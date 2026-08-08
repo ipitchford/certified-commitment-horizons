@@ -1,0 +1,117 @@
+{
+  "checks": {
+    "calibration": {
+      "bonferroni_family_coverage": 0.8984,
+      "exchangeable_coverage": 0.9038,
+      "scale_1_5_coverage": 0.77905,
+      "scenario_rows": 5,
+      "trial_rows": 85000
+    },
+    "certificate": {
+      "certificate_rows": 512,
+      "fixed_competitor_cases": 96,
+      "full_path_max_error": 0.0,
+      "graph_cases": 62,
+      "instances": 258,
+      "max_certificate_error": 0.0,
+      "max_fixed_competitor_error": 7.95807864051e-13,
+      "polynomial_exact_closures": 153,
+      "positive_partial_cases": 254
+    },
+    "exact": {
+      "T18_median_candidate_seconds": 6.789138812499999,
+      "T18_median_paths": 126976.0,
+      "exact_instances": 30,
+      "exact_statuses": {
+        "optimal": 30
+      },
+      "milp_probes": 24,
+      "milp_resolved": 22,
+      "milp_unresolved": 2
+    },
+    "exact_certification": {
+      "adversarial_rows": 34,
+      "agreement_rows": 330,
+      "brute_force_matches": 330,
+      "float_false_infinite": 0,
+      "max_interval_relative_width": 9.09959451889e-13,
+      "scaling_horizons": [
+        50,
+        100,
+        200,
+        365
+      ]
+    },
+    "example": {
+      "exact_radius_exact": "2/1",
+      "frozen_radius_exact": "3/2",
+      "producer_side_checker": "passed"
+    },
+    "json": {
+      "json_files_parsed": 15
+    },
+    "pdf": {
+      "all_fonts_embedded": true,
+      "bytes": 414917,
+      "critical_latex_warnings": [],
+      "fonts": 21,
+      "page_size": "595.276 x 841.89 pts (A4)",
+      "pages": 30,
+      "sha256": "59c98c7ea271051b01f5e314bba8d6cd5bab9d50db7469fadb4171971d4666c0",
+      "type3_fonts": 0
+    },
+    "pytest": {
+      "output": "..................................................................       [100%]\n66 passed in 3.78s",
+      "status": "pass"
+    },
+    "release_contract": {
+      "compiled_artifacts": 0,
+      "date": "2026-08-08",
+      "status": "unrefereed-candidate",
+      "third_party_full_text_files": 0,
+      "version": "2.1.2"
+    },
+    "required": {
+      "missing": [],
+      "partial_files": [],
+      "required_files": 32
+    },
+    "rolling": {
+      "cases": 462,
+      "inside_dead_zone": 254,
+      "max_residual_minus_bound": 2.27373675443e-13,
+      "positive_residual_cases": 111
+    },
+    "uci": {
+      "certificate_trace_rows": 371,
+      "columns": 13,
+      "forecast_vintage_rows": 248,
+      "missing_cells": 0,
+      "policy_rows": 864,
+      "raw_parser_shape": [
+        60,
+        13
+      ],
+      "rows": 60,
+      "sha256": "adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924"
+    },
+    "wheel": {
+      "package_source_files": 12,
+      "sha256": "bf61d898d9d90bfd27a159124e14d3ec9eafe958a5518ef1f56c9c63864442dc",
+      "source_bytes_match": true,
+      "version": "2.1.2"
+    }
+  },
+  "full_quick_replay_command": "./run_all.sh --quick",
+  "generated_at_utc": "2026-08-08T00:00:00+00:00",
+  "limitations": [
+    "Producer-side verification; not an independent clean-room reproduction.",
+    "Certified values are exact-rational and witness-backed, and the separately implemented producer-side checker re-verifies records, but neither implementation has proof-assistant verification; for T>12 frozen-minimality relies on the package's internally cross-checked parametric computation.",
+    "Illustrative UCI forecasts and costs are reconstructed; the case is not field validation.",
+    "Richter and Voros (1989) full text was not inspected, so the novelty boundary remains conditional."
+  ],
+  "release": "2.1.2",
+  "status": "pass",
+  "upstream_source_snapshot_commit": "64c63f4c633680a2d7b1e38750dbe0a669ac58a3",
+  "verification_command": "PYTHONPATH=src python scripts/verify_release.py --run-tests"
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "release_version": "1.0.0",
+  "checked_date": "2026-08-04",
+  "commands": [
+    "python -m compileall -q src scripts tests",
+    "PYTHONPATH=src pytest -q",
+    "python scripts/regenerate_figures.py",
+    "cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex",
+    "PYTHONPATH=src python scripts/verify_release.py",
+    "python /home/oai/skills/pdfs/scripts/render_pdf.py paper/main.pdf --dpi 180"
+  ],
+  "outcomes": {
+    "tests": {"passed": 20, "failed": 0},
+    "release_verifier": "passed",
+    "certificate_validation": {
+      "cases": 569,
+      "maximum_absolute_error": 0.0
+    },
+    "exact_small_instance_sample": {
+      "finite_instances": 129,
+      "lower_certificate_tight_fraction": 0.27906976744186046,
+      "median_lower_to_exact_ratio": 0.7776865685510453,
+      "median_outside_paths_processed_fraction": 0.0625
+    },
+    "rolling_loss": {
+      "cases": 220,
+      "maximum_bound_violation": 2.273736754432321e-13
+    },
+    "pdf": {
+      "pages": 22,
+      "page_size": "A4",
+      "encrypted": false,
+      "fonts_embedded": true,
+      "undefined_references_or_citations": false,
+      "overfull_boxes_detected": false,
+      "visual_render_inspected": true,
+      "clipping_or_overlap_detected": false
+    }
+  },
+  "interpretation": "These are producer-side checks. They do not constitute external peer review, independent reproduction or formal verification."
+}

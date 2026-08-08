@@ -1,0 +1,130 @@
+{
+  "bound_to_positive_residual_ratios": {
+    "dead_zone": {
+      "max": 461.2342410322334,
+      "median": 1.786569685536567,
+      "p90": 5.800967372373624
+    },
+    "generic": {
+      "max": 922.4684820644668,
+      "median": 89.13980238733595,
+      "p90": 251.63933413384862
+    },
+    "positive_residual_cases": 111
+  },
+  "cases": 462,
+  "dead_bound_quantiles": {
+    "max": 209.93398876860917,
+    "p50": 0.0,
+    "p75": 2.8202537542610804,
+    "p90": 33.8507307117877,
+    "p95": 71.03615279814707
+  },
+  "dead_exceeds_generic_violations": 0,
+  "design": {
+    "broad_instances": 240,
+    "conditioned_adversarial_instances": 120,
+    "conditioned_destabilising_attempts": 100,
+    "conditioned_destabilising_instances": 100,
+    "edge_cases": 2,
+    "horizons": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "target_norm_multipliers": [
+      0.0,
+      0.35,
+      0.8,
+      1.0,
+      1.25,
+      2.0
+    ]
+  },
+  "edge_case_records": [
+    {
+      "T": 2,
+      "bellman_residual": 0.0,
+      "case_id": 461,
+      "coefficient_diameter": 1.0,
+      "dead_le_generic": true,
+      "dead_zone_bound": 0.3999999999999999,
+      "dead_zone_slack": 0.3999999999999999,
+      "generic_bound": 0.3999999999999999,
+      "generic_slack": 0.3999999999999999,
+      "inside_dead_zone": false,
+      "nominal_arcs": 1,
+      "protected_arcs": 1,
+      "radius": 0.0,
+      "radius_status": "finite_at_endpoint",
+      "regime": "nominal_tie_zero_radius",
+      "revision_norm": 0.3999999999999999,
+      "stratum": "edge_case",
+      "target_multiplier": null,
+      "theorem_holds": true,
+      "zero_residual_inside_dead_zone": false
+    },
+    {
+      "T": 1,
+      "bellman_residual": 0.0,
+      "case_id": 462,
+      "coefficient_diameter": 0.0,
+      "dead_le_generic": true,
+      "dead_zone_bound": 0.0,
+      "dead_zone_slack": 0.0,
+      "generic_bound": 0.0,
+      "generic_slack": 0.0,
+      "inside_dead_zone": true,
+      "nominal_arcs": 1,
+      "protected_arcs": 1,
+      "radius": "Infinity",
+      "radius_status": "no_outside_path",
+      "regime": "no_outside_infinite_radius",
+      "revision_norm": 3.0,
+      "stratum": "edge_case",
+      "target_multiplier": null,
+      "theorem_holds": true,
+      "zero_residual_inside_dead_zone": true
+    }
+  ],
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": null,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "generic_bound_quantiles": {
+    "max": 647.9315104776637,
+    "p50": 48.44467931943759,
+    "p75": 117.17600582527425,
+    "p90": 186.92849728614124,
+    "p95": 249.42599683310064
+  },
+  "inside_dead_zone_cases": 254,
+  "inside_dead_zone_nonzero_residual_cases": 0,
+  "max_dead_minus_generic": 0.0,
+  "max_residual_minus_dead_bound": 2.2737367544323206e-13,
+  "residual_quantiles": {
+    "max": 36.549099939940334,
+    "p50": 0.0,
+    "p75": 1.1368683772161603e-13,
+    "p90": 1.1949973466589985,
+    "p95": 1.9129396466269821
+  },
+  "scope": "structural setup decisions with uncapacitated quantity recourse; all realised demand vectors satisfy the coordinate floors",
+  "theorem_violations": 0
+}

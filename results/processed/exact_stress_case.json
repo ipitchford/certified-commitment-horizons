@@ -1,0 +1,52 @@
+{
+  "T": 18,
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": null,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "exact_enumeration_5_second_limit": {
+    "candidate_generation_seconds": 8.86599654200836,
+    "disjunct_solve_seconds": 0.0,
+    "lower_bound": 4.120621857289924,
+    "note": "candidate generation is atomic in this implementation",
+    "paths_processed": 0,
+    "paths_total": 129024,
+    "status": "time_limit_before_disjuncts",
+    "upper_bound": "Infinity",
+    "wall_seconds": 8.86599654200836
+  },
+  "fixed_radius_milp_2_second_limit": {
+    "decision": false,
+    "minimum_gap_lower_bound": 3.042748760164301,
+    "minimum_gap_upper_bound": 3.042748760164301,
+    "mip_gap": 0.0,
+    "nodes": 1,
+    "proposed_radius": 4.161827558680016,
+    "status": "optimal",
+    "wall_seconds": 0.3860359169921139
+  },
+  "instance_file": "examples/benchmark_hard_instance_id26_T18.json",
+  "nominal_path_zero_based": [
+    0,
+    6,
+    10,
+    16,
+    18
+  ],
+  "polynomial_bracket": {
+    "lower": 4.120621345227739,
+    "status": "finite_bracket",
+    "upper": 6.128220191334514,
+    "wall_seconds": 0.004598250001436099
+  },
+  "protected_arcs": 1
+}

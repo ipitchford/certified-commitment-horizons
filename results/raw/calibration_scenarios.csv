@@ -1,0 +1,6 @@
+scenario,trials,covered,coverage,wilson_95_low,wilson_95_high,target_or_bound,n_calibration,alpha,rank,next_scale,guarantee_applies,dimension,calibration_inadmissible_fraction,next_inadmissible_fraction,n_calibration_per_decision,decisions,total_alpha,per_decision_alpha,mean_pointwise_coverage
+exchangeable_lognormal,20000,18076,0.9038,0.899635562701,0.90780934898,0.9,49,0.1,45,1,,,,,,,,,
+next_scale_1.25,20000,16817,0.84085,0.83571475213,0.84585433689,,49,0.1,45,1.25,False,,,,,,,,
+next_scale_1.50,20000,15581,0.77905,0.773246782026,0.784746042651,,49,0.1,45,1.5,False,,,,,,,,
+exchangeable_with_floor_admissibility,20000,18542,0.9271,0.923414427987,0.930621534814,0.9,49,0.1,45,,,4,0.0881214285714,0.09,,,,,
+five_decision_bonferroni_family,5000,4492,0.8984,0.889717548357,0.906470746733,0.9,,,98,,,,,,99,5,0.1,0.02,0.9786

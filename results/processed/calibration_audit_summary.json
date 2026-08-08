@@ -1,0 +1,94 @@
+{
+  "claims_tested": {
+    "exchangeable": "one-step marginal rank coverage",
+    "floor": "inadmissible revisions scored as positive infinity",
+    "repeated_use": "pre-specified five-decision Bonferroni family bound",
+    "shift": "negative control; ordinary exchangeable guarantee does not apply"
+  },
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": null,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "scenarios": [
+    {
+      "alpha": 0.1,
+      "coverage": 0.9038,
+      "covered": 18076,
+      "n_calibration": 49,
+      "next_scale": 1.0,
+      "rank": 45,
+      "scenario": "exchangeable_lognormal",
+      "target_or_bound": 0.9,
+      "trials": 20000,
+      "wilson_95_high": 0.9078093489801895,
+      "wilson_95_low": 0.8996355627009005
+    },
+    {
+      "alpha": 0.1,
+      "coverage": 0.84085,
+      "covered": 16817,
+      "guarantee_applies": false,
+      "n_calibration": 49,
+      "next_scale": 1.25,
+      "rank": 45,
+      "scenario": "next_scale_1.25",
+      "target_or_bound": null,
+      "trials": 20000,
+      "wilson_95_high": 0.8458543368901595,
+      "wilson_95_low": 0.8357147521303939
+    },
+    {
+      "alpha": 0.1,
+      "coverage": 0.77905,
+      "covered": 15581,
+      "guarantee_applies": false,
+      "n_calibration": 49,
+      "next_scale": 1.5,
+      "rank": 45,
+      "scenario": "next_scale_1.50",
+      "target_or_bound": null,
+      "trials": 20000,
+      "wilson_95_high": 0.7847460426513834,
+      "wilson_95_low": 0.7732467820257046
+    },
+    {
+      "alpha": 0.1,
+      "calibration_inadmissible_fraction": 0.08812142857142857,
+      "coverage": 0.9271,
+      "covered": 18542,
+      "dimension": 4,
+      "n_calibration": 49,
+      "next_inadmissible_fraction": 0.09,
+      "rank": 45,
+      "scenario": "exchangeable_with_floor_admissibility",
+      "target_or_bound": 0.9,
+      "trials": 20000,
+      "wilson_95_high": 0.9306215348139143,
+      "wilson_95_low": 0.9234144279869613
+    },
+    {
+      "coverage": 0.8984,
+      "covered": 4492,
+      "decisions": 5,
+      "mean_pointwise_coverage": 0.9786,
+      "n_calibration_per_decision": 99,
+      "per_decision_alpha": 0.02,
+      "rank": 98,
+      "scenario": "five_decision_bonferroni_family",
+      "target_or_bound": 0.9,
+      "total_alpha": 0.1,
+      "trials": 5000,
+      "wilson_95_high": 0.906470746732827,
+      "wilson_95_low": 0.8897175483573514
+    }
+  ]
+}

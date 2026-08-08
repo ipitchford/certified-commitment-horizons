@@ -1,0 +1,7 @@
+PDF: paper/main.pdf
+Pages: 29
+Encrypted: False
+Openable (pdftotext probe): True
+Likely scanned: False
+XFA present: False
+Note: v2.1.0 preflight regenerated with poppler tools; the v2.0.0 PyMuPDF probe was not rerun.

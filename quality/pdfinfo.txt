@@ -1,0 +1,22 @@
+Title:           Certified Commitment Horizons in Dynamic Lot Sizing
+Subject:         Prefix stability, inverse shortest paths and one-step calibration of forecast revisions
+Keywords:        
+Author:          Anonymous agentic research workflow
+Creator:         LaTeX with hyperref
+Producer:        pdfTeX-1.40.29
+CreationDate:    Wed Aug  5 06:00:04 2026 BST
+ModDate:         Wed Aug  5 06:00:04 2026 BST
+Custom Metadata: yes
+Metadata Stream: no
+Tagged:          no
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           29
+Encrypted:       no
+Page size:       595.276 x 841.89 pts (A4)
+Page rot:        0
+File size:       411934 bytes
+Optimized:       no
+PDF version:     1.7

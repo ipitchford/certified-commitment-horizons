@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "release": {
+    "title": "Certified Commitment Horizons in Dynamic Lot Sizing: Prefix Stability, Inverse Shortest Paths and Calibrated Forecast Revisions",
+    "version": "1.0.0",
+    "frozen_date": "2026-08-04",
+    "author_display": "Anonymous agentic research workflow",
+    "licences": {
+      "code": "MIT",
+      "manuscript_and_documentation": "CC BY 4.0"
+    }
+  },
+  "origin": {
+    "research_brief": "Lead with WW-Prefix-Radius-infinity; exploit the reduced cumulative-demand arc form K_i + q_i(D_j-D_i) and ordered Wagner-Whitin slopes; complete the system with polynomial lower certificates, an exact disjunctive model, statistical calibration and a rolling-loss theorem.",
+    "workflow": "Agentic mathematical exploration, proof drafting, literature search, code generation, numerical testing and producer-side adversarial audit.",
+    "external_data": "No proprietary or observational operational dataset was used. Experiments are synthetic and seeded."
+  },
+  "corpus_boundary": {
+    "literature_search_frozen": "2026-08-04",
+    "languages": ["English"],
+    "covered": [
+      "classical uncapacitated dynamic lot sizing",
+      "planning, decision and forecast horizons",
+      "nervousness and rolling-horizon stability",
+      "economic lot-sizing sensitivity analysis",
+      "combinatorial stability radii and inverse optimisation",
+      "conformal calibration",
+      "rolling-horizon error and regret bounds"
+    ],
+    "not_exhaustive_for": [
+      "non-English literature",
+      "unpublished industrial methods",
+      "unindexed theses",
+      "work released after 2026-08-04"
+    ]
+  },
+  "computational_environment": {
+    "seed": 20260804,
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "pandas": "2.2.3",
+    "matplotlib": "3.10.8",
+    "linear_and_mixed_integer_solver": "HiGHS through SciPy",
+    "latex": "pdfLaTeX/Biber via latexmk; host TeX distribution not container-pinned"
+  },
+  "assurance": {
+    "producer_proof_and_code_audit": true,
+    "deterministic_tests_passed": 20,
+    "release_verifier_passed": true,
+    "external_peer_review": false,
+    "independent_clean_room_reproduction": false,
+    "proof_assistant_verification": false,
+    "production_deployment_validation": false
+  },
+  "known_open_question": "The unrestricted exact complexity classification of WW-Prefix-Radius-infinity remains open."
+}

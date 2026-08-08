@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "release_version": "1.0.0",
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Complete Wagner-Whitin path costs reduce, up to a path-independent term, to arcs K_i + q_i(D_j-D_i).",
+      "status": "proved",
+      "support": ["paper: Proposition 3.1", "src/wwprefix/core.py"],
+      "boundary": "Uncapacitated single-item linear-cost model without backlogging."
+    },
+    {
+      "id": "C2",
+      "claim": "No speculative motives imply ordered reduced slopes and a Monge inequality for reduced arcs.",
+      "status": "proved",
+      "support": ["paper: Proposition 3.2", "tests/test_core.py"],
+      "boundary": "Monge structure does not make the obvious exact continuous relaxation integral."
+    },
+    {
+      "id": "C3",
+      "claim": "WW-Prefix-Radius-infinity belongs to NP.",
+      "status": "proved_upper_bound",
+      "support": ["paper: Proposition 3.3", "paper: Theorem 7.1"],
+      "boundary": "No hardness result or unrestricted polynomial-time exact algorithm is claimed."
+    },
+    {
+      "id": "C4",
+      "claim": "The weighted infinity-norm distance to a fixed competitor half-space has the stated exact floor-aware piecewise-linear formula.",
+      "status": "proved_and_tested",
+      "support": ["paper: Theorem 4.1", "src/wwprefix/certificates.py", "tests/test_certificates.py"],
+      "boundary": "The implementation is floating point."
+    },
+    {
+      "id": "C5",
+      "claim": "The frozen-comparator radius is a lower bound on strong prefix stability, is non-increasing in prefix length and is exact for a full selected path.",
+      "status": "proved",
+      "support": ["paper: Theorem 5.1", "tests/test_certificates.py"],
+      "boundary": "It can be strict for a partial prefix."
+    },
+    {
+      "id": "C6",
+      "claim": "The frozen-comparator lower certificate is computable by at most T+1 polynomial-size shortest-path and linear programmes.",
+      "status": "proved_and_computationally_cross_checked",
+      "support": ["paper: Theorem 5.2", "src/wwprefix/certificates.py", "results/certificate_validation.csv"],
+      "boundary": "The code returns a numerical rather than formal rational certificate."
+    },
+    {
+      "id": "C7",
+      "claim": "The supplied positive-floor three-period instance has lower certificate 1.5 and exact strong prefix radius 2.0.",
+      "status": "proved_and_replayed",
+      "support": ["paper: Proposition 6.1", "results/strict_gap_counterexample.json", "scripts/verify_release.py"],
+      "boundary": "This proves possible strictness, not a worst-case approximation ratio."
+    },
+    {
+      "id": "C8",
+      "claim": "A fixed outside path yields a compact exact inverse linear programme, and the exact radius is the minimum over the finite outside-path disjunction.",
+      "status": "proved_and_tested",
+      "support": ["paper: Theorem 7.1", "src/wwprefix/exact.py", "tests/test_independent_audit.py"],
+      "boundary": "Naive disjunctive enumeration is exponential in the worst case."
+    },
+    {
+      "id": "C9",
+      "claim": "The fixed-radius mixed-integer model exactly represents the decision problem in mathematical arithmetic.",
+      "status": "proved_formulation_and_numerically_tested",
+      "support": ["paper: Theorem 7.2", "src/wwprefix/exact.py", "tests/test_independent_audit.py"],
+      "boundary": "A feasible witness is directly checkable; solver-side negative results are not formal infeasibility certificates."
+    },
+    {
+      "id": "C10",
+      "claim": "The split-conformal order statistic gives at least 1-alpha marginal revision-score coverage under exchangeability.",
+      "status": "standard_result_applied",
+      "support": ["paper: Theorem 8.1", "src/wwprefix/calibration.py"],
+      "boundary": "Ordinary exchangeable coverage can fail under drift."
+    },
+    {
+      "id": "C11",
+      "claim": "A conformal threshold strictly below a deterministic lower certificate limits the next prefix-violation probability to alpha under the calibration assumptions.",
+      "status": "proved_corollary",
+      "support": ["paper: Corollary 8.2"],
+      "boundary": "Revision vectors must align in units, horizon, vintage and missingness treatment."
+    },
+    {
+      "id": "C12",
+      "claim": "Rolling realised regret telescopes into Bellman residuals and is bounded by the ordered-slope coefficient diameter times revision excess beyond each certified dead zone.",
+      "status": "proved_and_tested",
+      "support": ["paper: Theorem 9.3", "src/wwprefix/rolling.py", "results/rolling_loss.csv"],
+      "boundary": "The bound is deterministic and may be conservative; synthetic tests do not establish operational representativeness."
+    },
+    {
+      "id": "C13",
+      "claim": "The exact weighted coefficient diameter of suffix paths from a is sum_{t=a}^T (q_a-q_t)/w_t.",
+      "status": "proved",
+      "support": ["paper: Lemma 9.2", "tests/test_core.py"],
+      "boundary": "Canonical uncapacitated suffix path family with ordered slopes."
+    },
+    {
+      "id": "C14",
+      "claim": "The bounded literature search did not locate the complete combined decision object and theorem chain.",
+      "status": "bounded_negative_search",
+      "support": ["docs/literature_search.md"],
+      "boundary": "Not proof of absolute novelty or priority."
+    }
+  ]
+}

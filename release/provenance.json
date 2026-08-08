@@ -1,0 +1,112 @@
+{
+  "assurance": {
+    "exact_rational_computational_certification": true,
+    "field_validation": false,
+    "independent_clean_room_reproduction": false,
+    "internal_adversarial_review": true,
+    "journal_peer_review": false,
+    "producer_side_tests": true,
+    "proof_assistant_verification": false
+  },
+  "data": {
+    "chain_of_custody": "Version 2.1.2 re-fetched the official archive; the contained CSV was byte-identical to the analysed file.",
+    "download_url": "https://archive.ics.uci.edu/static/public/409/daily+demand+forecasting+orders.zip",
+    "license": "CC-BY-4.0",
+    "missing_cells": 0,
+    "observed_columns": 13,
+    "observed_rows": 60,
+    "official_record": "https://doi.org/10.24432/C5BC8T",
+    "path": "data/external/Daily_Demand_Forecasting_Orders.csv",
+    "reconstructed_elements": [
+      "forecast vintages",
+      "forecast-revision scores",
+      "setup costs",
+      "holding costs",
+      "counterfactual policy outcomes"
+    ],
+    "sha256": "adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924"
+  },
+  "date": "2026-08-08",
+  "upstream_frozen_environment": {
+    "cpu_count": 5,
+    "machine": "x86_64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+    "scipy": "1.17.0"
+  },
+  "publisher_full_replay_environment": {
+    "cpu_count": 8,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.11.14",
+    "scipy": "1.17.0",
+    "scope": "Producer-side full replay on 8 August 2026; not independent reproduction"
+  },
+  "generated_outputs": {
+    "full_replay_command": "./run_all.sh --full",
+    "paper": "paper/main.pdf",
+    "processed_results": "results/processed/",
+    "raw_results": "results/raw/",
+    "verification_command": "./run_all.sh --quick"
+  },
+  "literature_inspected_not_redistributed": [
+    {
+      "bytes": 1487212,
+      "inspection": "full_text",
+      "public_tree_included": false,
+      "source": "https://doi.org/10.1016/0166-218X(93)90016-H",
+      "sha256": "2c77f846a90ed60fdd5eae849c1b6a80929030999de3a6076e30e4057c4b2335"
+    },
+    {
+      "bytes": 191845,
+      "inspection": "full_text",
+      "public_tree_included": false,
+      "source": "https://doi.org/10.1016/S0167-6377(98)00031-5",
+      "sha256": "e7926c29814b4f29cda395f48a3859fc35ced21b5d90c1247f2db9f90bbf8b85"
+    },
+    {
+      "bytes": 1216015,
+      "inspection": "full_text",
+      "public_tree_included": false,
+      "source": "https://www.informs-sim.org/wsc25papers/con235.pdf",
+      "sha256": "559338cf7159cdee32434f4185c11a8be33d4f570305adcb48c6073cd1678426"
+    }
+  ],
+  "literature_metadata_only": [
+    {
+      "citation": "Richter, K., & Voros, J. (1989). A parametric analysis of the dynamic lot-sizing problem.",
+      "limit": "full text not obtained",
+      "record": "https://dblp.org/rec/journals/eik/RichterV89"
+    },
+    {
+      "citation": "Richter, K., & Weber, J. (1994). Sequential stability of the constant cost dynamic lot size model-searching for monotonicity.",
+      "record": "https://doi.org/10.1007/BF01719450"
+    },
+    {
+      "citation": "Forel, A., & Grunow, M. (2023). Dynamic stochastic lot sizing with forecast evolution in rolling-horizon planning.",
+      "record": "https://doi.org/10.1111/poms.13881"
+    }
+  ],
+  "random_seed": 20260804,
+  "release": "2.1.2",
+  "status": "unrefereed-candidate",
+  "review": {
+    "initial_review": "docs/peer_review_v1.0.0.md",
+    "initial_response": "docs/response_to_reviewers.md",
+    "final_review": "docs/final_review_v2.1.1_for_evidence_press.md",
+    "final_review_sha256": "4ff52bfe04de9920546f1e67dc28275811385bde81977f5b3dfbeb8af758330d",
+    "final_response": "docs/response_to_final_review_v2.1.2.md"
+  },
+  "schema_version": "1.0",
+  "upstream_source_snapshot_commit": "64c63f4c633680a2d7b1e38750dbe0a669ac58a3",
+  "repository": "https://github.com/ipitchford/certified-commitment-horizons",
+  "release_tag": "v2.1.2-candidate",
+  "repository_maintainer_and_publisher": "Ian Pitchford",
+  "workflow_author": "Anonymous agentic research workflow"
+}

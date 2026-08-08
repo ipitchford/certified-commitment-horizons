@@ -1,0 +1,237 @@
+{
+ "claims": [
+  {
+   "claim": "Under the Wagner-Whitin condition, physical path costs differ from reduced arc costs K_i + q_i(D_j-D_i) only by a path-independent term, and ordered slopes imply Monge arcs.",
+   "id": "C1_reduced_geometry",
+   "proof": "paper/main.tex, Propositions 2.1-2.2",
+   "scope": "Deterministic single-item uncapacitated model with ordered reduced slopes.",
+   "status": "proved_in_manuscript_and_unit_checked",
+   "tests": [
+    "tests/test_core.py"
+   ],
+   "uncertainty": "No proof-assistant formalisation."
+  },
+  {
+   "claim": "The weighted-infinity distance, with coordinate demand floors, to a tie against one fixed path is given by the coordinate-separable formula in Theorem 5.1.",
+   "id": "C2_fixed_path_radius",
+   "proof": "paper/main.tex, Theorem 5.1",
+   "scope": "A fixed outside path and fixed comparator; finite rational input in the theorem.",
+   "status": "proved_and_witness_checked",
+   "tests": [
+    "tests/test_core.py",
+    "results/raw/certificate_audit.csv",
+    "tests/test_exactcert.py"
+   ],
+   "uncertainty": "Certified through the exact rational layer (wwprefix.exactcert); every finite radius carries an exactly verified tie witness. No proof-assistant formalisation."
+  },
+  {
+   "audit_result": {
+    "all_acyclic": true,
+    "all_bijections": true,
+    "cases": 62
+   },
+   "claim": "The prefix-deviation directed acyclic graph maps source-sink paths bijectively to complete paths that leave the protected prefix.",
+   "id": "C3_prefix_graph",
+   "proof": "paper/main.tex, Section 6 and Lemmas 6.1-6.2",
+   "scope": "Selected complete nominal path and k protected arcs.",
+   "status": "proved_and_exhaustively_checked_at_small_horizons",
+   "tests": [
+    "results/raw/graph_bijection_audit.csv"
+   ],
+   "uncertainty": "Computational enumeration is finite and producer-side."
+  },
+  {
+   "audit_result": {
+    "comparisons": 512,
+    "generated_instances": 258,
+    "max_stored_absolute_error": 0.0
+   },
+   "claim": "The frozen-comparator prefix radius is computable by at most T+1 shortest-path calculations and polynomial-size Charnes-Cooper linear programmes.",
+   "id": "C4_polynomial_frozen_certificate",
+   "proof": "paper/main.tex, Theorems 7.1-7.2 and Appendix A",
+   "scope": "Ordered-slope Wagner-Whitin model, weighted infinity ball, demand floors.",
+   "status": "proved_with_repaired_positivity_and_path_decomposition_arguments",
+   "tests": [
+    "results/raw/certificate_audit.csv",
+    "results/raw/exact_certification_audit.csv",
+    "results/raw/graph_bijection_audit.csv",
+    "tests/test_exactcert.py"
+   ],
+   "uncertainty": "Polynomial bit complexity, not a strongly polynomial claim. The released certification computes the same value in exact rational arithmetic (breakpoint binary search plus parametric shortest paths); the Charnes-Cooper LP remains the proof device and the floating diagnostic path only."
+  },
+  {
+   "audit_result": {
+    "containment_failures": 0,
+    "exact_small_cases": 512,
+    "fixed_competitor_checks": 96,
+    "max_fixed_lp_error": 7.96e-13,
+    "polynomial_exact_closures": 153,
+    "positive_partial_cases": 254
+   },
+   "claim": "The frozen radius is a valid lower bound, an exposed outside path yields a feasible inverse-LP upper bound, and a closing witness or coincident bounds certifies the exact strong radius.",
+   "id": "C5_lower_upper_bracket",
+   "proof": "paper/main.tex, Section 8",
+   "scope": "Same model and prefix definition.",
+   "status": "proved_and_small_instance_checked",
+   "tests": [
+    "results/raw/certificate_audit.csv",
+    "results/raw/fixed_competitor_audit.csv"
+   ],
+   "uncertainty": "A non-closed bracket is genuinely unresolved; both certified ends are witness-backed in exact arithmetic."
+  },
+  {
+   "claim": "A positive-floor three-period instance has frozen radius 1.5 and exact strong prefix radius 2.0.",
+   "id": "C6_strict_gap",
+   "proof": "paper/main.tex, Proposition 9.1",
+   "scope": "The explicit instance in Proposition 9.1.",
+   "status": "analytically_proved_and_regression_tested",
+   "tests": [
+    "examples/strict_gap_instance.json",
+    "examples/sample_decision.json",
+    "tests/test_core.py"
+   ],
+   "uncertainty": "Establishes possibility, not external prevalence."
+  },
+  {
+   "audit_result": {
+    "exact_instances": 30,
+    "exact_optimal": 30,
+    "milp_probes": 24,
+    "milp_resolved_correct": 22,
+    "milp_unresolved": 2
+   },
+   "claim": "Each fixed outside competitor has a compact inverse shortest-path linear programme; the exact radius is their finite disjunction; fixed-radius decision has an O(T^3)-size mixed-integer formulation.",
+   "id": "C7_exact_formulations",
+   "proof": "paper/main.tex, Theorems 10.1-10.2",
+   "scope": "Finite horizon and bounded demand box induced by a proposed radius for the MILP.",
+   "status": "proved_formulation_with_bounded_scaling_evidence",
+   "tests": [
+    "results/raw/exact_benchmark.csv",
+    "results/raw/milp_benchmark.csv",
+    "results/processed/exact_stress_case.json"
+   ],
+   "uncertainty": "No polynomial-time exact algorithm or hardness result for the demand-induced restriction; generic partial inverse and anti-inverse shortest paths are NP-hard (Gassner 2009; Ley and Merkert 2025). Candidate generation is exponential. Escalation results are certified: point-exact or explicit certified intervals."
+  },
+  {
+   "audit_result": {
+    "bonferroni_families": 5000,
+    "bonferroni_family_coverage": 0.8984,
+    "exchangeable_coverage": 0.9038,
+    "exchangeable_trials": 20000,
+    "scale_1_5_negative_control_coverage": 0.77905
+   },
+   "claim": "Floor-aware split-conformal scoring gives one-step marginal coverage under exchangeability, and a prespecified finite family can use Bonferroni allocation.",
+   "id": "C8_conformal",
+   "proof": "paper/main.tex, Theorem 11.1 and Corollary 11.2",
+   "scope": "Exchangeable calibration and next score; prespecified scoring and admissibility rule.",
+   "status": "standard_rank_proof_and_simulation_checked",
+   "tests": [
+    "results/raw/calibration_trials.csv",
+    "results/raw/calibration_scenarios.csv"
+   ],
+   "uncertainty": "No conditional, adaptive, time-uniform or distribution-shift guarantee."
+  },
+  {
+   "audit_result": {
+    "cases": 462,
+    "inside_dead_zone_cases": 254,
+    "inside_nonzero_residual_cases": 0,
+    "max_numerical_excess": 2.2737367544323206e-13,
+    "theorem_violations": 0
+   },
+   "claim": "Bellman residuals telescope and ordered slopes yield a deterministic structural-loss bound with a dead zone equal to the certified prefix radius.",
+   "id": "C9_rolling_bound",
+   "proof": "paper/main.tex, Section 12",
+   "scope": "Admissible realised demand, structural setup commitments, uncapacitated quantity recourse and disclosed cycle-boundary replanning.",
+   "status": "proved_and_numerically_stress_checked",
+   "tests": [
+    "results/raw/rolling_audit.csv"
+   ],
+   "uncertainty": "Does not cover fixed quantities, capacities, transport slots or service loss."
+  },
+  {
+   "claim": "The end-to-end interface can be applied retrospectively to an observed demand series with reconstructed vintages and stylised costs, returning bounded commitment decisions and unresolved states.",
+   "evidence": [
+    "results/raw/uci_forecast_vintages.csv",
+    "results/raw/uci_certificate_trace.csv",
+    "results/raw/uci_policy_evaluation.csv",
+    "results/processed/uci_case_summary.json"
+   ],
+   "id": "C10_illustrative_case",
+   "scope": "The frozen 60-row UCI demand data and the disclosed reconstruction, not the source organisation's historical planning system.",
+   "status": "illustrative_end_to_end_execution",
+   "uncertainty": "Not field validation; forecasts, costs and counterfactual policies are reconstructed."
+  },
+  {
+   "claim": "The candidate novel object is prefix-face stability with a moving best inside continuation, not demand-vector stability or fixed-solution sensitivity in general.",
+   "evidence": [
+    "docs/literature_audit.md",
+    "THIRD_PARTY_NOTICES.md"
+   ],
+   "id": "C11_novelty_boundary",
+   "scope": "Bounded literature search frozen 5 August 2026; inspected-copy hashes retained without redistributing article full text.",
+   "status": "conditional",
+   "uncertainty": "No lawful digital copy of Richter and Voros (1989) exists (DOI test-prefix stub only; the 1987-94 EIK run was never digitised). Bibliography corrected; zbMATH review (Zbl 0672.90033) triangulated: fixed-solution stability regions, joint case a two-parameter region, no indication of a prefix-class object. Theorem-level overlap remains unresolved pending print acquisition (routes documented in docs/literature_audit.md)."
+  },
+  {
+   "claim": "Every value published under a certified_* key is computed, or a posteriori verified, in exact rational arithmetic with zero tolerances; floating point participates only as a search heuristic whose proposals are exactly re-verified; infinite radii are published only with structural or saturation proofs.",
+   "id": "C12_exact_certification_layer",
+   "proof": "src/wwprefix/exactcert.py; paper/main.tex Section 7 (exact implementation)",
+   "scope": "All certify/decide outputs of release 2.1.2.",
+   "status": "implemented_and_audited",
+   "tests": [
+    "tests/test_exactcert.py",
+    "results/raw/exact_certification_audit.csv",
+    "results/raw/exact_adversarial_audit.csv"
+   ],
+   "uncertainty": "The trusted base is the exact layer plus a separately implemented producer-side checker; neither is proof-assistant verified or organisationally independent. For T>12 frozen-minimality relies on internally cross-checked parametric computation."
+  },
+  {
+   "claim": "The peer-review false-infinity counterexample (review 4.1) is certified correctly: under exact decimal semantics the radius is exactly 1 and a proposed radius of 1.1 is classified certified_destabilising_witness_exists; under binary-float semantics the exact radius of the instance actually supplied is approximately 1.0000000283 with the same classification.",
+   "id": "C13_false_infinity_regression",
+   "proof": "tests/test_exactcert.py::test_reviewer_counterexample_*",
+   "scope": "Regression family including power-of-two rescalings.",
+   "status": "regression_tested_each_run",
+   "tests": [
+    "tests/test_exactcert.py",
+    "results/raw/exact_adversarial_audit.csv"
+   ],
+   "uncertainty": "None beyond the global limitations."
+  },
+  {
+   "claim": "Rescalings of cost units and demand units (with q and weights transformed accordingly) never flip a certificate between finite and infinite and never reverse a triage classification. Unconditional when the rescaling is performed in exact rational arithmetic; for rescalings performed in binary floating point the guarantee holds in the absence of underflow or overflow while forming the rescaled inputs (Sol adversarial review, finding 8).",
+   "id": "C14_rescaling_invariance",
+   "proof": "Exact arithmetic; asserted as a hard invariant in the audit.",
+   "scope": "Audited rescaling grid; property holds by construction for all exact inputs.",
+   "status": "audited_zero_flips",
+   "tests": [
+    "tests/test_exactcert.py",
+    "scripts/run_exact_certification_audit.py",
+    "docs/adversarial_review_sol_v2.1.0.md"
+   ],
+   "uncertainty": "Binary-performed rescalings near the subnormal or overflow range alter the instance itself before ingestion; exact decimal/rational strings avoid this entirely. Non-power-of-two decimal rescalings likewise change the binary instance."
+  },
+  {
+   "claim": "scripts/check_certificate.py re-verifies decision records from first principles without importing the package: nominal optimality, witnesses, floors, distances, exact ties, inside domination, saturation-infinity proofs and triage logic; for T<=12 it re-derives frozen minimality by complete enumeration.",
+   "id": "C15_producer_side_checker",
+   "proof": "scripts/check_certificate.py",
+   "scope": "All certify decision records.",
+   "status": "shipped_and_exercised_in_tests_and_release_verifier",
+   "tests": [
+    "tests/test_exactcert.py::test_independent_checker_passes_on_generated_records"
+   ],
+   "uncertainty": "This is separately implemented producer-side checking, not organisationally independent reproduction. Checker and package share Python and its integer arithmetic."
+  }
+ ],
+ "date": "2026-08-08",
+ "global_limitations": [
+  "No journal peer review.",
+  "No independent clean-room reproduction of the full pipeline (the shipped producer-side checker separately re-verifies decision records).",
+  "No proof-assistant verification.",
+  "No field validation or demonstrated industrial effect.",
+  "Certified values are exact-rational; floating point remains in search, diagnostics and the MILP escalation, whose negative answers are solver-level only.",
+  "Exact computational complexity of the demand-induced restriction remains open; generic partial inverse analogues are NP-hard."
+ ],
+ "release": "2.1.2",
+ "schema_version": "1.0"
+}

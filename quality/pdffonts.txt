@@ -1,0 +1,23 @@
+name                                 type              encoding         emb sub uni object ID
+------------------------------------ ----------------- ---------------- --- --- --- ---------
+CWMKTV+TeXGyreTermesX-Bold           Type 1            Custom           yes yes yes    101  0
+REQIZO+TeXGyreTermesX-Regular        Type 1            Custom           yes yes yes    102  0
+GROKOU+TeXGyreTermesX-Italic         Type 1            Custom           yes yes yes    103  0
+REQIZO+TeXGyreTermesX-Regular        Type 1            Custom           yes yes yes    104  0
+VCIKPU+txsys                         Type 1            Builtin          yes yes yes    105  0
+SLUECV+NewTXMI                       Type 1            Builtin          yes yes yes    106  0
+NFQHYE+NewTXMI7                      Type 1            Builtin          yes yes yes    107  0
+REQIZO+TeXGyreTermesX-Regular        Type 1            Custom           yes yes yes    108  0
+NHVFOM+txmiaX                        Type 1            Builtin          yes yes yes    132  0
+YEDUHT+txexs                         Type 1            Builtin          yes yes yes    148  0
+DUBNTZ+txsym                         Type 1            Builtin          yes yes yes    149  0
+EBHITT+NewTXMI5                      Type 1            Builtin          yes yes yes    150  0
+CWMKTV+TeXGyreTermesX-Bold           Type 1            Custom           yes yes yes    153  0
+GROKOU+TeXGyreTermesX-Italic         Type 1            Custom           yes yes yes    201  0
+XTBKLX+t1xtt                         Type 1            Builtin          yes yes yes    318  0
+BMQQDV+DejaVuSans                    CID TrueType      Identity-H       yes yes yes    443  0
+BMQQDV+DejaVuSans                    CID TrueType      Identity-H       yes yes yes    453  0
+BMQQDV+DejaVuSans                    CID TrueType      Identity-H       yes yes yes    463  0
+BMQQDV+DejaVuSans                    CID TrueType      Identity-H       yes yes yes    471  0
+GROKOU+TeXGyreTermesX-Italic         Type 1            Custom           yes yes yes    486  0
+BMQQDV+DejaVuSans                    CID TrueType      Identity-H       yes yes yes    516  0

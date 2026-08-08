@@ -1,0 +1,873 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{mathtools,bm}
+\usepackage{booktabs,array,tabularx,longtable,multirow}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{csquotes}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,doi=true,url=true,isbn=false,eprint=false]{biblatex}
+\addbibresource{references.bib}
+
+\definecolor{Aubergine}{HTML}{5B2A86}
+\definecolor{Petrol}{HTML}{087E8B}
+\definecolor{Saffron}{HTML}{D89B00}
+\definecolor{Coral}{HTML}{C8553D}
+\definecolor{Slate}{HTML}{44546A}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=Aubergine,
+  citecolor=Petrol,
+  urlcolor=Coral,
+  pdfauthor={Anonymous agentic research workflow},
+  pdftitle={Certified Commitment Horizons in Dynamic Lot Sizing},
+  pdfsubject={Prefix stability, inverse shortest paths and calibrated forecast revisions}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.58em}
+\setlist{nosep,leftmargin=1.55em}
+\captionsetup{font=small,labelfont=bf}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Certified commitment horizons}
+\fancyhead[R]{Preprint v1.0.0}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Decision problem}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\winf}[1]{\left\lVert #1\right\rVert_{\infty,w}}
+\newcommand{\pos}[1]{\left(#1\right)_{+}}
+\newcommand{\WWR}{\textsc{WW-Prefix-Radius}\ensuremath{_{\infty}}}
+\newcommand{\dhat}{\widehat d}
+\newcommand{\ellv}{\ell}
+\newcommand{\one}{\mathbf{1}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\title{\vspace{-1.2cm}\textbf{Certified Commitment Horizons in Dynamic Lot Sizing}\\[0.35em]
+\large Prefix Stability, Inverse Shortest Paths and Calibrated Forecast Revisions}
+\author{Anonymous agentic research workflow}
+\date{Preprint version 1.0.0 --- 4 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\fcolorbox{Petrol}{Petrol!6}{\begin{minipage}{0.92\linewidth}
+\textbf{Verification status.} The mathematical claims have a producer-side proof and code audit. The release includes deterministic tests, raw synthetic results and one-command replay. It has not received external peer review, independent clean-room reproduction or proof-assistant verification. The unrestricted complexity classification of \WWR{} remains open.
+\end{minipage}}
+\end{center}
+
+\begin{abstract}
+A rolling lot-sizing plan becomes operationally costly when every forecast revision changes orders that staff or suppliers have begun to execute. Classical planning-horizon work asks how much future information is needed before early decisions stabilise. We ask a different inverse question: given the current forecast and a selected optimal Wagner--Whitin schedule, how large must the forecast revision become before any optimal schedule can leave its first $k$ replenishment cycles?
+
+We formalise this quantity as a strong prefix-stability radius in a weighted $L_\infty$ norm, with coordinate-wise demand floors, and lead with the associated decision problem \WWR. The Wagner--Whitin condition reduces every arc to $K_i+q_i(D_j-D_i)$ with ordered slopes. This yields a Monge inequality, an exact fixed-path tie formula, and a polynomial frozen-comparator lower certificate computed by $O(T)$ linear-fractional shortest-path programmes. The lower certificate is exact for a full schedule but can be strict for a partial prefix; a three-period positive-demand example has certified radius $1.5$ and exact radius $2$.
+
+For exact analysis, each outside path induces a compact inverse linear programme whose suffix dual represents the best prefix-retaining continuation. Their finite disjunction gives the exact radius, while a fixed-radius mixed-integer formulation decides \WWR{} with $O(T^3)$ product variables. We prove membership in NP but leave the unrestricted exact complexity open. Historical forecast revisions can calibrate the deterministic radius through a finite-sample split-conformal threshold. Finally, Bellman residuals telescope across rolling replans, giving a deterministic regret bound with a certified dead zone: only revision magnitude beyond the stability radius is charged. Synthetic checks reproduce the polynomial certificate in 569 exhaustive cases and find no rolling-bound violation beyond $2.28\times10^{-13}$ in 220 trials. These computations audit implementation; they do not establish representativeness or substitute for the proofs.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords:} dynamic lot sizing; Wagner--Whitin; forecast revisions; nervousness; stability radius; inverse optimisation; shortest paths; conformal calibration; rolling horizon.
+
+\tableofcontents
+\clearpage
+
+\section{The decision problem}
+
+Suppose a planner has solved a deterministic single-item lot-sizing problem under the current demand forecast $\dhat\in\R_+^T$. The chosen optimum is a sequence of setup epochs, equivalently a shortest path. Some first replenishment cycles are about to be released to a supplier, warehouse or production team. The planner needs a quantitative answer to one question:
+
+\begin{quote}
+How far must the demand forecast move before a rationally optimal schedule can change any protected setup epoch or cycle boundary?
+\end{quote}
+
+A fixed seven- or fourteen-day fence does not answer this question. It ignores the current cost geometry, the size and direction of plausible revisions, and the fact that the best continuation after a protected prefix can itself change. We therefore define a distance to the nearest revised instance at which an optimal path can leave the prefix.
+
+Periods are $1,\ldots,T$. A path $P=(v_0=1<v_1<\cdots<v_m=T+1)$ has an arc $(v_r,v_{r+1})$ for each replenishment cycle. We select one nominal optimal path
+\[
+P^\star=(v_0=1<v_1<\cdots<v_m=T+1)
+\]
+and protect its first $k$ arcs, denoted $\pi_k=(v_0,\ldots,v_k)$. Let
+\[
+\cI_k=\{P:P\text{ starts with }\pi_k\},
+\qquad
+\cO_k=\cP\setminus\cI_k.
+\]
+For revised demand $d$, define the best inside and outside values
+\[
+A_k(d)=\min_{P\in\cI_k}C_P(d),
+\qquad
+B_k(d)=\min_{Q\in\cO_k}C_Q(d).
+\]
+The protected prefix remains a property of every optimal schedule exactly when $B_k(d)>A_k(d)$. Equality already permits a rational schedule change, so deployment rules must treat the boundary strictly.
+
+Let $w\in\R_{++}^T$ and
+\[
+\norm{x}_{\infty,w}=\max_{1\le t\le T}w_t|x_t|.
+\]
+The weights can encode units, forecast-horizon relevance or asymmetric operational scaling after an appropriate coordinate transformation. Let $\ellv\in\R_+^T$ be a demand floor satisfying $\ellv\le\dhat$ coordinate-wise.
+
+\begin{definition}[Strong prefix-stability radius]\label{def:radius}
+The weighted radius of the first $k$ replenishment cycles is
+\begin{equation}\label{eq:rho}
+\rho_{k,w}(\dhat)=
+\inf\left\{
+\winf{d-\dhat}:d\ge\ellv,\ B_k(d)\le A_k(d)
+\right\}.
+\end{equation}
+For $w=\one$ we write $\rho_{k,\infty}$.
+\end{definition}
+
+The definition is deliberately strong. For every $r<\rho_{k,w}$, every optimiser under every admissible revision of weighted size at most $r$ retains the prefix. The radius concerns setup epochs and cycle boundaries. It does not freeze literal order quantities: quantities change when demand changes even if the setup pattern does not.
+
+\begin{problem}[\WWR]\label{prob:decision}
+\textbf{Input:} a rational Wagner--Whitin instance, rational $\dhat,\ellv,w,R$, a selected nominal optimal path $P^\star$, and $k\in\{1,\ldots,m\}$.\\
+\textbf{Question:} does there exist $d\ge\ellv$ such that
+\[
+\winf{d-\dhat}\le R
+\quad\text{and}\quad
+B_k(d)\le A_k(d)?
+\]
+Equivalently, is $\rho_{k,w}(\dhat)\le R$? The unweighted problem sets $w=\one$.
+\end{problem}
+
+This decision problem leads the paper because it states the operational object directly. The later lower certificate, exact disjunction, statistical calibration and rolling-loss theorem each answer a distinct part of it.
+
+\begin{proposition}[Elementary geometry]\label{prop:geometry}
+Assume $P^\star$ is nominally optimal.
+\begin{enumerate}[label=(\alph*)]
+\item If $r<\rho_{k,w}(\dhat)$, every optimal path at every admissible $d$ with $\winf{d-\dhat}\le r$ belongs to $\cI_k$.
+\item If $\rho_{k,w}(\dhat)<\infty$, the nearest destabilising point is attained. Unless $\rho_{k,w}=0$, at least one nearest point satisfies $A_k(d)=B_k(d)$.
+\item $\rho_{k+1,w}(\dhat)\le\rho_{k,w}(\dhat)$ whenever both prefixes exist.
+\item A nominal outside tie implies $\rho_{k,w}(\dhat)=0$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Part (a) restates the complement of the event in \eqref{eq:rho}. For (b), restrict attention to a closed weighted ball whose radius exceeds the infimum; its intersection with $\{d:d\ge\ellv\}$ is compact. The functions $A_k$ and $B_k$ are minima of finitely many affine path costs and hence continuous, so a convergent destabilising sequence attains the infimum. If the nearest point had $B_k<A_k$, continuity along its line segment from $\dhat$ would produce an earlier equality. For (c), $\cI_{k+1}\subseteq\cI_k$ and $\cO_{k+1}\supseteq\cO_k$, so $A_{k+1}\ge A_k$ and $B_{k+1}\le B_k$; the destabilising set can only expand. Part (d) follows by evaluating the event at $\dhat$.
+\end{proof}
+
+\section{Position relative to earlier horizon and sensitivity work}
+
+\textcite{WagnerWhitin1958} formulate deterministic single-item dynamic lot sizing and show how its structure supports a forward algorithm and planning-horizon arguments. Subsequent algorithms exploit concavity, geometric envelopes and Monge structure to obtain $O(T\log T)$ performance in general variants and linear time under Wagner--Whitin costs \parencite{FedergruenTzur1991,WagelmansEtAl1992,AggarwalPark1993}.
+
+The planning- and forecast-horizon literature asks whether extending the terminal horizon or changing unspecified future data can alter early decisions. Protective procedures and rolling-horizon error bounds address the cost of finite look-ahead \parencite{EppenEtAl1969,LundinMorton1975,LeeDenardo1986}. \textcite{BesSethi1988} distinguish conditional forecast and decision horizons. \textcite{FedergruenTzur1994,FedergruenTzur1995} compute minimal forecast horizons and, where needed, adapt full-horizon plans to control worst-case optimality gaps under desired stability conditions. Integer-programming and discrete-demand approaches extend this line \parencite{DawandeEtAl2006,DawandeEtAl2007}.
+
+More recent stochastic work models forecast evolution inside rolling-horizon lot sizing and evaluates the value of anticipating later forecast updates \parencite{ForelGrunow2023}. That line changes the forward planning model. Our inverse object instead conditions on a realised current forecast and certifies how far the next revision must move before a specified deterministic prefix can cease to be compulsory.
+
+Our object differs in three respects. First, it conditions on the current finite forecast rather than an unknown extension of the horizon. Second, it measures a simultaneous norm-bounded revision to all forecast coordinates. Third, it protects a class of paths that share a prefix while allowing the best continuation inside that class to switch.
+
+The closest deterministic antecedent is the post-optimality analysis of \textcite{VanHoeselWagelmans1993}, which computes parameter ranges that retain an optimal economic lot-sizing solution. Generic stability-radius work studies the size of objective perturbation needed to change a combinatorial optimum \parencite{ChakravartiWagelmans1998}; inverse optimisation asks for the smallest cost perturbation that makes a specified solution optimal \parencite{AhujaOrlin2001}. Here demand revisions induce correlated changes across many arcs, and the protected object is a prefix face rather than one fixed path.
+
+A search frozen on 4 August 2026 covered publisher records, DOI searches, accessible manuscripts and English title/abstract queries for these literatures. It did not locate a source combining the prefix radius, a floor-aware polynomial lower certificate, exact inverse and mixed-integer models, finite-sample forecast-revision calibration, and a rolling loss bound with a stability dead zone. This is a bounded negative search result, not proof of absolute priority. The full search boundary and strings appear in the release.
+
+\section{Reduced cumulative-demand arcs and ordered slopes}
+
+\subsection{From physical costs to a shortest path}
+
+Let $K_i\ge0$ be the setup cost in period $i$, $p_i$ the unit production or purchase cost, and $h_i\ge0$ the cost of carrying one unit from period $i$ to $i+1$. Demand $d_t\ge0$ must be met without backlogging. Under the no-speculative-motive condition
+\begin{equation}\label{eq:wwcondition}
+p_i+h_i\ge p_{i+1}\qquad(i=1,\ldots,T-1),
+\end{equation}
+an optimal plan has the zero-inventory-ordering structure used by the Wagner--Whitin shortest path.
+
+Define
+\[
+H_i=\sum_{s=1}^{i-1}h_s,
+\qquad
+q_i=p_i-H_i,
+\qquad
+D_1=0,
+\qquad
+D_j=\sum_{t=1}^{j-1}d_t.
+\]
+Condition \eqref{eq:wwcondition} is equivalent to
+\begin{equation}\label{eq:orderedq}
+q_1\ge q_2\ge\cdots\ge q_T.
+\end{equation}
+An arc $(i,j)$ means that a setup in period $i$ covers periods $i,\ldots,j-1$.
+
+\begin{proposition}[Reduced cumulative-demand arc form]\label{prop:reduction}
+The physical cost of arc $(i,j)$ is
+\[
+K_i+\sum_{t=i}^{j-1}\left(p_i+\sum_{s=i}^{t-1}h_s\right)d_t.
+\]
+For every complete path this equals the path-independent term $\sum_{t=1}^T H_t d_t$ plus reduced arc costs
+\begin{equation}\label{eq:reducedarc}
+\bar c_{ij}(d)=K_i+q_i(D_j-D_i)
+=K_i+q_i\sum_{t=i}^{j-1}d_t.
+\end{equation}
+Consequently reduced and physical costs have the same optimal paths and the same path-to-path regret.
+\end{proposition}
+
+\begin{proof}
+For $t\ge i$,
+\[
+p_i+\sum_{s=i}^{t-1}h_s
+=p_i+H_t-H_i=q_i+H_t.
+\]
+Summing over the periods assigned to all path arcs contributes $\sum_t H_t d_t$ exactly once, independently of the path, and leaves \eqref{eq:reducedarc}.
+\end{proof}
+
+The canonical graph starts at vertex 1. If early demand can be zero, a path may encode a vacuous setup. A literal operational interpretation should either impose a strictly positive floor, preprocess zero-demand periods, or state an explicit convention. This paper retains a general non-negative floor in the mathematics and uses a positive floor in the strict counterexample.
+
+\subsection{Monge structure and what it does not solve}
+
+\begin{proposition}[Ordered slopes imply Monge arcs]\label{prop:monge}
+For $i<i'<j<j'$,
+\begin{equation}\label{eq:monge}
+\bar c_{ij}(d)+\bar c_{i'j'}(d)
+\le
+\bar c_{ij'}(d)+\bar c_{i'j}(d).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+After cancellation, the left side minus the right side is
+\[
+(q_{i'}-q_i)(D_{j'}-D_j)\le0
+\]
+by \eqref{eq:orderedq} and non-negative demand.
+\end{proof}
+
+This ordered-slope representation is the first proof attack on \WWR. It yields affine path coefficients, the Monge inequality, additive perturbation geometry and an exact coefficient diameter used later. It does not by itself make the exact prefix-radius problem a shortest path. The exact event compares two lower envelopes, $B_k(d)$ and $A_k(d)$, and the path attaining $A_k(d)$ can switch before an outside path wins. A natural continuous path-flow relaxation of the exact mixed-integer model is not integral: the three-period instance in \cref{sec:counterexample} has true radius 2, while the relaxation accepts radius 1. This negative result rules out treating the obvious relaxation as a certificate; it does not prove hardness.
+
+\subsection{Affine path costs}
+
+For a path $P$, let $i_P(t)$ be the setup period whose cycle contains $t$. Then
+\begin{equation}\label{eq:affinepath}
+C_P(d)=\kappa_P+\beta_P^\top d,
+\qquad
+\kappa_P=\sum_{i\in P\setminus\{T+1\}}K_i,
+\qquad
+\beta_{P,t}=q_{i_P(t)}.
+\end{equation}
+This affine form converts forecast stability into distance from $\dhat$ to unions of polyhedra.
+
+\begin{proposition}[Complexity upper bound]\label{prop:np}
+The rational decision problem \WWR{} belongs to NP.
+\end{proposition}
+
+\begin{proof}
+A yes-certificate specifies an outside path $Q$, a revised rational vector $d$ in the radius box, and shortest-path dual potentials for the suffix that follows the protected prefix. The potentials satisfy polynomially many inequalities of the form in \eqref{eq:dualpotential} below, and the candidate inequality verifies $C_Q(d)\le A_k(d)$. For fixed $Q$, these conditions form a rational linear programme of polynomial size. Whenever it is feasible, it has a basic feasible solution with polynomially bounded encoding length. A verifier checks the path, demand bounds, weighted box, dual inequalities and candidate inequality in polynomial time.
+\end{proof}
+
+No matching hardness result or polynomial exact algorithm is claimed. The exact complexity of the unrestricted problem is an explicit open question in this release.
+
+\section{Exact distance to a fixed competitor}
+
+Fix an outside path $Q$. Relative to $P^\star$, define its nominal gap and coefficient difference
+\begin{equation}\label{eq:gapb}
+g_Q=C_Q(\dhat)-C_{P^\star}(\dhat)\ge0,
+\qquad
+b_Q=\beta_Q-\beta_{P^\star}.
+\end{equation}
+Let $s_t=\dhat_t-\ellv_t$ be the available downward slack. For any coefficient vector $b$, define
+\begin{equation}\label{eq:Psi}
+\Psi_b(r)=
+ r\sum_{t:b_t<0}\frac{|b_t|}{w_t}
+ +\sum_{t:b_t>0}b_t\min\left\{\frac{r}{w_t},s_t\right\}.
+\end{equation}
+The first term increases coordinates with negative $b_t$; the second decreases coordinates with positive $b_t$ until the floor binds.
+
+\begin{theorem}[Fixed-path tie radius]\label{thm:pairwise}
+The exact distance from $\dhat$ to the half-space $C_Q(d)\le C_{P^\star}(d)$ under $d\ge\ellv$ is
+\begin{equation}\label{eq:pairradius}
+r(Q,P^\star)=\inf\{r\ge0:\Psi_{b_Q}(r)\ge g_Q\}.
+\end{equation}
+At radius $r$, a worst revision is
+\begin{equation}\label{eq:worstrevision}
+d_t(r)=
+\begin{cases}
+\max\{\ellv_t,\dhat_t-r/w_t\},&b_{Q,t}>0,\\
+\dhat_t+r/w_t,&b_{Q,t}<0,\\
+\dhat_t,&b_{Q,t}=0.
+\end{cases}
+\end{equation}
+Before any floor binds,
+\begin{equation}\label{eq:interiorradius}
+r(Q,P^\star)=
+\frac{g_Q}{\sum_t|b_{Q,t}|/w_t},
+\end{equation}
+provided the denominator is positive and the resulting revision remains above the floor.
+\end{theorem}
+
+\begin{proof}
+For a fixed radius, minimising the affine gap
+\[
+g_Q+b_Q^\top(d-\dhat)
+\]
+over the weighted box and floor constraints separates by coordinate. A positive coefficient is reduced by decreasing demand as far as the box and floor permit; a negative coefficient is reduced by increasing demand to the upper side of the box. The maximum attainable gap reduction is exactly $\Psi_{b_Q}(r)$. The half-space is reached exactly when that reduction is at least $g_Q$. Formula \eqref{eq:interiorradius} follows while all positive-coefficient coordinates remain unsaturated.
+\end{proof}
+
+The function $\Psi_b$ is continuous, non-decreasing and piecewise linear. Its breakpoints are $w_t(\dhat_t-\ellv_t)$ for coordinates with $b_t>0$. Thus a fixed path needs only sorting and a linear scan; the challenge is selecting the relevant outside path without enumeration.
+
+\section{A polynomial lower certificate}
+
+\subsection{Frozen-comparator radius}
+
+Define
+\begin{equation}\label{eq:lowerrho}
+\underline\rho_{k,w}(\dhat)=
+\min_{Q\in\cO_k} r(Q,P^\star).
+\end{equation}
+This freezes the inside comparator at the selected nominal path rather than allowing the best prefix-retaining continuation to switch.
+
+\begin{theorem}[Validity and endpoint exactness]\label{thm:lower}
+For every protected prefix,
+\begin{equation}\label{eq:lowerineq}
+\underline\rho_{k,w}(\dhat)\le\rho_{k,w}(\dhat).
+\end{equation}
+The sequence $\underline\rho_{k,w}$ is non-increasing in $k$. If $k=m$, so the protected prefix is the full path $P^\star$, then
+\[
+\underline\rho_{m,w}=\rho_{m,w}.
+\]
+\end{theorem}
+
+\begin{proof}
+At any destabilising $d$, choose $Q\in\cO_k$ attaining $B_k(d)$. Then
+\[
+C_Q(d)=B_k(d)\le A_k(d)\le C_{P^\star}(d).
+\]
+Therefore $d$ lies in at least one pairwise half-space used in \eqref{eq:lowerrho}; its distance cannot be below the minimum pairwise distance. Monotonicity follows because $\cO_k$ expands with $k$. When the full path is protected, $\cI_m=\{P^\star\}$ and $A_m=C_{P^\star}$, so the pairwise union is the exact destabilising set.
+\end{proof}
+
+The lower certificate is operationally useful: whenever a calibrated revision radius lies below it, the true prefix is safe. Its conservatism costs commitment length, not validity.
+
+\subsection{Prefix-deviation graph}
+
+We now compute \eqref{eq:lowerrho} without enumerating $2^{T-1}$ paths. Construct an expanded acyclic graph $\cG_k$. Its matching layer contains states that have followed the first $r<k$ nominal arcs. Taking a non-expected arc moves permanently to a deviated layer. The expected $k$th arc is omitted because taking it completes the protected prefix. The deviated layer contains the ordinary complete acyclic lot-sizing graph. Source-to-sink paths in $\cG_k$ are therefore in one-to-one correspondence with $\cO_k$. The graph has $O(T)$ vertices and $O(T^2)$ arcs.
+
+Let $X_k$ be its unit source-to-sink flow polytope, $Nx=h$, $x\ge0$. Because $N$ is a network matrix, its extreme points are path incidence vectors.
+
+For each period define the floor breakpoint
+\begin{equation}\label{eq:breakpoints}
+\delta_t=w_t(\dhat_t-\ellv_t).
+\end{equation}
+Sort the distinct positive breakpoints and append 0 and $+\infty$. On an interval $[\delta_\ell,\delta_{\ell+1}]$, the set of positive coefficient differences already saturated at the floor is fixed.
+
+For an expanded arc $e=(i,j)$ and $t\in\{i,\ldots,j-1\}$, put $c_{e,t}=q_i-\beta_{P^\star,t}$. Define additive arc intercepts and slopes
+\begin{align}
+ a_e^\ell
+ &=K_i+\sum_{t=i}^{j-1}
+ \begin{cases}
+ c_{e,t}\dhat_t,&c_{e,t}<0,\\
+ c_{e,t}\dhat_t,&c_{e,t}>0\text{ and }\delta_t>\delta_\ell,\\
+ c_{e,t}\ellv_t,&c_{e,t}>0\text{ and }\delta_t\le\delta_\ell,\\
+ 0,&c_{e,t}=0,
+ \end{cases} \label{eq:aintercept}\\
+ b_e^\ell
+ &=\sum_{t=i}^{j-1}
+ \begin{cases}
+ -c_{e,t}/w_t,&c_{e,t}<0,\\
+ c_{e,t}/w_t,&c_{e,t}>0\text{ and }\delta_t>\delta_\ell,\\
+ 0,&\text{otherwise}.
+ \end{cases}\label{eq:bslope}
+\end{align}
+For path vector $x$, the worst frozen-comparator gap throughout this interval is
+\begin{equation}\label{eq:intervalgap}
+F_x(r)=(a^\ell)^\top x-\kappa_{P^\star}-r(b^\ell)^\top x.
+\end{equation}
+
+\begin{theorem}[Polynomial frozen-comparator certificate]\label{thm:polynomial}
+The value $\underline\rho_{k,w}$ is computable by at most $T+1$ polynomial-size linear programmes and shortest-path calculations on $\cG_k$.
+
+On interval $[\delta_\ell,\delta_{\ell+1}]$, first solve a shortest path for $F_x(\delta_\ell)$. If its minimum is positive, the first crossing in that interval is the linear-fractional path problem
+\begin{equation}\label{eq:fractional}
+\min_{x\in X_k:\,(b^\ell)^\top x>0}
+\frac{(a^\ell)^\top x-\kappa_{P^\star}}{(b^\ell)^\top x}.
+\end{equation}
+It has the Charnes--Cooper linear-programming form
+\begin{align}
+\min_{y,\tau}\quad &(a^\ell)^\top y-\kappa_{P^\star}\tau\label{eq:ccobj}\\
+\text{s.t.}\quad &Ny=\tau h,\notag\\
+&(b^\ell)^\top y=1,\notag\\
+&y\ge0,\quad\tau\ge0.\notag
+\end{align}
+The first interval whose optimum lies within its endpoints contains the exact lower certificate.
+\end{theorem}
+
+\begin{proof}
+By \cref{thm:pairwise}, the pairwise gap for every outside path is affine in $r$ between consecutive floor breakpoints. Equations \eqref{eq:aintercept}--\eqref{eq:intervalgap} distribute its intercept and slope over the path arcs. Before the first crossing, every path has $F_x(\delta_\ell)>0$, so any path with positive slope crosses at the ratio in \eqref{eq:fractional}; paths with zero slope cannot cross in the interval. Minimising that ratio over the integral path polytope gives the earliest outside path. The substitution $y=\tau x$, $\tau=1/(b^\ell)^\top x$ yields \eqref{eq:ccobj}, following \textcite{CharnesCooper1962}. There are at most $T$ finite breakpoints, and each graph and linear programme has polynomial size.
+\end{proof}
+
+\begin{remark}[Numerical versus formal certification]
+The theorem is an exact rational linear-programming statement. The release implementation calls floating-point HiGHS through SciPy \parencite{HuangfuHall2018,VirtanenEtAl2020}. A safety-critical deployment should reconstruct rational primal-dual certificates or round the returned lower radius outward. The supplied number is a tested numerical lower certificate, not a proof object from a formally verified solver.
+\end{remark}
+
+\section{The lower certificate can be strict}\label{sec:counterexample}
+
+The moving inside continuation is not a technical nuisance; it changes the answer.
+
+\begin{proposition}[Positive-floor strict-gap instance]\label{prop:counterexample}
+Let $T=3$, unit weights and
+\[
+q=(2,1,0),\qquad K=(0,3,2),\qquad
+\dhat=(1,5,1),\qquad \ellv=(0.5,0.5,0.5).
+\]
+The selected nominal optimum is $P^\star=(1,2,4)$ with reduced cost 11. Protect the first arc $(1,2)$. Then
+\[
+\underline\rho_{1,\infty}=1.5
+\qquad\text{but}\qquad
+\rho_{1,\infty}=2.
+\]
+\end{proposition}
+
+\begin{proof}
+The four path costs are
+\begin{align*}
+P^\star=(1,2,4):&\quad 2d_1+d_2+d_3+3,\\
+D=(1,2,3,4):&\quad 2d_1+d_2+5,\\
+C=(1,3,4):&\quad 2d_1+2d_2+2,\\
+A=(1,4):&\quad 2d_1+2d_2+2d_3.
+\end{align*}
+Paths $P^\star,D$ are inside; $C,A$ are outside. The nominal gap between $C$ and $P^\star$ is 3 and their coefficient difference is $(0,1,-1)$, so \cref{thm:pairwise} gives radius $3/2$. At the frozen tie $(1,3.5,2.5)$, however, $D=10.5<C=P^\star=11$. The prefix remains optimal.
+
+Now take any admissible $d$ with $\norm{d-\dhat}_\infty<2$. Then $d_2>3$. If $d_3\ge2$, $D$ is the best inside path and $C-D=d_2-3>0$. If $1\le d_3<2$, $P^\star$ is best inside, $C$ is best outside, and $C-P^\star=d_2-d_3-1>0$. If $d_3<1$, $P^\star$ is best inside, $A$ is best outside, and $A-P^\star=d_2+d_3-3>0$ because $d_3\ge0.5$. Thus no radius below 2 destabilises the prefix. At $d=(1,3,3)$, whose distance is 2, $D=C=10$ while $P^\star=11$ and $A=14$. Hence the exact radius is 2.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{../figures/counterexample_geometry.pdf}
+\caption{Along one adversarial revision ray, the outside competitor ties the frozen nominal path at radius 1.5, but an alternative inside continuation has already become cheaper. The strong prefix boundary occurs at radius 2. The proof of \cref{prop:counterexample} covers the full $L_\infty$ ball, not only this ray.}
+\label{fig:counterexample}
+\end{figure}
+
+The example also defeats the continuous flow relaxation of the exact mixed-integer model: at radius 1 it admits a half-integral path-flow solution even though the true event is impossible below radius 2. This shows why the polynomial method is presented as a lower certificate rather than as an exact relaxation.
+
+\section{Exact inverse formulations}
+
+\subsection{A compact linear programme for one outside path}
+
+Fix $Q\in\cO_k$ and let $s=v_k$ be the last vertex of the protected prefix. Write the prefix cost as
+\[
+C_{\pi_k}(d)=\kappa_{\pi_k}+\beta_{\pi_k}^\top d.
+\]
+The best inside value is this fixed prefix plus a shortest suffix path from $s$ to $T+1$. Introduce suffix potentials $\pi_s,\ldots,\pi_{T+1}$ satisfying
+\begin{equation}\label{eq:dualpotential}
+\pi_s=0,
+\qquad
+\pi_j-\pi_i\le K_i+q_i\sum_{t=i}^{j-1}d_t
+\quad(s\le i<j\le T+1).
+\end{equation}
+The maximum feasible $\pi_{T+1}$ equals the suffix shortest-path value.
+
+\begin{theorem}[Fixed-competitor inverse LP]\label{thm:fixedlp}
+For a fixed outside path $Q$, its exact inverse radius relative to the prefix class is the optimum of
+\begin{align}
+\min_{d,r,\pi}\quad &r\label{eq:fixedlp}\\
+\text{s.t.}\quad
+&d_t\ge\ellv_t &&(t=1,\ldots,T),\notag\\
+&-r/w_t\le d_t-\dhat_t\le r/w_t &&(t=1,\ldots,T),\notag\\
+&\pi\text{ satisfies \eqref{eq:dualpotential}},\notag\\
+&C_Q(d)\le C_{\pi_k}(d)+\pi_{T+1},\notag\\
+&r\ge0.\notag
+\end{align}
+Denote this value $r_Q^{\mathrm{inv}}$. Then
+\begin{equation}\label{eq:exactdisjunction}
+\rho_{k,w}(\dhat)=\min_{Q\in\cO_k}r_Q^{\mathrm{inv}}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+For fixed $d$, feasible potentials have $\pi_{T+1}$ no larger than the suffix shortest-path value, and the shortest-path dual has an optimal feasible potential attaining equality. Therefore the last inequality is feasible exactly when $C_Q(d)\le A_k(d)$. Minimising the radius gives the distance to that fixed disjunct. Taking the minimum over all outside paths gives the union in \cref{def:radius}.
+\end{proof}
+
+Equation \eqref{eq:exactdisjunction} is an exact finite disjunctive model. It also supports a certifying enumerator. Sort outside paths by their pairwise lower bounds $r(Q,P^\star)$. Solve \eqref{eq:fixedlp} in that order, maintain the smallest upper bound $U$, and stop when the next pairwise lower bound is at least $U$. Theorem \ref{thm:lower} makes the pruning valid. The worst case remains exponential, but the recorded small-instance median processed only 6.25\% of outside paths.
+
+\subsection{An exact fixed-radius mixed-integer model}
+
+At a proposed radius $R$, define the coordinate box
+\begin{equation}\label{eq:boxLU}
+L_t=\max\{\ellv_t,\dhat_t-R/w_t\},
+\qquad
+U_t=\dhat_t+R/w_t.
+\end{equation}
+Put binary unit-flow variables $z_e$ on the prefix-deviation graph $\cG_k$. For each arc $e=(i,j)$ and covered period $t=i,\ldots,j-1$, introduce $u_{e,t}=d_tz_e$. The binary McCormick hull over $L_t\le d_t\le U_t$ is
+\begin{align}
+L_tz_e\le u_{e,t}&\le U_tz_e,\label{eq:mcc1}\\
+d_t-U_t(1-z_e)\le u_{e,t}&\le d_t-L_t(1-z_e).\label{eq:mcc2}
+\end{align}
+The selected outside-path cost is
+\begin{equation}\label{eq:milpcandidate}
+\sum_{e=(i,j)}K_i z_e+
+\sum_{e=(i,j)}q_i\sum_{t=i}^{j-1}u_{e,t}.
+\end{equation}
+Use \eqref{eq:dualpotential} for the inside suffix. One may impose candidate cost no greater than prefix plus $\pi_{T+1}$, or equivalently minimise that cost gap and test whether the optimum is non-positive.
+
+\begin{theorem}[Fixed-radius MILP]\label{thm:milp}
+The flow constraints on $\cG_k$, bounds \eqref{eq:boxLU}, product constraints \eqref{eq:mcc1}--\eqref{eq:mcc2}, suffix potentials \eqref{eq:dualpotential}, and the comparison of \eqref{eq:milpcandidate} with $C_{\pi_k}(d)+\pi_{T+1}$ form an exact mixed-integer formulation of \WWR{} at radius $R$. It has $O(T^3)$ variables and constraints in the direct construction.
+\end{theorem}
+
+\begin{proof}
+Every integer source-to-sink flow on $\cG_k$ selects exactly one outside path, and every outside path has one such flow. With binary $z_e$, \eqref{eq:mcc1}--\eqref{eq:mcc2} are the exact convex hull of $u_{e,t}=d_tz_e$ over the fixed box, so \eqref{eq:milpcandidate} is its true path cost. By shortest-path duality, the potential comparison holds exactly when the selected outside path is no more expensive than the best prefix-retaining path. The number of graph arcs is $O(T^2)$; summing an auxiliary product over every period covered by every arc gives $O(T^3)$ products.
+\end{proof}
+
+The implementation minimises the cost gap rather than relying on a zero-slack feasibility row, then independently re-solves the selected disjunct as \eqref{eq:fixedlp}. This rejects false positives caused by mixed-integer primal-feasibility tolerances near the exact boundary. A feasible witness is directly checkable. A negative solver result still requires retention of status, logs and, where available, an infeasibility certificate.
+
+\section{Calibrating forecast revisions}
+
+The deterministic radius answers how far demand must move. A commitment policy also needs a probability model for how far the next forecast revision will move. Rather than impose a parametric multivariate error distribution, score historical aligned revisions by the same geometry used in the optimisation.
+
+Let $E_1,\ldots,E_n\in\R^T$ be historical revision vectors for the same product class, lead-time grid and forecast vintage. Define
+\begin{equation}\label{eq:scores}
+S_i=\norm{E_i}_{\infty,w}.
+\end{equation}
+For target miscoverage $\alpha\in(0,1)$, let
+\begin{equation}\label{eq:conformalrank}
+j=\left\lceil(n+1)(1-\alpha)\right\rceil,
+\qquad
+q_{1-\alpha}=
+\begin{cases}
+S_{(j)},&j\le n,\\
++\infty,&j=n+1,
+\end{cases}
+\end{equation}
+where $S_{(j)}$ is the $j$th order statistic of the calibration scores.
+
+\begin{theorem}[Finite-sample revision tube]\label{thm:conformal}
+If $S_1,\ldots,S_n,S_{n+1}$ are exchangeable, then
+\begin{equation}\label{eq:coverage}
+\Pr\{S_{n+1}\le q_{1-\alpha}\}\ge1-\alpha.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Under exchangeability, the rank of the next score among the $n+1$ scores is uniform when ties are randomly broken and is conservative under the non-randomised weak inequality. The probability that the rank exceeds $j$ is at most $(n+1-j)/(n+1)\le\alpha$.
+\end{proof}
+
+\begin{corollary}[Calibrated commitment]\label{cor:calibrated}
+If
+\begin{equation}\label{eq:commitcriterion}
+q_{1-\alpha}<\underline\rho_{k,w}(\dhat).
+\end{equation}
+then, under the assumptions of \cref{thm:conformal},
+\[
+\Pr\{\text{the next revised optimum can leave the first $k$ cycles}\}\le\alpha.
+\]
+A conservative policy commits the largest $k$ satisfying \eqref{eq:commitcriterion}.
+\end{corollary}
+
+\begin{proof}
+The event $S_{n+1}\le q_{1-\alpha}$ implies a revision strictly inside the deterministic lower certificate and hence inside the true radius by \cref{thm:lower}. Its complement has probability at most $\alpha$.
+\end{proof}
+
+The strict inequality matters because a tie at the radius permits a schedule change. The weights should be fixed before calibration or fitted on a separate sample. Revision rows must align in units, horizon, vintage and information set. Missing coordinates require an explicit treatment before scoring; silently dropping them changes the norm and invalidates the claimed tube.
+
+Exchangeability is an assumption, not a property that conformal prediction manufactures. The synthetic scale-shift experiment in \cref{sec:computation} deliberately violates it: empirical coverage falls from 0.896 at equal scale to 0.639 and 0.370 when the next revision scale is multiplied by 1.25 and 1.5. Weighted or rolling conformal methods may reduce sensitivity to drift, but they require their own assumptions and error accounting \parencite{BarberEtAl2023}.
+
+\section{A rolling-horizon loss theorem}
+
+A stability radius controls decision changes. We now bound the cost of acting on successive forecasts.
+
+At a state $a$, let $V_a(d)$ be the optimal reduced suffix cost from $a$ through $T$. Suppose the planner implements a forecast-chosen block $\pi:a\to b$ and replans at $b$. Its Bellman residual under realised demand is
+\begin{equation}\label{eq:residual}
+R_\pi(d)=C_\pi(d)+V_b(d)-V_a(d)\ge0.
+\end{equation}
+If implemented blocks concatenate to a path $R$, their residuals telescope.
+
+\begin{lemma}[Telescoping identity]\label{lem:telescope}
+For block endpoints $1=a_0<a_1<\cdots<a_M=T+1$,
+\begin{equation}\label{eq:telescope}
+C_R(d)-V_1(d)=\sum_{r=0}^{M-1}R_{\pi_r}(d).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Sum \eqref{eq:residual}. The value terms cancel, $V_{T+1}=0$, and the block costs sum to the implemented path cost.
+\end{proof}
+
+For suffix paths $P,Q$ from $a$, define the weighted coefficient diameter
+\begin{equation}\label{eq:Lambda}
+\Lambda_a=
+\max_{P,Q:a\to T+1}
+\sum_{t=a}^T\frac{|\beta_{P,t}-\beta_{Q,t}|}{w_t}.
+\end{equation}
+
+\begin{lemma}[Exact ordered-slope diameter]\label{lem:diameter}
+Under \eqref{eq:orderedq},
+\begin{equation}\label{eq:Gamma}
+\Lambda_a=\Gamma_a:=
+\sum_{t=a}^T\frac{q_a-q_t}{w_t}.
+\end{equation}
+The direct suffix path and the path that sets up every period attain the maximum.
+\end{lemma}
+
+\begin{proof}
+At period $t$, any suffix path uses a setup epoch $i\in\{a,\ldots,t\}$, so ordered slopes imply $q_a\ge\beta_{P,t}=q_i\ge q_t$. Hence every pairwise coefficient difference is at most $q_a-q_t$ coordinate-wise. The direct path has coefficient $q_a$ in every period, while the every-period path has coefficient $q_t$ at period $t$, attaining the sum.
+\end{proof}
+
+\begin{theorem}[Certified dead-zone rolling loss]\label{thm:rolling}
+At state $a$, let forecast $f$ choose a prefix block $\pi:a\to b$. Suppose its strong weighted prefix radius is $\rho$ over the admissible demand domain. Then for every realised $d$,
+\begin{equation}\label{eq:deadzone}
+R_\pi(d)
+\le
+\Lambda_a\pos{\norm{d-f}_{\infty,w,[a:T]}-\rho}.
+\end{equation}
+If only a valid lower certificate $\underline\rho\le\rho$ is available, replacing $\rho$ by $\underline\rho$ preserves the inequality. Consequently, for a rolling policy using forecasts $f^r$ and certified blocks starting at $a_r$,
+\begin{equation}\label{eq:rollingbound}
+C_R(d)-V_1(d)
+\le
+\sum_r \Gamma_{a_r}
+\pos{
+\norm{d-f^r}_{\infty,w,[a_r:T]}-\underline\rho_r
+}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The residual is the difference between the best path constrained to retain $\pi$ and the unrestricted optimum. For two demand vectors $d,e$, choose an inside optimiser at $e$ and an unrestricted optimiser at $d$ to obtain
+\[
+R_\pi(d)-R_\pi(e)
+\le(\beta_P-\beta_Q)^\top(d-e)
+\le\Lambda_a\norm{d-e}_{\infty,w}.
+\]
+Swapping $d,e$ gives absolute Lipschitz continuity. Throughout the closed radius ball around $f$, an inside optimum remains globally optimal, so $R_\pi=0$. If $d$ lies outside, project it radially to the ball at
+\[
+e=f+\frac{\rho}{\norm{d-f}_{\infty,w}}(d-f).
+\]
+The segment remains in the floor-constrained domain, and $\norm{d-e}_{\infty,w}=\norm{d-f}_{\infty,w}-\rho$. Lipschitz continuity proves \eqref{eq:deadzone}. A smaller lower certificate enlarges the positive part. Sum the block bounds using \cref{lem:telescope} and substitute \cref{lem:diameter}.
+\end{proof}
+
+Without stability information, the generic Lipschitz bound charges $\Gamma_a\norm{d-f}$ from zero. Theorem \ref{thm:rolling} removes a certified dead zone. It is a worst-case bound and may remain conservative; its value is that every term is auditable and it becomes exactly zero when realised revisions stay within each certified radius.
+
+A related approximate-policy statement is immediate. If a chosen block has forecast residual at most $\varepsilon$, then
+\[
+R_\pi(d)\le\varepsilon+\Lambda_a\norm{d-f}_{\infty,w}.
+\]
+The stronger dead-zone form requires exact prefix optimality and a valid radius.
+
+\section{Computational audit}\label{sec:computation}
+
+The computations target implementation errors, not theorem discovery by simulation. All pseudo-random experiments use NumPy's \texttt{default\_rng} with seed 20260804. The frozen environment was Python 3.13.5, NumPy 2.3.5, SciPy 1.17.0, pandas 2.2.3 and Matplotlib 3.10.8 on x86-64 Linux. Raw comma-separated tables, scripts and figures accompany the paper.
+
+Synthetic Wagner--Whitin instances use strictly decreasing slopes generated from positive increments, setup costs sampled independently, and positive demand. These distributions are test generators, not a model of industrial demand.
+
+\begin{table}[t]
+\centering
+\caption{Frozen computational audit. Timing is machine-dependent; algebraic comparisons and seeded samples are replayable under the locked environment.}
+\label{tab:audit}
+\begin{tabularx}{0.96\linewidth}{@{}l>{\raggedleft\arraybackslash}p{0.22\linewidth}X@{}}
+\toprule
+Check & Recorded result & Interpretation \\
+\midrule
+Polynomial vs exhaustive lower certificate & 569 cases; maximum absolute error 0 & Checks path automaton, floor breakpoints and fractional LP against path enumeration for $T=2,\ldots,9$. \\
+Exact small-instance radii & 129 finite instances & First-cycle certificate exactly tight in 27.9\%; median lower/exact ratio 0.778; tenth percentile 0.396. \\
+Pruned exact enumeration & Median 6.25\% of outside paths solved & Observed pruning only; no polynomial worst-case claim. \\
+Polynomial scaling & Median 0.0057 s at $T=20$; 0.604 s at $T=160$ & Single-machine synthetic timing; not a complexity proof. \\
+Conformal equal-scale coverage & 0.8964, Monte Carlo SE 0.00278 & Consistent with nominal 0.90 within simulation error. \\
+Conformal scale shift & 0.6387 at $1.25\times$; 0.3697 at $1.5\times$ & Deliberate exchangeability failure. \\
+Rolling theorem & 220 cases; maximum excess $2.28\times10^{-13}$ & Numerical round-off only; median certified bound 298.2 versus 719.2 without the dead zone. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\begin{subfigure}[t]{0.48\linewidth}
+\includegraphics[width=\linewidth]{../figures/certificate_tightness.pdf}
+\caption{Lower-certificate tightness.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\linewidth}
+\includegraphics[width=\linewidth]{../figures/certificate_scaling.pdf}
+\caption{Polynomial runtime.}
+\end{subfigure}
+
+\vspace{1em}
+\begin{subfigure}[t]{0.48\linewidth}
+\includegraphics[width=\linewidth]{../figures/calibration_coverage.pdf}
+\caption{Calibration and scale drift.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\linewidth}
+\includegraphics[width=\linewidth]{../figures/rolling_loss_bound.pdf}
+\caption{Realised regret versus bound.}
+\end{subfigure}
+\caption{Synthetic audit results. Panel (a) compares the polynomial lower certificate with exact strong radii, not with exhaustive computation of the same lower certificate. Panel (b) uses a logarithmic time axis. Panel (c) illustrates the exchangeability boundary. Panel (d) is plotted on $\log_{10}(1+x)$ axes.}
+\label{fig:audit}
+\end{figure}
+
+The exact MILP and disjunctive LP were cross-checked on random instances with $T=3,\ldots,6$. A separate explicit LP containing one inequality for every inside path matched the compact suffix-dual LP. At each tested exact radius, the mixed-integer model was infeasible below a tolerance-separated boundary and returned a directly checked witness at the boundary. The implementation now validates the selected mixed-integer path with the independent fixed-competitor LP to avoid a solver-tolerance false positive observed $10^{-5}$ below one random boundary during adversarial testing.
+
+The certificate-tightness distribution makes the intended use clear. The lower bound is often informative but not uniformly close. An organisation should therefore use it as a cheap first-line commitment certificate and invoke exact analysis only when the business value of an additional cycle justifies the computation.
+
+\section{Operational protocol}
+
+The complete system separates deterministic geometry, statistical frequency and realised severity.
+
+\begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=5.2em,itemsep=0.45em]
+\item \textbf{Freeze the instance.} Record $K,q,\dhat$, the demand floor, norm weights, units, forecast vintage and data hash. Verify ordered slopes or document why the reduced Wagner--Whitin model is inapplicable.
+\item \textbf{Solve the nominal problem.} Select and record one tie-broken optimal path $P^\star$. Enumerate its replenishment cycles; do not describe changing quantities as changing structural commitments.
+\item \textbf{Compute polynomial certificates.} For each $k$, calculate $\underline\rho_{k,w}$. Check monotonicity and retain the primal path, adversarial revision and solver record.
+\item \textbf{Calibrate revision magnitude.} Assemble aligned historical revision vectors, audit missingness and drift, compute $q_{1-\alpha}$, and commit the largest $k$ with $q_{1-\alpha}<\underline\rho_{k,w}$.
+\item \textbf{Escalate near the boundary.} If a longer commitment has material value but fails the lower-certificate test, run the exact fixed-radius MILP or the pruned disjunctive LP. Treat timeouts and uncertified infeasibility as unresolved, not as safe.
+\item \textbf{Replan and monitor.} After each forecast revision, rerun the calculation from the current state. Accumulate the deterministic rolling bound in \eqref{eq:rollingbound} and compare it with realised regret when actual demand becomes available.
+\item \textbf{Govern exceptions.} Record manual overrides, capacity constraints, minimum order quantities, supplier lock-ins and service constraints outside the model. A mathematical certificate for the wrong feasible set is operationally invalid.
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\caption{Four outputs that should not be conflated.}
+\label{tab:outputs}
+\begin{tabularx}{0.96\linewidth}{@{}p{0.24\linewidth}p{0.28\linewidth}X@{}}
+\toprule
+Output & Meaning & What it does not mean \\
+\midrule
+$\underline\rho_{k,w}$ & Deterministic safe lower radius & It need not equal the exact radius. \\
+Exact witness or $\rho_{k,w}$ & Nearest revised instance at which an outside optimum can tie or win & It is not a probability of revision. \\
+$q_{1-\alpha}$ & Finite-sample marginal revision threshold under exchangeability & It is not a conditional guarantee under arbitrary drift. \\
+Rolling bound & Worst-case realised cost above the clairvoyant optimum & It is not a forecast of expected financial loss without a stochastic model. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The command-line release implements two main operations. \texttt{wwprefix certify} returns nominal paths, lower certificates, optional exact small-instance radii and an optional conformal commitment length. \texttt{wwprefix decide} solves \WWR{} at one proposed radius. JSON inputs and outputs make each decision auditable and suitable for embedding in a wider planning system.
+
+\section{Scope, failure modes and open problems}
+
+The conclusions are bounded by the following assumptions.
+
+\paragraph{Model boundary.}
+The theory covers one uncapacitated item, deterministic period demands once a scenario is fixed, linear production and holding costs, no backlogging, and Wagner--Whitin ordered slopes. Capacity, joint setups, minimum order quantities, perishability, substitution and service constraints change the path family and may destroy the formulas.
+
+\paragraph{Demand-domain boundary.}
+The revision set has a coordinate-wise lower floor and no upper cap beyond the radius box. A physical setup interpretation needs positive demand or preprocessing of zero-demand periods. Additional upper bounds can be inserted into the pairwise and exact programmes but require revised breakpoint formulas.
+
+\paragraph{Decision boundary.}
+The prefix fixes structural setup epochs and cycle boundaries. It does not freeze order quantities, labour allocations, transport bookings or supplier-specific decisions unless those are explicitly represented.
+
+\paragraph{Statistical boundary.}
+The split-conformal statement is marginal and requires exchangeable scores. Product pooling, changing forecast systems, promotions, censored demand and missing coordinates can break alignment. The scale-shift experiment is a warning, not a drift correction.
+
+\paragraph{Computational boundary.}
+The polynomial lower certificate is numerically solved in floating point. Exact disjunctive enumeration can be exponential. Mixed-integer infeasibility depends on solver assurance. The release contains no independent reproduction or formal proof.
+
+\paragraph{Open exact complexity.}
+The central unresolved theoretical question is whether the ordered-slope, prefix-class structure makes unrestricted \WWR{} polynomially solvable, or whether the moving inside lower envelope encodes an NP-hard disjunction. Productive next attacks include: (i) a stronger Monge-compatible extended formulation; (ii) a reduction that preserves ordered $q$ and positive demand; (iii) fixed-parameter algorithms in the number of protected cycles, distinct slopes or floor breakpoints; and (iv) approximation guarantees for $\underline\rho_{k,w}/\rho_{k,w}$ under cost separation assumptions.
+
+\paragraph{Calibration and control extensions.}
+A second research line should derive time-uniform or drift-robust revision tubes and integrate them with sequential commitment decisions. The deterministic theorem is modular: any valid revision region contained in a stability ball can replace split conformal calibration. A third line should test whether the rolling dead-zone bound predicts operational nervousness and expediting cost on forecast-vintage data from real supply chains.
+
+\section{Conclusion}
+
+The relevant commitment horizon is not a fixed number of calendar periods. It is the distance from the current forecast to the nearest demand revision at which the best schedule can leave a specified replenishment prefix.
+
+The reduced arc form $K_i+q_i(D_j-D_i)$ makes that distance tractable in layers. Ordered slopes yield Monge structure and a sharp coefficient diameter. Fixed-path geometry yields a closed-form floor-aware tie radius. A prefix-deviation graph turns the minimum of those distances into a polynomial lower certificate. Exact fixed-competitor and mixed-integer formulations resolve cases where that certificate is too conservative. Historical revisions convert the radius into a calibrated commitment rule under an explicit exchangeability assumption. Bellman residuals then convert the same radius into a rolling cost bound with a certified dead zone.
+
+This layered result is operationally complete even while the unrestricted exact complexity remains open. It offers a cheap safe certificate, an exact escalation route, a statistically calibrated decision threshold and a deterministic account of realised rolling loss. Each layer exposes its own assumptions and failure modes, so a planner can distinguish what has been proved, what has been estimated and what remains unresolved.
+
+\clearpage
+\appendix
+
+\section{Full proof details for the polynomial certificate}
+
+This appendix expands the interval argument behind \cref{thm:polynomial}. For path $Q$, write $b_{Q,t}=\beta_{Q,t}-\beta_{P^\star,t}$. Its worst residual pairwise gap at radius $r$ is
+\begin{equation}\label{eq:appendixF}
+F_Q(r)=g_Q-
+ r\sum_{b_{Q,t}<0}\frac{|b_{Q,t}|}{w_t}
+ -\sum_{b_{Q,t}>0}b_{Q,t}\min\left\{\frac r{w_t},\dhat_t-\ellv_t\right\}.
+\end{equation}
+The frozen radius is the first $r$ for which $\min_{Q\in\cO_k}F_Q(r)\le0$.
+
+Fix an interval with left endpoint $\delta_\ell$. If $b_{Q,t}>0$ and $\delta_t\le\delta_\ell$, coordinate $t$ has saturated at the floor throughout the interval and contributes $b_{Q,t}\ellv_t$ to the affine path gap. If $b_{Q,t}>0$ and $\delta_t>\delta_\ell$, it contributes $b_{Q,t}\dhat_t-rb_{Q,t}/w_t$. If $b_{Q,t}<0$, upward demand remains unsaturated and contributes $b_{Q,t}\dhat_t+r b_{Q,t}/w_t$. These are exactly the arc terms in \eqref{eq:aintercept}--\eqref{eq:bslope}.
+
+Let $\phi_\ell(r)=\min_{x\in X_k}F_x(r)$. If $\phi_\ell(\delta_\ell)\le0$, the global first crossing is $\delta_\ell$ because previous intervals had no crossing. Otherwise all positive-slope paths have a ratio strictly larger than $\delta_\ell$, and the smallest ratio solves \eqref{eq:fractional}. If it exceeds the right endpoint, no path crosses in the interval. At the last interval, every positive coefficient difference is floor-saturated; only negative differences can continue to reduce gaps as demand rises. If no denominator-positive path exists and the left endpoint is safe, the frozen radius is infinite.
+
+The Charnes--Cooper feasible set is a scaled network-flow polytope. A feasible $(y,\tau)$ has $\tau>0$ because $(b^\ell)^\top y=1$; then $x=y/\tau$ satisfies $Nx=h$ and the objective equals the path ratio. Conversely every denominator-positive $x\in X_k$ maps to a feasible pair. Although the LP may return a convex combination at a multiple optimum, linear-fractional optimisation over a polytope has an optimal extreme point, hence an outside path.
+
+\section{Exact disjunction as a union of polyhedra}
+
+For each outside path $Q$, define
+\[
+\mathcal D_Q=
+\left\{d\ge\ellv:C_Q(d)\le C_P(d)\ \text{for all }P\in\cI_k\right\}.
+\]
+Then the destabilising set is
+\[
+\mathcal D_k=\bigcup_{Q\in\cO_k}\mathcal D_Q.
+\]
+Each $\mathcal D_Q$ is a polyhedron described either by exponentially many inside-path inequalities or by the compact extended potential formulation \eqref{eq:dualpotential}. The exact radius is the distance from $\dhat$ to this union. This view clarifies three facts:
+
+\begin{enumerate}[label=(\roman*)]
+\item the fixed-competitor problem is linear;
+\item the difficulty lies in the union over outside paths and the moving best inside path; and
+\item the frozen lower certificate replaces each $\mathcal D_Q$ by the larger half-space $\{d:C_Q(d)\le C_{P^\star}(d)\}$, so its union is larger and its distance is smaller.
+\end{enumerate}
+
+\section{Independent checks encoded in the release}
+
+The test suite contains the following cross-checks.
+
+\begin{enumerate}
+\item Reduced arc costs match direct affine path coefficients; ordered slopes satisfy the Monge inequality.
+\item The piecewise pairwise formula respects weighted norms and positive demand floors.
+\item The polynomial lower method matches exhaustive outside-path enumeration on integer and continuous random instances.
+\item Full-path lower certificates equal exact radii.
+\item The compact fixed-competitor potential LP matches an independently coded LP with one inequality for every inside path.
+\item The exact disjunctive radius and fixed-radius MILP agree on random small instances after a tolerance-separated boundary check.
+\item The strict-gap example returns 1.5 for the lower certificate and 2 for the exact radius, and the continuous path relaxation fails.
+\item Conformal order-statistic ranks and weighted revision scores match direct calculations.
+\item Rolling realised regret never exceeds the deterministic theorem bound in the frozen and unit-test samples.
+\end{enumerate}
+
+The script \texttt{scripts/verify\_release.py} checks the frozen row counts, numerical invariants, analytical witness, figure files and example command-line output. It does not establish external independence because it was produced within the same workflow.
+
+\section{Notation table}
+
+\begin{longtable}{@{}p{0.20\linewidth}p{0.73\linewidth}@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+\endfirsthead
+\toprule
+Symbol & Meaning \\
+\midrule
+\endhead
+$T$ & Number of periods. \\
+$K_i,p_i,h_i$ & Setup, unit production/purchase and one-period holding costs. \\
+$H_i,q_i$ & $H_i=\sum_{s<i}h_s$ and reduced slope $q_i=p_i-H_i$. \\
+$D_j$ & Cumulative demand before period $j$, $D_j=\sum_{t<j}d_t$. \\
+$P^\star$ & Selected nominal optimal path. \\
+$\pi_k$ & First $k$ arcs of $P^\star$. \\
+$\cI_k,\cO_k$ & Paths inside and outside the protected prefix class. \\
+$A_k(d),B_k(d)$ & Best inside and outside reduced costs under revised demand $d$. \\
+$w,\ellv$ & Positive norm weights and coordinate-wise demand floor. \\
+$\rho_{k,w}$ & Exact strong prefix-stability radius. \\
+$\underline\rho_{k,w}$ & Polynomial frozen-comparator lower certificate. \\
+$\kappa_P,\beta_P$ & Constant setup cost and demand coefficient vector of path $P$. \\
+$g_Q,b_Q$ & Nominal path gap and coefficient difference relative to $P^\star$. \\
+$\Gamma_a$ & Exact weighted coefficient diameter of suffix paths from $a$. \\
+$R_\pi(d)$ & Bellman residual of an implemented block under realised demand. \\
+\bottomrule
+\end{longtable}
+
+\printbibliography[title={References}]
+
+\end{document}

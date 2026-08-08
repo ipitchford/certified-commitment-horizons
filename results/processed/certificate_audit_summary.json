@@ -1,0 +1,139 @@
+{
+  "adversarial_partial_positive_cases": 182,
+  "adversarial_partial_strict_lower_count": 96,
+  "all_exact_brackets_contain": true,
+  "all_graph_bijections_pass": true,
+  "all_graphs_acyclic": true,
+  "all_monotonicity_checks_pass": true,
+  "broad_partial_positive_cases": 72,
+  "broad_partial_strict_lower_count": 5,
+  "by_regime": {
+    "floor_heavy": {
+      "lower_to_exact": {
+        "median": 0.9999999999999997,
+        "p10": 0.9999999999999982,
+        "p90": 1.0000000000000013
+      },
+      "polynomial_exact_count": 29,
+      "relative_bracket_width": {
+        "median": 2.5533160964625436e-16,
+        "p10": -1.352582270076353e-15,
+        "p90": 1.3582969172202196e-15
+      },
+      "rows": 31,
+      "strict_lower_count": 2,
+      "upper_to_exact": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      }
+    },
+    "near_tie": {
+      "lower_to_exact": {
+        "median": 0.9999999999999988,
+        "p10": 0.9999999999999922,
+        "p90": 1.0000000000000013
+      },
+      "polynomial_exact_count": 11,
+      "relative_bracket_width": {
+        "median": 1.1904305667560777e-15,
+        "p10": -1.3827353383402364e-15,
+        "p90": 7.823270622863464e-15
+      },
+      "rows": 11,
+      "strict_lower_count": 0,
+      "upper_to_exact": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      }
+    },
+    "regular": {
+      "lower_to_exact": {
+        "median": 0.9999999999999998,
+        "p10": 0.9966704996031766,
+        "p90": 1.0000000000000009
+      },
+      "polynomial_exact_count": 27,
+      "relative_bracket_width": {
+        "median": 2.5625711572665693e-16,
+        "p10": -8.473263095018236e-16,
+        "p90": 0.003329500396823454
+      },
+      "rows": 30,
+      "strict_lower_count": 3,
+      "upper_to_exact": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      }
+    },
+    "strict_gap": {
+      "lower_to_exact": {
+        "median": 0.9368123044297137,
+        "p10": 0.6182668740295835,
+        "p90": 1.0000000000000022
+      },
+      "polynomial_exact_count": 86,
+      "relative_bracket_width": {
+        "median": 0.06318769557028625,
+        "p10": -2.185582250414054e-15,
+        "p90": 0.38579341984729565
+      },
+      "rows": 182,
+      "strict_lower_count": 96,
+      "upper_to_exact": {
+        "median": 1.0,
+        "p10": 1.0,
+        "p90": 1.0
+      }
+    }
+  },
+  "certificate_comparisons": 512,
+  "design": {
+    "adversarial_conditioned_instances": 96,
+    "adversarial_frequency_is_not_a_prevalence_estimate": true,
+    "broad_generated_instances": 162
+  },
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": null,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "exact_cases": 512,
+  "exact_solver_failures": 0,
+  "finite_certificate_comparisons": 512,
+  "fixed_competitor_comparisons": 96,
+  "full_path_exact_checks": 258,
+  "full_path_max_lower_exact_error": 4.547473508864641e-13,
+  "generated_instances": 258,
+  "graph_checks": 62,
+  "max_absolute_certificate_error": 0.0,
+  "max_fixed_competitor_error": 7.958078640513122e-13,
+  "partial_lower_to_exact": {
+    "median": 0.9999999999999765,
+    "p10": 0.6408601460109066,
+    "p90": 1.0000000000000013
+  },
+  "partial_polynomial_exact_count": 153,
+  "partial_polynomial_exact_share": 0.6023622047244095,
+  "partial_positive_exact_cases": 254,
+  "partial_relative_bracket_width": {
+    "median": 2.338076091199092e-14,
+    "p10": -1.353245057551424e-15,
+    "p90": 0.3639218165847943
+  },
+  "partial_upper_to_exact": {
+    "median": 1.0,
+    "p10": 1.0,
+    "p90": 1.0
+  }
+}

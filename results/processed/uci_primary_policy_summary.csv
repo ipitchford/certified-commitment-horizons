@@ -1,0 +1,9 @@
+policy,windows,mean_committed_periods,median_committed_periods,mean_committed_arcs,total_actual_structural_regret_gbp,mean_actual_structural_regret_gbp,median_actual_structural_regret_gbp,max_actual_structural_regret_gbp,exact_escalations,unresolved_boundaries,nonzero_commitment_windows,retained_windows,retention_fraction
+certified_lower_only,12,0.166666666667,0,0.0833333333333,0,0,0,0,0,1,1,1,1
+certified_with_exact_escalation,12,0.333333333333,0,0.166666666667,0,0,0,0,1,0,2,2,1
+fixed_2_period_fence,12,2.08333333333,2,1,114.80436,9.56703,6.38424,24.74388,0,0,12,10,0.833333333333
+fixed_3_period_fence,12,3.91666666667,4,1.91666666667,308.21736,25.68478,26.5257,55.07076,0,0,12,10,0.833333333333
+fixed_4_period_fence,12,4.16666666667,4,2,308.21736,25.68478,26.5257,55.07076,0,0,12,10,0.833333333333
+old_plan_one_cycle,12,2.08333333333,2,1,114.80436,9.56703,6.38424,24.74388,0,0,12,10,0.833333333333
+unrestricted_actual_benchmark,12,0,0,0,0,0,0,0,0,0,,,
+updated_plan_one_cycle,12,2.25,2,1,73.32612,6.11051,1.77516,20.30376,0,0,12,12,1
