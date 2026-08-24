@@ -45,6 +45,7 @@ def instance_from_mapping(value: Mapping[str, Any]) -> WWInstance:
         demand=_numeric_list(value["demand"], "demand"),
         floor=None if value.get("floor") is None else _numeric_list(value["floor"], "floor"),
         weights=None if value.get("weights") is None else _numeric_list(value["weights"], "weights"),
+        semantic_mode=str(value.get("semantic_mode", "forced_source_graph")),
     )
 
 
@@ -80,6 +81,7 @@ def exact_instance_from_mapping(value: Mapping[str, Any]):
         rats(value["demand"], "demand"),
         None if value.get("floor") is None else rats(value["floor"], "floor"),
         None if value.get("weights") is None else rats(value["weights"], "weights"),
+        semantic_mode=str(value.get("semantic_mode", "forced_source_graph")),
     )
 
 

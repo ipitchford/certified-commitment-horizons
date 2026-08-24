@@ -1,0 +1,28 @@
+{
+  "M1_refusals": 0,
+  "P1_largest_resolved_T": {
+    "M1_enumeration": 18,
+    "M2_arc_product_milp": 18,
+    "M3_compact_min_radius": 18,
+    "M3b_compact_decision": 18,
+    "M4_polynomial_bracket": null
+  },
+  "deviations": [],
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": "a082af26a61a7ef70e2d1503a7f40a9d9fca1cc7",
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "preregistration_sha256": "2a6980131d0c2380dcfecf3aee29fc7d8aad919807859a3def4353a6e21db254",
+  "rows": 60,
+  "smoke": true,
+  "wall_seconds_total": 107.01138424999999
+}

@@ -1,5 +1,3 @@
 # Literature boundary
 
-No third-party article full text or extracted article text is redistributed here.
-
-`docs/literature_audit.md`, `paper/references.bib` and `THIRD_PARTY_NOTICES.md` identify the inspected corpus, access boundary, source URLs and hashes. Readers should obtain cited works from their publishers, lawful repositories or document-delivery services.
+Third-party literature PDFs and derived text extracts were inspected in the private review workspace but are not redistributed in this release. Use `docs/literature_audit.md`, `release/prior_art_corpus.json`, `release/provenance.json`, and `THIRD_PARTY_NOTICES.md` for citations, source URLs, inspection states and content hashes.

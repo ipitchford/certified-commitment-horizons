@@ -13,9 +13,8 @@ cannot re-verify is reported as unresolved rather than silently promoted.
 
 Certificates emitted here are self-contained: a witness demand vector, an
 outside path, and (for upper bounds against the moving inside continuation)
-an inside-path mixture.  ``scripts/check_certificate.py`` is a separately
-implemented producer-side checker that re-verifies them without importing
-this package.
+an inside-path mixture.  ``scripts/check_certificate.py`` re-verifies them
+independently of this package.
 """
 from __future__ import annotations
 
@@ -27,6 +26,9 @@ import numpy as np
 
 from .graph import PrefixDeviationGraph, build_prefix_deviation_graph
 from .model import (
+    CLASSICAL_ACTIVE_HORIZON,
+    FORCED_SOURCE_GRAPH,
+    SEMANTIC_MODES,
     Path,
     WWInstance,
     follows_prefix,
@@ -81,6 +83,7 @@ class ExactInstance:
     demand: tuple[Rat, ...]
     floor: tuple[Rat, ...]
     weights: tuple[Rat, ...]
+    semantic_mode: str = FORCED_SOURCE_GRAPH
 
     @classmethod
     def from_rationals(
@@ -90,6 +93,8 @@ class ExactInstance:
         demand: Sequence[object],
         floor: Sequence[object] | None = None,
         weights: Sequence[object] | None = None,
+        *,
+        semantic_mode: str = FORCED_SOURCE_GRAPH,
     ) -> "ExactInstance":
         Kr = tuple(_fr(v) for v in K)
         qr = tuple(_fr(v) for v in q)
@@ -113,7 +118,19 @@ class ExactInstance:
                 "exact layer: reduced slopes q must be exactly non-increasing; "
                 "the supplied instance violates the ordering at machine precision"
             )
-        return cls(Kr, qr, d, ell, w)
+        if semantic_mode not in SEMANTIC_MODES:
+            allowed = ", ".join(sorted(SEMANTIC_MODES))
+            raise ValueError(f"exact layer: semantic_mode must be one of: {allowed}")
+        if semantic_mode == CLASSICAL_ACTIVE_HORIZON:
+            if ell[0] <= 0:
+                raise ValueError(
+                    "exact layer: classical_active_horizon requires floor[0] > 0"
+                )
+            if len(Kr) > 1 and any(v <= 0 for v in Kr[1:]):
+                raise ValueError(
+                    "exact layer: classical_active_horizon requires K[i] > 0 for i > 0"
+                )
+        return cls(Kr, qr, d, ell, w, semantic_mode)
 
     @classmethod
     def from_ww(cls, instance: WWInstance) -> "ExactInstance":
@@ -123,6 +140,7 @@ class ExactInstance:
             list(instance.demand),
             list(instance.floor),
             list(instance.weights),
+            semantic_mode=instance.semantic_mode,
         )
 
     @property
@@ -503,13 +521,8 @@ def exact_frozen_certificate(
     k: int,
 ) -> ExactFrozenResult:
     """Exact frozen-comparator radius: min over outside paths of the exact
-    pairwise radius against the fixed nominal path.
-
-    The released implementation uses a finite exact parametric shortest-path
-    procedure.  The manuscript's separate Charnes--Cooper construction proves
-    polynomial-time computability; no polynomial iteration bound is claimed
-    for this implementation.
-    """
+    pairwise radius against the fixed nominal path, computed in polynomial
+    time by parametric shortest paths on the prefix-deviation DAG."""
     pstar = validate_complete_path(nominal_path, inst.T)
     graph = build_prefix_deviation_graph(_as_ww_stub(inst), pstar, k)
     if not graph.has_source_sink_path():
@@ -610,28 +623,12 @@ def exact_frozen_certificate(
         bv = sum((b[e] for e in ids), Fraction(0))
         return av, bv
 
-    # Every strict Newton step selects a new active source--sink path.  The
-    # graph is acyclic, so its exact source--sink path count is a finite (and
-    # potentially exponential) correctness bound.  This replaces the former
-    # arbitrary engineering cap; it is deliberately not described as a
-    # polynomial complexity bound.
-    path_counts = {node: 0 for node in graph.nodes}
-    path_counts[graph.source] = 1
-    outgoing = graph.outgoing
-    for node in graph.topological_nodes():
-        for arc in outgoing[node]:
-            path_counts[arc.head] += path_counts[node]
-    max_iterations = path_counts[graph.sink]
-    if max_iterations <= 0:
-        raise CertificationError("deviation graph unexpectedly has no source-sink path")
-
     iterations = 0
+    max_iterations = 4 * len(graph.arcs) + 64
     while value_n != 0:
         iterations += 1
         if iterations > max_iterations:
-            raise CertificationError(
-                "parametric Newton exceeded the finite source-sink path bound"
-            )
+            raise CertificationError("parametric Newton failed to terminate")
         av, bv = piece(ids_n)
         if bv <= 0:
             raise CertificationError(
@@ -674,6 +671,7 @@ def _as_ww_stub(inst: ExactInstance) -> WWInstance:
         np.asarray([float(v) for v in inst.demand], dtype=float),
         np.asarray([float(v) for v in inst.floor], dtype=float),
         np.asarray([float(v) for v in inst.weights], dtype=float),
+        inst.semantic_mode,
     )
 
 
@@ -721,20 +719,40 @@ def _repair_ladder(
     outside: Sequence[int],
     demand: Sequence[float | Rat],
 ) -> CertifiedWitness | None:
-    """Try the proposed float witness, then slightly inflated moves."""
-    base = [_fr(v) for v in demand]
-    for scale_exp in (None, -40, -24, -12, -6):
-        if scale_exp is None:
-            candidate = list(base)
-        else:
-            factor = 1 + Fraction(1, 2 ** (-scale_exp))
-            candidate = [
-                dn + factor * (v - dn) for v, dn in zip(base, inst.demand)
-            ]
-        candidate = [max(v, e) for v, e in zip(candidate, inst.floor)]
-        witness = certify_strong_witness(inst, prefix, outside, candidate)
-        if witness is not None:
-            return witness
+    """Repair a floating search proposal without letting it decide a claim.
+
+    HiGHS may return a mathematically simple boundary point a few ulps away
+    from its rational coordinates.  Trying the exact binary floats first can
+    therefore turn the same search on two platforms into different certified
+    intervals.  We first propose a bounded-denominator rational reconstruction,
+    then the exact binary values, and subject every candidate to the same exact
+    strong-witness check.  Reconstruction can improve search portability; it
+    cannot create a certified result unless the reconstructed point is an exact
+    feasible witness for the supplied instance.
+    """
+    binary = [_fr(v) for v in demand]
+    reconstructed = [
+        Fraction(float(v)).limit_denominator(10**12)
+        if isinstance(v, (float, np.floating))
+        else _fr(v)
+        for v in demand
+    ]
+    bases = [reconstructed]
+    if reconstructed != binary:
+        bases.append(binary)
+    for base in bases:
+        for scale_exp in (None, -40, -24, -12, -6):
+            if scale_exp is None:
+                candidate = list(base)
+            else:
+                factor = 1 + Fraction(1, 2 ** (-scale_exp))
+                candidate = [
+                    dn + factor * (v - dn) for v, dn in zip(base, inst.demand)
+                ]
+            candidate = [max(v, e) for v, e in zip(candidate, inst.floor)]
+            witness = certify_strong_witness(inst, prefix, outside, candidate)
+            if witness is not None:
+                return witness
     return None
 
 
@@ -1106,6 +1124,7 @@ def certified_exact_radius(
     k: int,
     *,
     max_paths: int | None = None,
+    max_candidates: int | None = None,
 ) -> CertifiedEnumerationResult:
     """Finite disjunction over outside paths with exact pairwise lower bounds
     for ordering/pruning, float LP proposals per disjunct, and exact
@@ -1115,12 +1134,25 @@ def certified_exact_radius(
     paths, of that path's best certified lower bound; ``upper_radius`` is the
     smallest exactly verified witness radius.  ``exact_certified`` holds only
     when the two coincide as rationals with every disjunct accounted for.
+
+    The candidate family has exactly ``2^(T-1) - 2^max(T-1-s, 0)`` members
+    for a prefix ending at node ``s`` and is materialised atomically, so
+    escalation is worst-case exponential in ``T``.  ``max_candidates``
+    refuses oversized disjunctions from the closed form before generating
+    anything; the refusal keeps the trivial certified bracket ``[0, inf)``.
     """
     from .exact import fixed_competitor_inverse_lp
-    from .model import outside_paths
+    from .model import outside_path_count, outside_paths
 
     pstar = validate_complete_path(nominal_path, inst.T)
     prefix = pstar[: k + 1]
+    predicted_candidates = outside_path_count(inst.T, prefix)
+    if max_candidates is not None and predicted_candidates > max_candidates:
+        return CertifiedEnumerationResult(
+            Fraction(0), None, None, False, None,
+            predicted_candidates, 0, 0, 0, 0, predicted_candidates,
+            "refused_by_candidate_guard",
+        )
     stub = _as_ww_stub(inst)
 
     candidates: list[tuple[OptRat, Path]] = []
@@ -1144,7 +1176,7 @@ def certified_exact_radius(
     processed = 0
     upper_certified = 0
     lower_improved = 0
-    status = "complete"
+    status = "enumeration_completed"
 
     for position, (pairwise_lower, qpath) in enumerate(finite):
         if best_upper is not None and pairwise_lower >= best_upper:
@@ -1152,7 +1184,7 @@ def certified_exact_radius(
             # later disjunct cannot undercut the incumbent witness.
             break
         if max_paths is not None and processed >= max_paths:
-            status = "path_limit"
+            status = "enumeration_stopped_path_limit"
             break
         processed += 1
         proposal = fixed_competitor_inverse_lp(stub, pstar, k, qpath)
@@ -1177,7 +1209,7 @@ def certified_exact_radius(
     ]
     if best_upper is None:
         certified_lower_global: OptRat = min(caps) if caps else None
-        if not caps and status == "complete":
+        if not caps and status == "enumeration_completed":
             return CertifiedEnumerationResult(
                 None, None, None, True, None, total, processed,
                 infinite_count, upper_certified, lower_improved, 0,
@@ -1185,10 +1217,15 @@ def certified_exact_radius(
             )
         return CertifiedEnumerationResult(
             certified_lower_global, None, None, False, None, total, processed,
-            infinite_count, upper_certified, lower_improved, len(caps), status,
+            infinite_count, upper_certified, lower_improved, len(caps),
+            (
+                "enumeration_completed_with_certified_interval"
+                if status == "enumeration_completed"
+                else status
+            ),
         )
     certified_lower_global = min(caps) if caps else best_upper
-    exact = not caps and status == "complete"
+    exact = not caps and status == "enumeration_completed"
     pruned_exactly = infinite_count + sum(
         1 for v in disjunct_lowers if v is not None and v >= best_upper
     )
@@ -1204,5 +1241,13 @@ def certified_exact_radius(
         upper_certified,
         lower_improved,
         len(caps),
-        status,
+        (
+            "exact_certified"
+            if exact
+            else (
+                "enumeration_completed_with_certified_interval"
+                if status == "enumeration_completed"
+                else status
+            )
+        ),
     )

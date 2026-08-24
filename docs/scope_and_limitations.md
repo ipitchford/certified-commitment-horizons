@@ -1,37 +1,48 @@
 # Scope, assumptions and failure modes
 
-## Proven model scope
+## Two semantic layers
 
-The theory applies to a deterministic, single-item, uncapacitated Wagner-Whitin shortest-path model with non-negative demand floors and ordered reduced slopes. It certifies a prefix of setup epochs and cycle boundaries. Realised or revised quantities may adjust within those retained cycles.
+The universal graph results apply to a deterministic, single-item, forced-source directed acyclic path model with non-negative floors and ordered reduced slopes.
+
+The ordinary uncapacitated Wagner–Whitin interpretation applies only in `classical_active_horizon` mode, which requires a strictly positive first-period demand floor and strictly positive later setup costs. The semantic-bridge theorem then identifies optimal graph paths with optimal physical setup patterns. Outside those conditions, graph conclusions remain valid as graph statements and must not be promoted to classical lot-sizing claims.
+
+## Protected object
+
+The radius certifies setup epochs and replenishment-cycle boundaries. Quantities may adjust within a retained cycle. It does not certify fixed quantities, service levels, supplier capacity or transport reservations.
 
 ## Outside the theorem
 
-The current results do not automatically cover capacity constraints, fixed order quantities, minimum order quantities, backlogging, perishability, substitution, service-level constraints, transport slots, shared setups, multi-item coupling or endogenous forecast revisions. These features alter the feasible path family or the cost geometry and may invalidate the certificate.
+Capacity constraints, minimum order quantities, backlogging, perishability, substitution, joint setups, multi-item coupling and endogenous forecast revisions alter the feasible family or cost geometry. The current formulas and certificates do not automatically survive those changes.
 
 ## Nominal degeneracy
 
-A radius attached to a selected nominal path can depend on arbitrary tie-breaking. The software therefore reports the number of nominal optima up to a cap, computes the longest prefix common to all nominal optima, and states whether the requested protected prefix is common. The paper recommends protecting the common prefix unless a disclosed secondary criterion selects an optimum. A nominal outside tie gives radius zero.
+The software reports the common prefix of every nominal optimum and whether the requested prefix lies within it. A nominal outside tie gives radius zero. A complete comparator selected by a secondary rule affects the frozen lower certificate, although the strong radius depends only on the protected node prefix.
 
-## Statistical scope
+## Exact complexity
 
-The conformal theorem is one-step and marginal over the calibration sample and next revision under exchangeability. It is not conditional on the realised calibration set, time-uniform, or automatically simultaneous across products or replans. Repeated prespecified decisions require an explicit error allocation; adaptive selection or distribution shift requires a different theorem and procedure.
+The fixed-competitor inverse problem is a compact linear programme. The strong radius is a finite disjunction over outside paths and has a polynomial-size mixed-integer formulation. The released enumerator is worst-case exponential. This proves a property of that algorithm, not NP-hardness of the decision problem.
 
-## Rolling-loss semantics
-
-The rolling theorem prices structural setup commitments with uncapacitated quantity recourse and replanning at disclosed cycle boundaries. It does not price service failures, capacity reservations or fixed quantities unless they enter the optimisation model. The realised demand must remain in the floor-constrained admissible domain.
-
-## Exact computation
-
-The fixed outside-path inverse problem is a compact linear programme. The exact strong radius is a finite disjunction over outside paths, and fixed-radius decision has a polynomial-size mixed-integer formulation. These are exact formulations, not polynomial-time algorithms; generic partial inverse and anti-inverse shortest-path analogues are NP-hard (Gassner 2009; Ley & Merkert 2025), and only the demand-induced Wagner-Whitin restriction remains open. Candidate generation is exponential in the current enumerator; time limits leave a certified but unresolved bracket, never a silent answer.
+The exact complexity of the demand-induced, ordered-slope one-protected-arc restriction remains open. Generic partial inverse shortest-path hardness results modify arc weights independently and do not transfer automatically.
 
 ## Numerical certification
 
-Every value the software labels certified is computed, or a posteriori verified, in exact rational arithmetic with zero tolerances (`wwprefix.exactcert`); floating-point optimisation only proposes witnesses and dual mixtures, which are exactly re-verified before use. Decision records carry witnesses that `scripts/check_certificate.py` re-verifies without importing the package (complete re-derivation of frozen minimality for T <= 12). Remaining boundary: for larger horizons lower-bound minimality relies on the package's internally cross-checked parametric computation; mixed-integer "no" answers are solver-level evidence only; neither implementation is proof-assistant verified. Plain JSON numbers are decided at their exact binary values; decimal-exact semantics require numeric strings.
+Every certified value is computed or re-verified in exact rational arithmetic with zero tolerances. Floating SciPy/HiGHS optimisation may propose candidates but cannot decide topology, zero, tie, infinity or a certified class. The independent checker replays records without importing the package.
+
+Remaining assurance limits:
+
+- no proof-assistant verification;
+- for `T > 12`, the independent checker does not rederive global frozen-minimality by complete enumeration;
+- mixed-integer negative results remain solver-level unless a certified bound closes them;
+- all code and producer audits arise from one workflow.
+
+## Statistical scope
+
+The conformal theorem is one-step and marginal under exchangeability. It is not conditional, adaptive, time-uniform or automatically simultaneous across many products and replans. Distribution shift can cause undercoverage, as the negative-control simulations demonstrate.
 
 ## Evidence boundary
 
-Synthetic tests probe correctness, conservatism and edge cases. They do not estimate industrial prevalence. The illustrative UCI case uses real demand but reconstructed forecast vintages and stylised costs. No field decision, service outcome or financial saving has been validated.
+Synthetic and exact finite audits test implementation behaviour, theorem identities on bounded corpora and edge cases. They do not estimate industrial prevalence. The UCI case uses real demand but reconstructed forecasts and stylised costs. No prospective field benefit has been established.
 
 ## Novelty boundary
 
-Indexed evidence shows that Richter and Vörös (1989) analysed demand-vector parameterisation and stability regions preserving a Wagner-Whitin solution. This release did not obtain the full article, so it cannot exclude theorem-level overlap. The claimed candidate novelty is the moving prefix-face object, the floor-aware polynomial lower certificate and its integration with exact brackets, calibration and rolling loss. That boundary remains conditional until the 1989 full text is inspected.
+The supplied Richter–Vörös (1989) scan was inspected page by page and bound to its SHA-256. No protected-prefix, moving-continuation or simultaneous weighted demand-ball theorem was found in that article. The targeted corpus now also includes polynomial interval-demand minimax-regret lot sizing (Zhang, 2011; Li & Romero Morales, 2013), robust uncertainty-range models (Li & Romero Morales, 2017) and inverse cost elicitation for lot sizing (Egri et al., 2014). These are direct comparators but have different decision variables, quantifier order and objectives. The conclusion remains a bounded contribution comparison, not exhaustive priority; adjacent sources remain less completely inspected, and no independent bibliographic attestation is included.

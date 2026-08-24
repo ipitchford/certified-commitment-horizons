@@ -321,7 +321,7 @@ def test_certified_enumeration_brackets_and_monotonicity() -> None:
             inst = random_instance(rng, T)
             _, pstar = shortest_path(inst)
             ei = ExactInstance.from_ww(inst)
-            exact_finite_radii = []
+            uppers = []
             for k in range(1, len(pstar)):
                 result = certified_exact_radius(ei, pstar, k)
                 bracket = exact_polynomial_bracket(ei, pstar, k)
@@ -329,12 +329,24 @@ def test_certified_enumeration_brackets_and_monotonicity() -> None:
                     assert not (result.upper_radius < bracket.lower_radius)
                 if result.exact_certified and result.upper_radius is not None:
                     assert result.lower_radius == result.upper_radius
-                    exact_finite_radii.append(result.upper_radius)
-            # The exact strong radius is monotone under prefix enlargement.
-            # An unresolved, independently selected feasible upper witness is
-            # not itself required to be monotone.
-            for a, b in zip(exact_finite_radii, exact_finite_radii[1:]):
-                assert b <= a  # protecting more arcs can only shrink the radius
+                uppers.append(result.upper_radius)
+            # Monotonicity is a theorem about the true radii, not about
+            # independently found feasible upper witnesses for unresolved
+            # disjuncts.  Check it only where both adjacent radii are exactly
+            # certified; for intervals, check only lower <= upper.
+            results = [
+                certified_exact_radius(ei, pstar, k)
+                for k in range(1, len(pstar))
+            ]
+            for result in results:
+                if result.lower_radius is not None and result.upper_radius is not None:
+                    assert result.lower_radius <= result.upper_radius
+            for previous, current in zip(results, results[1:]):
+                if previous.exact_certified and current.exact_certified:
+                    if previous.exact_radius is None:
+                        continue  # any finite value is <= +infinity
+                    assert current.exact_radius is not None
+                    assert current.exact_radius <= previous.exact_radius
 
 
 def test_exact_and_float_layers_agree_on_benign_instances() -> None:
@@ -426,7 +438,7 @@ def test_disordered_slopes_rejected_exactly() -> None:
 
 
 # ---------------------------------------------------------------------------
-# CLI and producer-side checker integration
+# CLI and independent checker integration
 # ---------------------------------------------------------------------------
 
 
@@ -569,7 +581,7 @@ def test_nan_and_infinity_inputs_rejected_by_both_layers() -> None:
 
 
 def test_checker_verifies_saturation_infinity_record(tmp_path: Path) -> None:
-    """The producer-side checker must re-prove a saturation-infinity claim
+    """The independent checker must re-prove a saturation-infinity claim
     (Sol review, item 9 exercises the checker's own dynamic programme)."""
     import subprocess
     import sys

@@ -1,0 +1,10 @@
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /mnt/data/certified_commitment_horizons_v3.0.0
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: wwprefix
+  Building wheel for wwprefix (pyproject.toml): started
+  Building wheel for wwprefix (pyproject.toml): finished with status 'done'
+  Created wheel for wwprefix: filename=wwprefix-3.0.0-py3-none-any.whl size=59141 sha256=6d5c4bdf94a94ff3650c0a7ff4cc125e1f6185ec5f416a200989dea500b1202f
+  Stored in directory: /tmp/pip-ephem-wheel-cache-e3enhxjy/wheels/52/2b/ef/326485f031fb4c9d2b03b2fd0845d68c55b8706db732ede318
+Successfully built wwprefix

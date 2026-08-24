@@ -531,8 +531,8 @@ def main() -> None:
             "target_mean": float(df[TARGET].mean()),
             "target_max": float(df[TARGET].max()),
             "status": (
-                "real observed demand; version 2.1.2 re-fetched the official UCI archive "
-                "and its sole CSV was byte-identical; forecasts and costs are reconstructed"
+                "real observed demand; local bytes obtained from a public mirror and checked "
+                "against the UCI schema; forecasts and costs are reconstructed"
             ),
         },
         "forecast_design": {

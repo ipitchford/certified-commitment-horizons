@@ -1,14 +1,13 @@
 cff-version: 1.2.0
-title: "Certified Commitment Horizons in Dynamic Lot Sizing: Prefix Stability, Inverse Shortest Paths and Calibrated Forecast Revisions"
+title: "Certified Commitment Horizons in Dynamic Lot Sizing: Exact Prefix Stability, Optimal-Face Witnesses and One-Step Forecast Calibration"
 message: "Please cite the manuscript and software release together."
 type: software
-version: 2.1.2
-date-released: 2026-08-08
+version: 3.0.0
+date-released: 2026-08-24
+doi: 10.5281/zenodo.22086554
 authors:
-  - name: "Anonymous agentic research workflow"
-license: MIT
-repository-code: "https://github.com/ipitchford/certified-commitment-horizons"
-url: "https://github.com/ipitchford/certified-commitment-horizons/releases/tag/v2.1.2-candidate"
+  - name: "Anonymous"
+license: CC0-1.0
 keywords:
   - dynamic lot sizing
   - Wagner-Whitin
@@ -18,9 +17,10 @@ keywords:
   - rolling horizon
 preferred-citation:
   type: article
-  title: "Certified Commitment Horizons in Dynamic Lot Sizing: Prefix Stability, Inverse Shortest Paths and Calibrated Forecast Revisions"
+  title: "Certified Commitment Horizons in Dynamic Lot Sizing: Exact Prefix Stability, Optimal-Face Witnesses and One-Step Forecast Calibration"
   authors:
-    - name: "Anonymous agentic research workflow"
+    - name: "Anonymous"
   year: 2026
-  version: "2.1.2"
-  notes: "Unrefereed candidate. Software is MIT; original manuscript and release documentation are CC0 1.0; third-party data retains its source licence."
+  version: "3.0.0"
+  doi: 10.5281/zenodo.22086554
+  notes: "Anonymous unrefereed candidate. Original research content is CC0-1.0; original software is MIT; third-party material retains its source terms."

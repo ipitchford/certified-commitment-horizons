@@ -1,0 +1,13 @@
+{
+  "seed": 20260818,
+  "horizons": [
+    2,
+    8
+  ],
+  "instances": 84,
+  "prefix_cases": 315,
+  "finite_exact_witness_cases": 250,
+  "single_detour_edge_witnesses_found": 250,
+  "failures": 0,
+  "scope": "Finite exact-rational audit of theorem implementation on random integer instances; not a proof of the universal theorem."
+}

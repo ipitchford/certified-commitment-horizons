@@ -26,11 +26,11 @@ jobs:
           sudo apt-get install --yes poppler-utils
           python -m pip install --upgrade pip
           python -m pip install -r requirements-lock.txt
-          python -m pip install --no-deps release/wwprefix-2.1.2-py3-none-any.whl
+          python -m pip install --no-deps release/wwprefix-3.0.0-py3-none-any.whl
       - name: Parse sources
         env:
           PYTHONDONTWRITEBYTECODE: "1"
-        run: python scripts/check_python_syntax.py
+        run: python -m compileall -q src scripts tests
       - name: Test normally
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -41,8 +41,18 @@ jobs:
           PYTHONDONTWRITEBYTECODE: "1"
           PYTHONPATH: src
         run: python -O -m pytest -q -p no:cacheprovider
-      - name: Verify frozen artefacts
+      - name: Verify frozen release tree and final receipt
         env:
           PYTHONDONTWRITEBYTECODE: "1"
-          PYTHONPATH: src
-        run: python scripts/verify_release.py --run-tests
+        run: |
+          release_tree=$(mktemp -d)
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='archive/' \
+            --exclude='editorial/' \
+            --exclude='CONTRIBUTING.md' \
+            ./ "$release_tree/"
+          python "$release_tree/scripts/verify_hashes.py" "$release_tree/release/SHA256SUMS"
+          cd "$release_tree"
+          PYTHONPATH=src python scripts/verify_release.py --run-tests

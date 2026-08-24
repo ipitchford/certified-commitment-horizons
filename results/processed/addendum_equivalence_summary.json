@@ -1,0 +1,29 @@
+{
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": null,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.12.11 (main, Jun  3 2025, 15:41:47) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "failures": [],
+  "gate": "PASSED: the compact model reproduces every resolved exact reference; scaling benchmark may run",
+  "match_class_counts": {
+    "exact_match_certified": 305,
+    "exact_rational_equality": 247,
+    "float_match_certified": 27,
+    "reference_unresolved": 28,
+    "unresolved_pair": 20
+  },
+  "quick_mode": false,
+  "relative_tolerance": 1e-06,
+  "rows": 627,
+  "wall_seconds": 128.9823164170084,
+  "zero_disagreements": true
+}

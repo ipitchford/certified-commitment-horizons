@@ -1,60 +1,106 @@
 # Input and output schema
 
-## Input document
+## Instance object
+
+A JSON input may be either the instance object itself or an object with an `instance` field and an optional `nominal_path`.
+
+Required arrays, all of equal length `T`:
+
+| Field | Type | Constraint | Meaning |
+|---|---|---|---|
+| `K` | numbers or numeric strings | `K_i >= 0` | setup cost at period `i` |
+| `q` | numbers or numeric strings | non-increasing | reduced unit-cost slope |
+| `demand` | numbers or numeric strings | `demand_i >= floor_i` | nominal forecast |
+| `floor` | numbers or numeric strings | `floor_i >= 0` | declared coordinate lower bound |
+| `weights` | numbers or numeric strings | `weights_i > 0` | weighted `L∞` metric |
+
+Optional fields:
+
+| Field | Allowed values | Default | Effect |
+|---|---|---|---|
+| `semantic_mode` | `forced_source_graph`, `classical_active_horizon` | `forced_source_graph` | selects the graph-only or classical interpretation contract |
+| `nominal_path` | strictly increasing one-based node list beginning at 1 and ending at `T+1` | exact shortest path selected deterministically | must be exactly optimal |
+
+The algorithm does not infer `floor`. Its provenance must state whether each
+lower bound represents empirical/physical support, a contractual or planning
+minimum, or a deliberately conservative truncation used to protect the
+calculation. Those interpretations have the same mathematical inequality but
+are not operationally interchangeable. In particular, the strictly positive
+period-1 floor required by `classical_active_horizon` must be warranted for
+every revision to which the classical interpretation is applied.
+
+## Semantic modes
+
+### `forced_source_graph`
+
+Every complete path begins at period 1. A period-1 setup is therefore part of the graph definition even when first-period demand is zero. Paths that differ only by an empty zero-cost setup node remain distinct graph decisions.
+
+This is the broad mathematical domain of the graph theorems. It must not be silently presented as the unconstrained classical lot-sizing model.
+
+### `classical_active_horizon`
+
+The parser requires:
+
+```text
+floor[0] > 0
+K[i] > 0 for every i = 1, ..., T-1
+```
+
+With zero initial inventory, no backlogging and ordered reduced slopes, these conditions make the forced source productive under every admissible revision and exclude empty later setups from every optimum. The manuscript’s semantic-bridge theorem then transfers graph setup-prefix conclusions to ordinary uncapacitated Wagner–Whitin setup schedules.
+
+The excluded leading-zero example is retained as `examples/leading_zero_semantic_counterexample.json`:
+
+```text
+K=(100,1), q=(1,0), demand=(0,1), floor=(0,0)
+graph optimum = 101
+ordinary physical optimum = 1
+```
+
+## Exact numeric parsing
+
+Numeric strings are parsed as exact rationals:
 
 ```json
-{
-  "instance": {
-    "K": [0.0, 3.0, 2.0],
-    "q": [2.0, 1.0, 0.0],
-    "demand": [1.0, 5.0, 1.0],
-    "floor": [0.5, 0.5, 0.5],
-    "weights": [1.0, 1.0, 1.0]
-  },
-  "nominal_path": [1, 2, 4]
-}
+{"K": ["0.1", "3/2"]}
 ```
 
-`instance` may also be the top-level object. `nominal_path` is optional; when omitted, the software computes a nominal optimum with a deterministic tie-break: fewer setup arcs first, then lexicographic node order; when supplied, it must be *exactly* optimal for the supplied instance or the command refuses.
+Plain JSON numbers are first parsed by the JSON implementation and then converted losslessly from their binary values. Use strings where exact decimal semantics matter.
 
-**Exact numeric strings.** Every numeric entry may instead be a string, parsed as an exact decimal (`"0.999999999"`) or exact rational (`"1/3"`). Plain JSON numbers are decided at their exact IEEE-754 binary values. Users whose data are decimal and who care about ulp-scale effects should use strings; the certified layer then decides the decimal instance exactly. The radius options `--proposed-radius` and `--radius` are strings parsed the same way.
+## Public paths
 
-## Field contracts
+Public JSON paths use one-based nodes. For a three-period horizon, `[1, 2, 4]` means the internal zero-based tuple `(0, 1, 3)`.
 
-| Field | Contract | Interpretation |
-|---|---|---|
-| `K[t]` | finite, non-negative | setup or order cost for an arc beginning in period `t+1` |
-| `q[t]` | finite and non-increasing | reduced cumulative-demand slope |
-| `demand[t]` | finite, at least `floor[t]` | current nominal demand forecast |
-| `floor[t]` | finite, non-negative | lower admissibility bound for revised demand |
-| `weights[t]` | finite, strictly positive | coordinate scale in `max_t weights[t] * abs(d[t]-demand[t])` |
-| `nominal_path` | strictly increasing, starts at 1, ends at `T+1` | replenishment path in public one-based node labels |
+## Certified output
 
-All arrays must have the same positive length `T`. The ordered-slope condition is the implementation-level Wagner-Whitin assumption used by the polynomial certificate and rolling diameter theorem.
+Every `certified_*` value is represented as:
 
-## Public versus internal indices
-
-The Python algorithms use zero-based nodes `0,...,T`; JSON uses one-based nodes `1,...,T+1`. Period-array positions remain ordinary JSON positions `0,...,T-1`.
-
-## Commands
-
-```bash
-wwprefix certify INPUT.json --k K [--exact] [--proposed-radius R]
-wwprefix decide INPUT.json --k K --radius R [--time-limit SECONDS]
+```json
+{"float": 1.5, "exact": "3/2"}
 ```
 
-`k` counts protected path arcs, not calendar periods. A single protected arc may span several periods.
+The rational string is authoritative. Proven infinity uses `"exact": "inf"` together with a specific infinity status.
 
-## Decision semantics
+Each command output contains:
 
-The certified triage has three states:
+- `schema_version: "3.0"`;
+- `model_semantics`, including whether the classical bridge is active;
+- exact verification of nominal optimality and the common nominal prefix;
+- a certified lower/upper bracket;
+- exact witness records when available;
+- optional diagnostic `float_search`; and
+- optional exact escalation or fixed-radius triage.
 
-- `certified_no_destabilisation`: the proposed radius is strictly below the certified exact lower radius;
-- `certified_destabilising_witness_exists`: an exactly verified witness destabilises within the proposed radius;
-- `unresolved_requires_exact_escalation`: the certified bounds do not decide the event.
+## Status vocabulary
 
-Exact routines may also return `path_limit` or another unresolved status, and the MILP escalation is labelled `solver_level_only_not_exactly_certified`. Such outputs are evidence gaps, not negative decisions.
+| Status | Meaning |
+|---|---|
+| `exact_certified` | one exact rational strong radius is proved by the implemented certificate logic |
+| `enumeration_completed_with_certified_interval` | candidate processing completed but exact closure failed; lower and upper witnesses remain valid |
+| `certified_interval` | a bounded exact interval is valid without point closure |
+| `refused_by_candidate_guard` | predeclared candidate cap exceeded before generation |
+| `enumeration_stopped_path_limit` | a caller-supplied path cap stopped the search |
+| `exact_infinite_no_outside_path` | no path can leave the protected class |
+| `exact_infinite_saturation` | a positive residual gap remains after all beneficial demand coordinates saturate |
+| solver-level status | a floating mixed-integer result has not met the exact certification conditions |
 
-## Certified values, infinity and numerical safety
-
-Certified values are serialized as `{"float": ..., "exact": "p/q"}` pairs; the exact string is authoritative. Proven infinity appears as the string `"inf"` in the exact slot together with an `infinity_status` of `proven_infinite_no_outside_path` or `proven_infinite_saturation` (the latter carries a certified positive `residual_gap`). Floating-point search results appear only under `float_search` and are diagnostic. There is no tolerance-based `safe_radius` any more: the certified lower radius *is* the operational lower certificate, computed in exact rational arithmetic. Any record can be re-verified with `python scripts/check_certificate.py RECORD.json INSTANCE.json`.
+Enumeration completion and point certification are separate concepts. An independently found feasible upper witness need not be monotone across prefix depths; only the true exactly certified radii obey the monotonicity theorem.

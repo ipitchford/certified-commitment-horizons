@@ -99,7 +99,7 @@
     "paths_processed": 1,
     "paths_pruned_exactly": 2,
     "paths_total": 2,
-    "status": "complete",
+    "status": "exact_certified",
     "upper_radius": {
       "exact": "2/1",
       "float": 2.0
@@ -157,6 +157,15 @@
     },
     "role": "diagnostic_floating_point_estimates_only_no_certification"
   },
+  "model_semantics": {
+    "bridge_conditions": {
+      "first_period_floor_strictly_positive": true,
+      "later_setup_costs_strictly_positive": true
+    },
+    "classical_lot_sizing_bridge_active": true,
+    "interpretation": "canonical productive setup schedules in the classical active-horizon Wagner-Whitin model",
+    "mode": "classical_active_horizon"
+  },
   "nominal": {
     "common_optimal_prefix": [
       1,
@@ -177,5 +186,5 @@
     "verified_exactly_optimal": true
   },
   "protected_arcs": 1,
-  "schema_version": "2.1"
+  "schema_version": "3.0"
 }

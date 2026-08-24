@@ -1,0 +1,26 @@
+{
+  "instance": {
+    "K": [
+      100,
+      1
+    ],
+    "q": [
+      1,
+      0
+    ],
+    "demand": [
+      0,
+      1
+    ],
+    "floor": [
+      0,
+      0
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "semantic_mode": "forced_source_graph"
+  },
+  "note": "Reviewer semantic-bridge counterexample: graph optimum 101; ordinary classical lot-sizing optimum 1 by first setting up in period 2. The v3 schema therefore refuses to label this instance classical_active_horizon."
+}

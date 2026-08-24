@@ -19,5 +19,4 @@ paper/*.run.xml
 paper/*.toc
 results/raw/*.partial.csv
 *.zip
-*.sha256
 .DS_Store

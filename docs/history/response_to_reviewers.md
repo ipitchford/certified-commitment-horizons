@@ -1,5 +1,7 @@
 # Response to the v1.0.0 peer review
 
+> **Historical record.** This document describes the state at its own review round and is not updated. The Richter–Vörös (1989) full text was subsequently obtained and audited on 17–18 August 2026 with no theorem-level collision found; see `docs/literature_audit.md` and manuscript v2.2.0.
+
 **Revised version:** 2.0.0, 4 August 2026  
 **Decision on review:** all eight major concerns were acted on; two remain bounded rather than eliminated: full-text novelty comparison with Richter and Vörös (1989), and realistic-scale exact computation.
 

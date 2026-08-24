@@ -1,112 +1,143 @@
 {
-  "assurance": {
-    "exact_rational_computational_certification": true,
-    "field_validation": false,
-    "independent_clean_room_reproduction": false,
-    "internal_adversarial_review": true,
-    "journal_peer_review": false,
-    "producer_side_tests": true,
-    "proof_assistant_verification": false
-  },
-  "data": {
-    "chain_of_custody": "Version 2.1.2 re-fetched the official archive; the contained CSV was byte-identical to the analysed file.",
-    "download_url": "https://archive.ics.uci.edu/static/public/409/daily+demand+forecasting+orders.zip",
-    "license": "CC-BY-4.0",
-    "missing_cells": 0,
-    "observed_columns": 13,
-    "observed_rows": 60,
-    "official_record": "https://doi.org/10.24432/C5BC8T",
-    "path": "data/external/Daily_Demand_Forecasting_Orders.csv",
-    "reconstructed_elements": [
-      "forecast vintages",
-      "forecast-revision scores",
-      "setup costs",
-      "holding costs",
-      "counterfactual policy outcomes"
-    ],
-    "sha256": "adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924"
-  },
-  "date": "2026-08-08",
-  "upstream_frozen_environment": {
-    "cpu_count": 5,
-    "machine": "x86_64",
-    "matplotlib": "3.10.8",
-    "numpy": "2.3.5",
-    "pandas": "2.2.3",
-    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
-    "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
-    "scipy": "1.17.0"
-  },
-  "publisher_full_replay_environment": {
-    "cpu_count": 8,
-    "machine": "arm64",
-    "matplotlib": "3.10.8",
-    "numpy": "2.3.5",
-    "pandas": "2.2.3",
-    "platform": "macOS-26.5.2-arm64-arm-64bit",
-    "python": "3.11.14",
-    "scipy": "1.17.0",
-    "scope": "Producer-side full replay on 8 August 2026; not independent reproduction"
-  },
-  "generated_outputs": {
-    "full_replay_command": "./run_all.sh --full",
-    "paper": "paper/main.pdf",
-    "processed_results": "results/processed/",
-    "raw_results": "results/raw/",
-    "verification_command": "./run_all.sh --quick"
-  },
-  "literature_inspected_not_redistributed": [
+  "schema_version": "2.0",
+  "work_id": "cch-wwprefix",
+  "attempt_id": "cch-wwprefix-v3.0.0-20260818",
+  "release_version": "3.0.0",
+  "release_date": "2026-08-24",
+  "source_snapshot_sha256": "1db7b50d8e20f5bcaff061b9718acbc9b35204f24d266db79c95c5b2efa8f87b",
+  "source_snapshot_definition": "SHA-256 over sorted path/NUL/file-hash records for authoritative source, tests, scripts, manuscript source, documentation and lockfiles; generated results, PDF, wheel, logs and release metadata excluded.",
+  "inputs": [
     {
-      "bytes": 1487212,
-      "inspection": "full_text",
-      "public_tree_included": false,
-      "source": "https://doi.org/10.1016/0166-218X(93)90016-H",
-      "sha256": "2c77f846a90ed60fdd5eae849c1b6a80929030999de3a6076e30e4057c4b2335"
+      "role": "starting_release_archive",
+      "name": "202608181121-certified_commitment_horizons_v2.0.0.zip",
+      "sha256": "4c91430011e83ac07583f6a9b2698e176f799f36fd9ae408d23d34c1f092f5f0",
+      "included_in_release": false
     },
     {
-      "bytes": 191845,
-      "inspection": "full_text",
-      "public_tree_included": false,
-      "source": "https://doi.org/10.1016/S0167-6377(98)00031-5",
-      "sha256": "e7926c29814b4f29cda395f48a3859fc35ced21b5d90c1247f2db9f90bbf8b85"
+      "role": "full_adversarial_review",
+      "name": "Full review: Certified Commitment Horizons in Dynamic Lot Sizing.md",
+      "sha256": "25081d9c58610af0d9304faf1128b3efcca3b43e2b77443b35afedb5a214be3d",
+      "included_in_release": false,
+      "response": "docs/response_to_full_review_v3.0.0.md"
     },
     {
-      "bytes": 1216015,
-      "inspection": "full_text",
-      "public_tree_included": false,
-      "source": "https://www.informs-sim.org/wsc25papers/con235.pdf",
-      "sha256": "559338cf7159cdee32434f4185c11a8be33d4f570305adcb48c6073cd1678426"
+      "role": "prior_art_source",
+      "name": "A_Parametric_Analysis_of_The_Dynamic_Lot_Sizing_Problem_Voros_Knut_Jozsef(1).pages",
+      "sha256": "bd5ee5a82e399e11572b44d2bf334672be6bc6b47499271e636cf3a8f04aa255",
+      "included_in_release": false,
+      "reason": "copyrighted scan; receipt and hash only"
+    },
+    {
+      "role": "prior_art_public_full_text",
+      "name": "literature/li_romero_morales_2013.pdf",
+      "citation": "Li, D., & Romero Morales, D. (2013). Polynomial Time Algorithms for the Minimax Regret Uncapacitated Lot Sizing Model. Optimization Online 4149.",
+      "source_url": "https://optimization-online.org/2013/12/4149/",
+      "sha256": "4b970c6228b34e49d47ee460f37e11095299c1ab0351a7b351b553f123d7b86b",
+      "included_in_release": false,
+      "inspection_state": "full text inspected",
+      "reason": "source URL and content hash retained; third-party PDF not redistributed"
+    },
+    {
+      "role": "prior_art_external_full_text",
+      "name": "ijpe2014.pdf",
+      "citation": "Egri, P., Kis, T., Kovács, A., & Váncza, J. (2014). An inverse economic lot-sizing approach to eliciting supplier cost parameters.",
+      "source_url": "https://real.mtak.hu/15082/",
+      "sha256": "9043ec932b8a0ba21647d49eddaef0c2e31c20640da8dfd2db6545f44d0150e9",
+      "included_in_release": false,
+      "inspection_state": "full repository manuscript inspected",
+      "reason": "external repository manuscript; URL and hash recorded rather than redistributed"
+    },
+    {
+      "role": "prior_art_publisher_record",
+      "name": "Zhang 2011 minimax-regret ULS",
+      "citation": "Zhang, M. (2011). Two-stage minimax regret robust uncapacitated lot-sizing problems with demand uncertainty. Operations Research Letters, 39(5), 342–345.",
+      "doi": "10.1016/j.orl.2011.06.013",
+      "included_in_release": false,
+      "inspection_state": "publisher abstract and detailed section snippets inspected; full text not independently obtained"
     }
   ],
-  "literature_metadata_only": [
+  "research_roles": [
     {
-      "citation": "Richter, K., & Voros, J. (1989). A parametric analysis of the dynamic lot-sizing problem.",
-      "limit": "full text not obtained",
-      "record": "https://dblp.org/rec/journals/eik/RichterV89"
+      "actor": "human project owner",
+      "role": "set research direction, supplied source materials, required world-leading coherence and retains publication judgement"
     },
     {
-      "citation": "Richter, K., & Weber, J. (1994). Sequential stability of the constant cost dynamic lot size model-searching for monotonicity.",
-      "record": "https://doi.org/10.1007/BF01719450"
+      "actor": "OpenAI GPT-5.6 Pro",
+      "access_date": "2026-08-18",
+      "role": "review synthesis, mathematical and semantic repair, code/test revision, literature positioning, artefact assembly and producer-side verification"
     },
     {
-      "citation": "Forel, A., & Grunow, M. (2023). Dynamic stochastic lot sizing with forecast evolution in rolling-horizon planning.",
-      "record": "https://doi.org/10.1111/poms.13881"
+      "actor": "inherited agentic workflow",
+      "role": "earlier theorem, implementation and audit development; historical records retained under docs/history",
+      "independence": "not independent of the release programme"
     }
   ],
-  "random_seed": 20260804,
-  "release": "2.1.2",
-  "status": "unrefereed-candidate",
-  "review": {
-    "initial_review": "docs/peer_review_v1.0.0.md",
-    "initial_response": "docs/response_to_reviewers.md",
-    "final_review": "docs/final_review_v2.1.1_for_evidence_press.md",
-    "final_review_sha256": "4ff52bfe04de9920546f1e67dc28275811385bde81977f5b3dfbeb8af758330d",
-    "final_response": "docs/response_to_final_review_v2.1.2.md"
+  "environment": {
+    "platform": "macOS Darwin 25.5.0 arm64",
+    "python_runtime_used_for_final_replay": "3.12.11",
+    "supported_python": ">=3.11",
+    "packages": {
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "pandas": "2.2.3",
+      "matplotlib": "3.10.8",
+      "typer": "0.26.3",
+      "pytest": "9.0.2"
+    },
+    "solver": {
+      "engine": "HiGHS through SciPy",
+      "interface_version": "SciPy 1.17.0",
+      "engine_version": "1.8.0",
+      "engine_license": "MIT",
+      "engine_license_url": "https://github.com/ERGO-Code/HiGHS/blob/v1.8.0/LICENSE.txt",
+      "roles": [
+        "floating search",
+        "linear programming",
+        "mixed-integer search"
+      ],
+      "certification_role": "none unless a candidate is exactly re-verified"
+    },
+    "exact_arithmetic": "Python integers and fractions.Fraction",
+    "latex": "pdfTeX 1.40.29, latexmk 4.88 and biber 2.21; exact versions captured in quality/preflight.txt"
   },
-  "schema_version": "1.0",
-  "upstream_source_snapshot_commit": "64c63f4c633680a2d7b1e38750dbe0a669ac58a3",
-  "repository": "https://github.com/ipitchford/certified-commitment-horizons",
-  "release_tag": "v2.1.2-candidate",
-  "repository_maintainer_and_publisher": "Ian Pitchford",
-  "workflow_author": "Anonymous agentic research workflow"
+  "seeds": {
+    "inherited_main_corpus": 20260804,
+    "semantic_bridge_audit": 2026081801,
+    "optimal_face_audit": 20260818
+  },
+  "data_sources": [
+    {
+      "name": "Daily Demand Forecasting Orders",
+      "provider": "UCI Machine Learning Repository",
+      "doi": "10.24432/C5BC8T",
+      "frozen_file": "data/external/Daily_Demand_Forecasting_Orders.csv",
+      "sha256": "adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924",
+      "role": "illustrative observed-demand series only"
+    }
+  ],
+  "verification_architecture": {
+    "quick_replay": "bash run_all.sh --quick",
+    "full_replay": "bash run_all.sh --full",
+    "preseal_replay": "bash run_all.sh --quick --pre-seal",
+    "integrity": "python scripts/verify_hashes.py release/SHA256SUMS",
+    "release_verifier": "PYTHONPATH=src python scripts/verify_release.py --run-tests",
+    "fresh_extraction_runner": "python scripts/fresh_extract_replay.py --python /path/to/python3.12",
+    "deterministic_sealer": "python scripts/seal_release.py --output /path/to/certified_commitment_horizons_v3.0.0.zip",
+    "record_checker": "python scripts/check_certificate.py examples/sample_decision.json examples/strict_gap_instance.json",
+    "fresh_extraction_receipt": "quality/fresh_extract_replay.txt"
+  },
+  "independence": {
+    "clean_room_reproduction": false,
+    "independent_specialist_review": false,
+    "proof_assistant_verification": false,
+    "second_bibliographic_attestation": false
+  },
+  "preservation": {
+    "manifest": "release/SHA256SUMS",
+    "wheel": "release/wwprefix-3.0.0-py3-none-any.whl",
+    "manuscript": "paper/main.pdf",
+    "archive_identifier": "10.5281/zenodo.22086554",
+    "concept_identifier": "10.5281/zenodo.21853901",
+    "archive_state": "version DOI reserved; publication and byte-identical public readback pending"
+  }
 }

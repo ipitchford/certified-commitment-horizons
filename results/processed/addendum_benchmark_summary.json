@@ -1,0 +1,39 @@
+{
+  "M1_refusals": 30,
+  "P1_largest_resolved_T": {
+    "M1_enumeration": 18,
+    "M2_arc_product_milp": 100,
+    "M3_compact_min_radius": 100,
+    "M3b_compact_decision": 100,
+    "M4_polynomial_bracket": 100
+  },
+  "P2_decision_walltime_ratio_M2_over_M3b": {
+    "cells": 42,
+    "median": 23.159568654616976,
+    "p25": 13.68825692817398,
+    "p75": 66.98486425550055
+  },
+  "P3_bracket_width_rel": {
+    "closed_fraction": 0.7619047619047619,
+    "max": 0.6462611988714642,
+    "median": 0.0
+  },
+  "deviations": [],
+  "environment": {
+    "cpu_count": 8,
+    "git_commit": null,
+    "machine": "arm64",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.12.11 (main, Jun  3 2025, 15:41:47) [Clang 17.0.0 (clang-1700.0.13.3)]",
+    "scipy": "1.17.0",
+    "seed": 20260804
+  },
+  "preregistration_sha256": "2a6980131d0c2380dcfecf3aee29fc7d8aad919807859a3def4353a6e21db254",
+  "rows": 210,
+  "smoke": false,
+  "wall_seconds_total": 2430.6082219579985
+}

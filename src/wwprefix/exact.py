@@ -17,6 +17,7 @@ from .model import (
     WWInstance,
     constrained_inside_path,
     follows_prefix,
+    outside_path_count,
     outside_paths,
     path_coefficients,
     path_cost,
@@ -286,6 +287,7 @@ def exact_radius_enumeration(
     k: int,
     *,
     max_paths: int | None = None,
+    max_candidates: int | None = None,
     time_limit: float | None = None,
     tol: float = 1e-8,
 ) -> ExactRadiusResult:
@@ -293,12 +295,40 @@ def exact_radius_enumeration(
 
     On interruption, ``radius`` is the best feasible upper bound and
     ``lower_bound`` is the next unprocessed fixed-path lower bound.
+
+    Candidate generation is atomic and materialises every outside path:
+    exactly ``2^(T-1) - 2^max(T-1-s, 0)`` records for a prefix ending at
+    node ``s`` (the addendum enumeration-complexity theorem), so it is
+    worst-case exponential in ``T``. ``max_candidates`` refuses, from the
+    closed form and before any generation, escalations whose disjunction
+    would exceed the cap; the returned status is
+    ``refused_by_candidate_guard`` with the trivial certified bracket
+    ``[0, inf)``.
     """
     total_start = perf_counter()
     pstar = validate_complete_path(nominal_path, instance.T)
     if not (1 <= k <= len(pstar) - 1):
         raise ValueError("invalid protected-prefix length k")
     prefix = pstar[: k + 1]
+    predicted_candidates = outside_path_count(instance.T, prefix)
+    if max_candidates is not None and predicted_candidates > max_candidates:
+        return ExactRadiusResult(
+            inf,
+            0.0,
+            None,
+            None,
+            None,
+            None,
+            predicted_candidates,
+            0,
+            predicted_candidates,
+            0,
+            0,
+            "refused_by_candidate_guard",
+            perf_counter() - total_start,
+            candidate_generation_seconds=0.0,
+            disjunct_solve_seconds=0.0,
+        )
     candidates = [
         (path_pairwise_radius(instance, path, pstar).radius, path)
         for path in outside_paths(instance.T, prefix)

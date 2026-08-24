@@ -1,47 +1,53 @@
-# Release notes: v2.1.2 candidate
+# Release notes: 3.0.0
 
-**Date:** 8 August 2026
-**Status:** unrefereed candidate; release-assurance correction.
+**Date:** 24 August 2026  
+**Role:** unrefereed theoretical–computational candidate  
+**Decision:** coherent rebuild after major review; producer replay required before distribution
 
-- Corrected the test contract: monotonicity is asserted for certified exact strong radii, not for independently selected unresolved upper witnesses.
-- Replaced the arbitrary parametric-Newton iteration cap with the exact finite number of source-to-sink paths in the deviation DAG. This is a finite, potentially exponential implementation bound; no polynomial iteration claim is made.
-- Synchronised version, date, title, claim-ledger and assurance metadata.
-- Replaced “adversarial peer review” and “independent checker” language with accurate internal/cross-model review and separately implemented producer-side checker language.
-- Removed third-party article PDFs, extracted text, caches and bytecode from the public package; retained citations, source URLs and hashes.
-- Verified the included UCI CSV byte-for-byte against the official UCI archive and recorded its CC BY 4.0 attribution.
-- Added split licensing, third-party notices, an AI index, deterministic release-contract checks and this response to the final review.
+## Research changes
 
-# Release notes: v2.1.1
+1. **Separated graph semantics from classical lot sizing.** Every instance declares `forced_source_graph` or `classical_active_horizon`. The manuscript now proves a sufficient graph-to-classical bridge under a positive first-period demand floor and strictly positive later setup costs. The leading-zero counterexample is retained as a negative control: the graph costs 101, the ordinary physical model costs 1, and classical mode rejects it.
+2. **Defined empty-setup semantics.** Graph paths that differ through zero-quantity, zero-cost setup nodes remain distinct only in graph mode. Classical mode excludes encoding-only optimal ties through its bridge conditions.
+3. **Corrected the monotonicity test.** The theorem concerns true strong radii. The suite now tests monotonicity only between adjacent exactly certified radii and checks only lower-bound ≤ feasible-upper consistency for unresolved intervals.
+4. **Added a single-detour optimal-face theorem.** Every finite nearest prefix-loss boundary contains adjacent co-optimal retaining and leaving paths that differ on one divergence–remergence interval. A new exact audit found witnesses in all 254 finite boundaries from 315 prefix cases; the other 61 cases were proven infinite.
+5. **Strengthened the semantic audit.** An implementation independent of the path solver enumerates physical setup patterns. It matches graph optima and optimal setup sets in 320/320 active-horizon cases and finds no empty later optimal setup.
+6. **Retained the complexity frontier.** The exact demand-induced one-protected-arc problem remains open. The released disjunction is exponential, but the release does not infer NP-hardness from the algorithm.
+7. **Expanded the adjacent-literature boundary.** Forecast-horizon, robust-cost, forecast-evolution and lead-time-uncertainty work are positioned as distinct comparators. Zhang (2011) and Li–Romero Morales (2013) are now treated as the closest polynomial interval-demand minimax-regret comparators, and Egri et al. (2014) as the direct inverse-lot-sizing precedent. Their quantifier order, decision variables and objectives are distinguished from the nearest protected-prefix crossing. The Richter–Vörös conclusion remains source-specific and conditional.
 
-**Date:** 5 August 2026
-**Status:** bibliographic correction release; no code changes.
+## Assurance changes
 
-- Richter–Vörös (1989): removed the non-resolving 10.5555 identifier (the DOI system's test prefix on an ACM Guide index stub) and replaced it with the verified citation (*Journal of Information Processing and Cybernetics: EIK*, 25(3), 67–73; Akademie-Verlag; ISSN 0863-0593; Zbl 0672.90033), triangulated across zbMATH, dblp and the ACM Guide.
-- Established and documented that no lawful digital copy of the paper appears to exist (the journal's 1987–94 English-title run was never digitised; OpenAlex records no repository copy). A print-acquisition dossier (author offprint via J. Vörös, University of Pécs; British Library On Demand; Subito) ships in `docs/literature_audit.md`.
-- Sharpened the novelty boundary using the zbMATH review: the 1989 paper derives fixed-solution stability regions, with the joint cost–demand case a two-parameter region — consistent with scalar parametrisations, not a simultaneous weighted demand ball with floors; theorem-level exclusion still requires the print text.
-- Cited the accessible same-programme instalments: Richter (1987), *EJOR 31*, 61–65; Richter & Vörös (1989), *EJOR 41*(2), 169–173 (metadata verified, full text not inspected).
-- Updated the assurance box, corpus-boundary section, novelty table, scope section, claims ledger (C11) and response-to-reviewers accordingly.
+- Replaced ambiguous `complete` statuses with exact, interval, refusal and solver-level states.
+- Stratified the 627-row equivalence corpus: 305 exact-match certified, 247 exact rational decomposition equalities, a 55-row platform-sensitive floating-search/reference-unresolved partition, and 20 unresolved pairs. In the frozen macOS replay the search partition was 27 exact-witness matches and 28 reference-unresolved.
+- Replaced theorem-level “machine checked” language with finite-audit descriptions and explicit denominators.
+- Added `release/operating_model.json` with the semantic-bridge state, multidimensional assurance, human gates, remaining risks, next targets and a no-evidence impact record.
+- Added stable `work_id` and `attempt_id`, a version-matched claims ledger, provenance, inspection receipt, verification receipt and manifest.
+- Added a direct response to the full review at `docs/response_to_full_review_v3.0.0.md`.
+- Added `release/prior_art_corpus.json`, including access states, hashes, comparison dimensions, missingness and the bounded novelty conclusion.
+- Rebuilt the wheel from the exact source and added byte-for-byte source/wheel verification.
+- Added PDF font, warning, text-extraction and page-image preflight.
+- Made floating-search proposal recovery portable by rationally reconstructing bounded-denominator candidates before exact verification; no floating proposal is accepted without an exact strong-witness check.
+- Added a non-circular pre-seal/final verification protocol and an isolated installed-wheel replay in a newly created environment.
+- Normalised the standing scholarly creator to `Anonymous`, applied the CC0-for-original-research/MIT-for-code rights split, and removed third-party literature PDFs and derived text extracts from the redistributable package while retaining citations, source URLs and hashes.
 
-# Release notes: v2.1.0
+## Evidence denominators
 
-**Date:** 5 August 2026
-**Status:** revised preprint and producer-side reproducibility release, responding to the 5 August 2026 machine peer review (major revisions).
+| Gate | Result |
+|---|---|
+| Semantic bridge | 320/320 exact matches; 0 empty later optimal setups |
+| Optimal-face witness | 254/254 finite boundaries; 61 proven infinite; 0 failures |
+| Frozen certificate | 512 rows; maximum stored exact discrepancy 0 |
+| Polynomial bracket | 411 exact closures; 101 certified intervals |
+| Exact certification | 330/330 frozen matches; 305 exact strong radii; 25 intervals |
+| Compact equivalence | 627 stratified rows; 0 warranted disagreements |
+| Exact enumeration benchmark | 28/30 optimal; 2 atomic candidate-generation timeouts before any disjunct; 0 solver failures |
+| Mixed-integer decision | 22 resolved/correct; 2 time-limit unresolved |
+| Rolling theorem | 462 cases; 0 violations; 254/254 dead-zone residuals zero |
+| Deterministic tests | 94 passed |
 
-## Main changes from v2.0.0
+## Claim ceiling
 
-- **Exact rational certification layer** (`src/wwprefix/exactcert.py`): every certified value is computed, or a posteriori verified, in exact rational arithmetic with zero tolerances. The frozen certificate is computed by breakpoint binary search plus finitely terminating parametric shortest paths — no LP and no tolerance in the certified path. This repairs the review's decisive finding (comment 4.1): the v2.0.0 implementation could certify a destabilisable radius as safe by discarding a 1e-9 coefficient under a 1e-8 tolerance.
-- **Floating point demoted to search.** HiGHS LPs propose witnesses and dual mixtures; the exact layer re-verifies before use. Float outputs appear only under a `float_search` key labelled diagnostic.
-- **Proven-infinity taxonomy:** `proven_infinite_no_outside_path` and `proven_infinite_saturation` (with a certified residual gap); solver-presumed infinities are never published as proven.
-- **Certified escalation:** exact pairwise lower bounds order and prune the finite disjunction; per-disjunct certificates (binding-comparator pairwise radii, dual mixtures, separating-mixture probes for infeasible disjuncts) return point-exact radii or certified intervals with published width.
-- **Independent checker** `scripts/check_certificate.py`: re-verifies decision records from first principles without importing the package; wired into tests and the release verifier.
-- **Exact decimal inputs:** instance arrays and radius options accept numeric strings parsed as exact decimals or `p/q` rationals.
-- **New audits:** `run_exact_certification_audit.py` with agreement (complete-enumeration equality), adversarial (review counterexample in both semantics, tiny slope gaps to 1e-15, extreme weights, near-coincident breakpoints, huge-K instances) and rescaling-invariance (hard zero-flip assertion) strata, plus certified runtimes at T = 50/100/200/365.
-- **Literature repositioning:** partial inverse and partial anti-inverse shortest paths added (Gassner 2009; Ley & Merkert 2025) with a comparison table; the open-complexity claim narrowed to the demand-induced restriction.
-- **Estimand separation:** old forecast, revised forecast and realised demand are distinguished notationally; the conformal result is titled and stated as one-step calibration of forecast revisions; a table assigns each guarantee to its estimand.
-- **Manuscript minor repairs** per review comments 1–15 (Prop 2.1 wording, O_k nonempty assumption, potential notation u, boxed assurance statement, executable bit, four-period fence row, stylised-cost labelling, overlapping-windows prominence, Wilson intervals, timing separation, infinity taxonomy, title, conclusion wording, reference accents).
-- **New documents:** `docs/response_to_reviewers_v2.1.0.md`, `docs/PRACTITIONER_GUIDE.md`.
-- Test suite grown from 20 to 63 tests, including the reviewer-counterexample regression family.
+Release 3.0.0 supports exact graph-theoretic results and a conditional classical active-horizon corollary. It does not claim independent replication, proof-assistant verification, exhaustive novelty, polynomial-time exact solution, industrial benefit, adaptive conformal validity, or an official REF grade.
 
-## Assurance boundary
+## Historical states
 
-Certified values are exact-rational and witness-backed, and the shipped checker re-verifies records independently of the package; but there is no journal peer review, no independent clean-room reproduction of the full pipeline, no proof-assistant verification, and no field validation. For T > 12 the checker relies on the package's internally cross-checked parametric computation for lower-bound minimality. MILP negatives remain solver-level evidence. The full Richter–Vörös (1989) article was not obtained; theorem-level novelty remains conditional. Exact enumeration remains worst-case exponential.
+Earlier review and response records are preserved under `docs/history/`. Their version numbers and assurance states describe their own snapshots and do not override this release’s metadata.

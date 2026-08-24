@@ -1,0 +1,19 @@
+Certified Commitment Horizons v3.0.0 fresh-extraction replay
+generated_at_utc: 2026-08-24T20:12:36.637601+00:00
+status: PASS
+source_snapshot_sha256: 1db7b50d8e20f5bcaff061b9718acbc9b35204f24d266db79c95c5b2efa8f87b
+python: /Users/admin/Documents/Codex/2026-08-24/lo-2/work/cch_v3_env/bin/python
+locked_dependency_install: PASS
+pytest: 94 passed
+wheel_install: PASS
+isolated_wheel_import: PASS
+wheel_import_origin: /private/var/folders/zw/csz72k695vl0vzqj_fpgn8kr0000gn/T/cch-v3-fresh-x71uk3q6/venv/lib/python3.12/site-packages/wwprefix/__init__.py
+cli_help: PASS
+sample_certification: PASS
+independent_checker: PASS
+preseal_release_verifier: PASS
+quick_replay_preseal: PASS
+pdf_sha256: d68886a4ce02e085d4077b0b46d06219e55679c46e101f8a7f4d4ed17fef25a8
+wheel_sha256: 68283040d084a6a92c5201e1e3f413cfaba4e295fb788be98bea52116e3a2dfa
+source_snapshot_check_output: 1db7b50d8e20f5bcaff061b9718acbc9b35204f24d266db79c95c5b2efa8f87b
+authority_limit: Producer fresh-extraction replay; not independent reproduction or peer review.

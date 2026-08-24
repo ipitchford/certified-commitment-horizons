@@ -1,0 +1,163 @@
+{
+  "attempt_id": "cch-wwprefix-v3.0.0-20260818",
+  "checks": {
+    "benchmarks": {
+      "exact_instances": 30,
+      "exact_resolved": 28,
+      "exact_time_limit_before_disjuncts": 2,
+      "milp_probes": 24,
+      "milp_resolved": 22,
+      "milp_unresolved": 2
+    },
+    "calibration": {
+      "bonferroni_family_coverage": 0.8984,
+      "exchangeable_coverage": 0.9038,
+      "scale_1_5_coverage": 0.77905,
+      "trials": 85000
+    },
+    "certificate": {
+      "certificate_rows": 512,
+      "certified_intervals": 101,
+      "fixed_competitor_cases": 96,
+      "graph_cases": 62,
+      "instances": 258,
+      "max_stored_absolute_error": 0.0,
+      "partial_cases": 254,
+      "partial_exact_closures": 153,
+      "total_exact_closures": 411
+    },
+    "equivalence": {
+      "match_class_counts": {
+        "exact_match_certified": 305,
+        "exact_rational_equality": 247,
+        "float_match_certified": 27,
+        "reference_unresolved": 28,
+        "unresolved_pair": 20
+      },
+      "platform_sensitive_search_partition": 55,
+      "rows": 627,
+      "warranted_disagreements": 0
+    },
+    "exact_certification": {
+      "adversarial_rows": 34,
+      "brute_force_matches": 330,
+      "certified_intervals": 25,
+      "comparisons": 330,
+      "max_interval_relative_width": 9.09959451889e-13,
+      "point_exact": 305
+    },
+    "example": {
+      "exact_radius": "2/1",
+      "frozen_radius": "3/2",
+      "independent_checker": "pass",
+      "semantic_mode": "classical_active_horizon"
+    },
+    "fresh_extract": {
+      "reason": "pre-seal mode breaks the receipt/verifier dependency cycle",
+      "status": "deferred_until_final_seal"
+    },
+    "json": {
+      "json_files_parsed": 25
+    },
+    "literature": {
+      "claim_ceiling": "bounded_contribution_comparison_not_exhaustive_priority",
+      "egri_external_sha256": "9043ec932b8a0ba21647d49eddaef0c2e31c20640da8dfd2db6545f44d0150e9",
+      "li_mruls_sha256": "4b970c6228b34e49d47ee460f37e11095299c1ab0351a7b351b553f123d7b86b",
+      "richter_source_sha256": "bd5ee5a82e399e11572b44d2bf334672be6bc6b47499271e636cf3a8f04aa255",
+      "sources": 9
+    },
+    "metadata_contract": {
+      "claim_ids_unique": true,
+      "claims": 17,
+      "human_gates_open": 6,
+      "identity": {
+        "attempt_id": "cch-wwprefix-v3.0.0-20260818",
+        "release_version": "3.0.0",
+        "work_id": "cch-wwprefix"
+      },
+      "impact_evidence": "none",
+      "publication_state": "candidate_release_eligible_after_internal_replay"
+    },
+    "optimal_face": {
+      "finite_exact_boundaries": 254,
+      "prefix_cases": 315,
+      "witnesses_found": 254
+    },
+    "pdf": {
+      "all_fonts_embedded": true,
+      "bytes": 477043,
+      "critical_latex_warnings": [],
+      "fonts": 22,
+      "page_size": "595.276 x 841.89 pts (A4)",
+      "pages": 40,
+      "sha256": "d68886a4ce02e085d4077b0b46d06219e55679c46e101f8a7f4d4ed17fef25a8",
+      "type3_fonts": 0
+    },
+    "pytest": {
+      "output": "........................................................................ [ 76%]\n......................                                                   [100%]\n94 passed in 14.50s",
+      "status": "pass",
+      "tests": 94
+    },
+    "required": {
+      "forbidden_present": [],
+      "missing": [],
+      "partial_files": [],
+      "required_files": 40
+    },
+    "rolling": {
+      "cases": 462,
+      "inside_dead_zone": 254,
+      "max_output_excess": 2.27373675443e-13
+    },
+    "semantic_bridge": {
+      "empty_optimal_graph_paths": 0,
+      "exact_matches": 320,
+      "instances": 320,
+      "negative_control": {
+        "classical_admissible": false,
+        "graph": "101",
+        "physical": "1"
+      }
+    },
+    "source_snapshot": {
+      "file_count": 82,
+      "matches_provenance": true,
+      "sha256": "1db7b50d8e20f5bcaff061b9718acbc9b35204f24d266db79c95c5b2efa8f87b"
+    },
+    "uci": {
+      "columns": 13,
+      "evaluation_windows": 12,
+      "missing_cells": 0,
+      "rows": 60,
+      "sha256": "adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924"
+    },
+    "versions": {
+      "metadata_files_consistent": true,
+      "version": "3.0.0"
+    },
+    "wheel": {
+      "sha256": "68283040d084a6a92c5201e1e3f413cfaba4e295fb788be98bea52116e3a2dfa",
+      "source_bytes_match": true,
+      "source_files": 16,
+      "version": "3.0.0"
+    }
+  },
+  "generated_at_utc": "2026-08-18T00:00:00+00:00",
+  "limitations": [
+    "Producer-side verification; not independent clean-room reproduction.",
+    "Universal mathematical claims rest on manuscript proofs; finite audits test implementations and bounded instances but do not machine-prove the theorems.",
+    "Neither the exact implementation nor the independent checker has proof-assistant verification; for T>12 the checker does not independently enumerate global frozen-minimality.",
+    "Mixed-integer negative results remain solver-level unless a certified bracket or exact proof closes them.",
+    "The Richter-V\u00f6r\u00f6s conclusion is source-specific and the literature search is targeted, not exhaustive; no second attestation is included.",
+    "The UCI case uses reconstructed forecast vintages and stylised costs and is not field validation.",
+    "The exact complexity of the demand-induced one-protected-arc problem remains open."
+  ],
+  "quick_replay_command": "bash run_all.sh --quick",
+  "release_version": "3.0.0",
+  "schema_version": "2.0",
+  "source_snapshot_sha256": "1db7b50d8e20f5bcaff061b9718acbc9b35204f24d266db79c95c5b2efa8f87b",
+  "status": "pass",
+  "verification_command": "PYTHONPATH=src python scripts/verify_release.py --run-tests --pre-seal",
+  "verification_mode": "pre-seal",
+  "work_id": "cch-wwprefix"
+}

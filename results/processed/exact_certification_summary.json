@@ -10,7 +10,7 @@
     "brute_force_matches": 330,
     "enumeration_exact_certified": 305,
     "enumeration_interval_cases": 25,
-    "enumeration_interval_max_relative_width": 9.099594518889638e-13,
+    "enumeration_interval_max_relative_width": 9.099594518894447e-13,
     "float_false_finite_count": 0,
     "float_false_infinite_count": 0,
     "float_max_error_on_finite": 4.547473508864641e-13,
@@ -26,27 +26,27 @@
     "pandas": "2.2.3",
     "platform": "macOS-26.5.2-arm64-arm-64bit",
     "processor": "arm",
-    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "python": "3.12.11 (main, Jun  3 2025, 15:41:47) [Clang 17.0.0 (clang-1700.0.13.3)]",
     "scipy": "1.17.0",
     "seed": 20260804
   },
   "scaling": {
     "per_horizon_seconds": {
       "100": {
-        "bracket_max": 3.8861868329986464,
-        "frozen_max": 3.4960531670076307
+        "bracket_max": 5.3272273750044405,
+        "frozen_max": 4.910610749997431
       },
       "200": {
-        "bracket_max": 37.12863149998884,
-        "frozen_max": 34.30655066699546
+        "bracket_max": 61.973028749998775,
+        "frozen_max": 52.61734537499433
       },
       "365": {
-        "bracket_max": 293.36236620901036,
-        "frozen_max": 292.50594004199957
+        "bracket_max": 586.2716176669928,
+        "frozen_max": 514.0140593749966
       },
       "50": {
-        "bracket_max": 0.43800591699255165,
-        "frozen_max": 0.37048008300189395
+        "bracket_max": 0.6815582910057856,
+        "frozen_max": 0.644234499995946
       }
     },
     "rows": 16

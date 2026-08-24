@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 AUX_SUFFIXES = {".aux", ".bcf", ".blg", ".bbl", ".fdb_latexmk", ".fls", ".log", ".out", ".run.xml", ".toc"}
-SKIP_DIRS = {".git", ".venv", ".pytest_cache", "__pycache__", "build", "dist"}
+SKIP_DIRS = {".git", ".pytest_cache", "__pycache__", "build", "dist"}
 
 
 def sha256(path: Path) -> str:

@@ -1,0 +1,32 @@
+{
+  "title": "Certified Commitment Horizons in Dynamic Lot Sizing: Exact Prefix Stability, Optimal-Face Witnesses and One-Step Forecast Calibration",
+  "upload_type": "publication",
+  "publication_type": "report",
+  "description": "Anonymous unrefereed theoretical-computational candidate. The release gives exact-rational certificates and bounded computational evidence for prefix stability in the declared forced-source path model, with an ordinary Wagner-Whitin interpretation only under explicit classical active-horizon bridge conditions. Producer replay is not independent reproduction, peer review, formal verification or field validation.",
+  "creators": [
+    {
+      "name": "Anonymous"
+    }
+  ],
+  "version": "3.0.0-candidate",
+  "publication_date": "2026-08-24",
+  "access_right": "open",
+  "license": "cc-zero",
+  "keywords": [
+    "dynamic lot sizing",
+    "Wagner-Whitin",
+    "commitment horizon",
+    "stability radius",
+    "inverse optimisation",
+    "exact rational certification",
+    "unrefereed candidate"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ipitchford/certified-commitment-horizons/releases/tag/v3.0.0-candidate",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Original research content is CC0-1.0; original source code is MIT; the included UCI data retain CC BY 4.0. Third-party literature PDFs are not redistributed. Version DOI 10.5281/zenodo.22086554; concept DOI 10.5281/zenodo.21853901."
+}

@@ -14,6 +14,10 @@ import numpy as np
 ArrayLike = Sequence[float] | np.ndarray
 Path = tuple[int, ...]
 
+FORCED_SOURCE_GRAPH = "forced_source_graph"
+CLASSICAL_ACTIVE_HORIZON = "classical_active_horizon"
+SEMANTIC_MODES = frozenset({FORCED_SOURCE_GRAPH, CLASSICAL_ACTIVE_HORIZON})
+
 
 @dataclass(frozen=True)
 class WWInstance:
@@ -22,6 +26,14 @@ class WWInstance:
     ``q`` contains the reduced arc slopes and must be non-increasing. Demand
     revisions are restricted to ``d >= floor``. The weighted infinity norm is
     ``max_t weights[t] * |d[t] - demand[t]|``.
+
+    ``forced_source_graph`` is the abstract path model: every path starts with
+    a setup at period 0, and paths that differ only by a zero-quantity, zero-cost
+    setup remain distinct graph decisions. ``classical_active_horizon`` activates
+    the lot-sizing bridge and therefore requires ``floor[0] > 0`` and strictly
+    positive setup costs after period 0. Under those conditions every admissible
+    classical optimum has a canonical productive setup path and no empty later
+    setup can create an encoding-only tie.
     """
 
     K: np.ndarray
@@ -29,6 +41,7 @@ class WWInstance:
     demand: np.ndarray
     floor: np.ndarray
     weights: np.ndarray
+    semantic_mode: str = FORCED_SOURCE_GRAPH
 
     @classmethod
     def create(
@@ -39,6 +52,7 @@ class WWInstance:
         floor: ArrayLike | None = None,
         weights: ArrayLike | None = None,
         *,
+        semantic_mode: str = FORCED_SOURCE_GRAPH,
         check_ordered: bool = True,
         tol: float = 1e-10,
     ) -> "WWInstance":
@@ -67,7 +81,23 @@ class WWInstance:
             raise ValueError("weights must be strictly positive")
         if check_ordered and np.any(q_arr[:-1] < q_arr[1:] - tol):
             raise ValueError("reduced slopes q must be non-increasing")
-        return cls(K_arr.copy(), q_arr.copy(), d_arr.copy(), ell.copy(), w.copy())
+        if semantic_mode not in SEMANTIC_MODES:
+            allowed = ", ".join(sorted(SEMANTIC_MODES))
+            raise ValueError(f"semantic_mode must be one of: {allowed}")
+        if semantic_mode == CLASSICAL_ACTIVE_HORIZON:
+            if ell[0] <= 0:
+                raise ValueError(
+                    "classical_active_horizon requires floor[0] > 0 so every "
+                    "admissible revision has a productive period-1 setup"
+                )
+            if K_arr.size > 1 and np.any(K_arr[1:] <= 0):
+                raise ValueError(
+                    "classical_active_horizon requires K[i] > 0 for i > 0 so "
+                    "empty later setup nodes cannot be optimal ties"
+                )
+        return cls(
+            K_arr.copy(), q_arr.copy(), d_arr.copy(), ell.copy(), w.copy(), semantic_mode
+        )
 
     @property
     def T(self) -> int:
@@ -80,6 +110,7 @@ class WWInstance:
             demand,
             self.floor,
             self.weights,
+            semantic_mode=self.semantic_mode,
             check_ordered=False,
         )
 
@@ -159,6 +190,26 @@ def follows_prefix(path: Sequence[int], prefix: Sequence[int]) -> bool:
     p = tuple(path)
     pref = tuple(prefix)
     return len(p) >= len(pref) and p[: len(pref)] == pref
+
+
+def inside_path_count(T: int, prefix: Sequence[int]) -> int:
+    """Number of complete paths retaining ``prefix``: ``2^max(T-1-s, 0)``.
+
+    The prefix fixes every node up to ``s``; a retaining path then chooses an
+    arbitrary subset of the internal nodes ``s+1, ..., T-1``.
+    """
+    pref = validate_prefix(prefix, T)
+    s = pref[-1]
+    return 1 << max(T - 1 - s, 0)
+
+
+def outside_path_count(T: int, prefix: Sequence[int]) -> int:
+    """Closed-form outside-path count ``2^(T-1) - 2^max(T-1-s, 0)``.
+
+    Known before any enumeration, so escalation can disclose or refuse the
+    candidate set without materialising it.
+    """
+    return (1 << max(T - 1, 0)) - inside_path_count(T, prefix)
 
 
 def outside_paths(T: int, prefix: Sequence[int]) -> Iterator[Path]:

@@ -70,7 +70,7 @@
     "path": "data/external/Daily_Demand_Forecasting_Orders.csv",
     "rows": 60,
     "sha256": "adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924",
-    "status": "real observed demand; version 2.1.2 re-fetched the official UCI archive and its sole CSV was byte-identical; forecasts and costs are reconstructed",
+    "status": "real observed demand; local bytes obtained from a public mirror and checked against the UCI schema; forecasts and costs are reconstructed",
     "target_max": 616.453,
     "target_mean": 300.8733166666667,
     "target_min": 129.412
@@ -85,7 +85,7 @@
     "pandas": "2.2.3",
     "platform": "macOS-26.5.2-arm64-arm-64bit",
     "processor": "arm",
-    "python": "3.11.14 (main, Feb 12 2026, 00:41:29) [Clang 21.1.4 ]",
+    "python": "3.12.11 (main, Jun  3 2025, 15:41:47) [Clang 17.0.0 (clang-1700.0.13.3)]",
     "scipy": "1.17.0",
     "seed": 20260804
   },

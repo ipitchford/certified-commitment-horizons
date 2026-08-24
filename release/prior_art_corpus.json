@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "work_id": "cch-wwprefix",
+  "attempt_id": "cch-wwprefix-v3.0.0-20260818",
+  "release_version": "3.0.0",
+  "search_frozen": "2026-08-18",
+  "review_type": "targeted_not_systematic",
+  "claim_ceiling": "bounded_contribution_comparison_not_exhaustive_priority",
+  "comparison_dimensions": [
+    "object retained or protected",
+    "perturbed data",
+    "uncertainty geometry",
+    "quantifier order",
+    "tie or regret semantics",
+    "algorithmic result",
+    "relation to compulsory-prefix radius"
+  ],
+  "sources": [
+    {
+      "id": "richter_voros_1989",
+      "citation": "Richter, K., & Vörös, J. (1989). A Parametric Analysis of the Dynamic Lot-Sizing Problem. EIK 25(3), 67–73.",
+      "access_state": "full supplied print scan inspected pages 67–73",
+      "sha256": "bd5ee5a82e399e11572b44d2bf334672be6bc6b47499271e636cf3a8f04aa255",
+      "redistributed": false,
+      "object": "one fixed regeneration-point solution",
+      "perturbation": "one scalar cost direction, one scalar demand direction, and a joint two-scalar region",
+      "algorithmic_result": "inequality-defined stability intervals or regions; no complexity classification",
+      "boundary": "no protected prefix, moving continuation, simultaneous weighted T-dimensional demand ball, coordinate floors or compulsory-optimality tie event",
+      "evidence": "release/literature_inspection_receipt.json"
+    },
+    {
+      "id": "van_hoesel_wagelmans_1993",
+      "citation": "van Hoesel, S. P. M., & Wagelmans, A. P. M. (1993). Sensitivity Analysis of the Economic Lot-Sizing Problem. Discrete Applied Mathematics 45(3), 291–312.",
+      "access_state": "full text inspected",
+      "redistributed": false,
+      "redistribution_note": "inspected-copy hash retained; third-party PDF excluded from the public release",
+      "object": "one complete optimal solution",
+      "perturbation": "individual parameter ranges including one demand coordinate at a time",
+      "boundary": "does not protect a prefix face or allow the best retaining continuation to switch"
+    },
+    {
+      "id": "chakravarti_wagelmans_1998",
+      "citation": "Chakravarti, N., & Wagelmans, A. P. M. (1998). Calculation of Stability Radii for Combinatorial Optimization Problems. Operations Research Letters 23(1–2), 1–7.",
+      "access_state": "working-paper full text inspected",
+      "redistributed": false,
+      "redistribution_note": "inspected-copy hash retained; third-party PDF excluded from the public release",
+      "object": "one fixed binary solution",
+      "perturbation": "independent objective-coefficient modifications",
+      "algorithmic_result": "fixed-solution stability radius polynomial when the underlying oracle is polynomial",
+      "boundary": "full-path endpoint is adjacent; partial prefix is a moving optimal face under correlated demand-induced arc costs"
+    },
+    {
+      "id": "zhang_2011",
+      "citation": "Zhang, M. (2011). Two-Stage Minimax Regret Robust Uncapacitated Lot-Sizing Problems with Demand Uncertainty. Operations Research Letters 39(5), 342–345.",
+      "doi": "10.1016/j.orl.2011.06.013",
+      "access_state": "publisher abstract and detailed section snippets inspected; full text not independently obtained",
+      "redistributed": false,
+      "object": "one setup vector selected before interval-demand uncertainty",
+      "quantifier_order": "minimise over first-stage setup vector, then maximise regret over demand scenarios",
+      "algorithmic_result": "polynomial dynamic programme under interval demand uncertainty; later source reports O(T^7)",
+      "boundary": "minimax regret against a fully adaptive optimum, not nearest crossing of two adaptive prefix-restricted envelopes"
+    },
+    {
+      "id": "li_romero_morales_2013",
+      "citation": "Li, D., & Romero Morales, D. (2013). Polynomial Time Algorithms for the Minimax Regret Uncapacitated Lot Sizing Model. Optimization Online 4149.",
+      "source_url": "https://optimization-online.org/2013/12/4149/",
+      "access_state": "full six-page public preprint inspected",
+      "sha256": "4b970c6228b34e49d47ee460f37e11095299c1ab0351a7b351b553f123d7b86b",
+      "redistributed": false,
+      "redistribution_note": "source URL and inspected-copy hash retained; third-party PDF excluded from the public release",
+      "object": "one setup vector selected before uncertainty",
+      "quantifier_order": "min_y max_u regret(y,u)",
+      "algorithmic_result": "O(T^6) with production-cost and demand uncertainty; O(T^5) for demand only; O(T^4) for production costs only",
+      "boundary": "closest robust-complexity comparator, but no inverse nearest radius and no protected-prefix inside/outside envelopes"
+    },
+    {
+      "id": "li_romero_morales_2017",
+      "citation": "Li, D., & Romero Morales, D. (2017). The Robust Uncapacitated Lot Sizing Model with Uncertainty Range. Optimization Online 5800.",
+      "source_url": "https://optimization-online.org/2017/01/5800/",
+      "access_state": "repository metadata and abstract inspected",
+      "redistributed": false,
+      "object": "a robust setup solution",
+      "perturbation": "demand uncertainty controlled by budget, protected periods and per-period protection level",
+      "algorithmic_result": "polynomial robust models",
+      "boundary": "protects feasibility/robust objective over an uncertainty range, not compulsory optimality of a selected setup prefix"
+    },
+    {
+      "id": "egri_et_al_2014",
+      "citation": "Egri, P., Kis, T., Kovács, A., & Váncza, J. (2014). An Inverse Economic Lot-Sizing Approach to Eliciting Supplier Cost Parameters. International Journal of Production Economics 149, 80–88.",
+      "doi": "10.1016/j.ijpe.2013.06.024",
+      "source_url": "https://real.mtak.hu/15082/",
+      "access_state": "full 22-page repository manuscript inspected",
+      "sha256": "9043ec932b8a0ba21647d49eddaef0c2e31c20640da8dfd2db6545f44d0150e9",
+      "redistributed": false,
+      "object": "historical demand–optimal-lot-size pairs",
+      "perturbation": "latent setup, holding and backlog cost ratios",
+      "algorithmic_result": "inverse shortest-path linear programme",
+      "boundary": "direct inverse lot-sizing precedent, but no demand perturbation, nearest boundary or protected-prefix event"
+    },
+    {
+      "id": "gassner_2009",
+      "citation": "Gassner, E. (2009). Selected Partial Inverse Combinatorial Optimization Problems with Forbidden Elements. Technical Report 2009-15.",
+      "access_state": "full text previously inspected",
+      "redistributed": false,
+      "object": "optimum avoiding forbidden elements",
+      "perturbation": "independent arc weights",
+      "algorithmic_result": "partial anti-inverse shortest paths strongly NP-hard under L1 and L-infinity",
+      "boundary": "hardness does not transfer automatically through the correlated demand-to-arc map and Monge restrictions"
+    },
+    {
+      "id": "ley_merkert_2025",
+      "citation": "Ley, E., & Merkert, M. (2025). Solution Methods for Partial Inverse Combinatorial Optimization Problems in Which Weights Can Only Be Increased. Journal of Global Optimization 93, 263–298.",
+      "doi": "10.1007/s10898-025-01529-x",
+      "access_state": "publisher full text/record previously inspected",
+      "redistributed": false,
+      "object": "optimum containing required elements",
+      "perturbation": "independent arc weights, increase only",
+      "algorithmic_result": "NP-complete on a DAG with one required arc",
+      "boundary": "generic arc-weight result does not classify the demand-induced ordered-slope one-arc core"
+    }
+  ],
+  "bounded_conclusion": "Within the inspected corpus, no source contains the combination of compulsory optimality for a protected prefix face, a moving best retaining continuation, a floor-truncated weighted simultaneous demand ball, exact fixed-path and bracket certificates, and nearest-boundary semantics. The full-path case and generic stability radii are not claimed as novel. The closest omitted comparators—interval-demand minimax-regret lot sizing and inverse lot-sizing cost elicitation—have materially different quantifiers and targets.",
+  "missingness": [
+    "Search was targeted rather than systematic.",
+    "No second human or institutional bibliographic attestation.",
+    "Several adjacent Richter-programme papers remain uninspected in full text.",
+    "Zhang (2011) full text was not independently obtained; its publisher record and Li–Romero Morales's full-text account were inspected.",
+    "No exhaustive priority or negative-universe claim is made."
+  ]
+}

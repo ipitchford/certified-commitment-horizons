@@ -1,174 +1,198 @@
 # Certified Commitment Horizons in Dynamic Lot Sizing
 
-**Release:** 2.1.2, 8 August 2026
-**Status:** unrefereed candidate research release
-**Model:** deterministic, single-item, uncapacitated Wagner-Whitin lot sizing
-**Licence:** CC0 1.0 for original manuscript, figures, documentation and release metadata; MIT for source code; UCI data remains CC BY 4.0. See `LICENSES.md` and `THIRD_PARTY_NOTICES.md`.
+**Release:** 3.0.0 — 24 August 2026  
+**Status:** unrefereed theoretical–computational candidate  
+**Licence:** CC0-1.0 for original research content and metadata; MIT for original software; third-party material retains its source terms
+**Version DOI:** [10.5281/zenodo.22086554](https://doi.org/10.5281/zenodo.22086554)  
+**Concept DOI:** [10.5281/zenodo.21853901](https://doi.org/10.5281/zenodo.21853901)
 
-**What changed in 2.1.2.** Release-assurance correction responding to the
-5 August final Evidence Press review. The invalid monotonicity requirement on
-unresolved upper witnesses was removed; the parametric exact routine now uses
-the finite source-to-sink path count instead of an arbitrary iteration cap;
-version and assurance metadata were synchronised; third-party literature files
-were removed from the public tree; UCI provenance was restored to the exact
-official download; and deterministic rights, metadata and clean-tree checks
-were added. No theorem statement or numerical result was strengthened.
+## What this release establishes
 
-**What changed in 2.1.1.** Bibliographic correction release: the Richter–Vörös
-(1989) entry no longer prints the non-resolving DOI test-prefix identifier and now
-carries the verified EIK citation (ISSN 0863-0593, Zbl 0672.90033); the novelty
-boundary is restated on triangulated zbMATH/dblp/ACM evidence with a documented
-print-acquisition dossier; the accessible same-programme EJOR instalments are cited.
-No code changes.
+The package studies `WW-Prefix-Radius-infinity`: the weighted, floor-truncated demand-space distance at which an optimal Wagner–Whitin-type replenishment path may cease to share a protected setup prefix.
 
-**What changed in 2.1.0.** The 2.0.0 floating-point implementation could return a
-false infinite "safe" radius on a valid instance (peer review, comment 4.1). Version
-2.1.0 computes every certified value in exact rational arithmetic with zero
-tolerances (`src/wwprefix/exactcert.py`), demotes floating point to a search
-heuristic whose proposals are exactly re-verified, ships an independent certificate
-checker (`scripts/check_certificate.py`), accepts exact decimal inputs as numeric
-strings, and adds regression, adversarial, rescaling-invariance and scaling audits.
-See `docs/response_to_reviewers_v2.1.0.md` and `docs/PRACTITIONER_GUIDE.md`.
+Release 3.0.0 separates two semantic layers that earlier versions conflated:
 
-## Decision object
+- **`forced_source_graph`** is the abstract path model. Every complete path begins at period 1. An empty zero-cost setup node remains a distinct graph decision.
+- **`classical_active_horizon`** is the ordinary uncapacitated lot-sizing interpretation. It is accepted only when the first-period demand floor is strictly positive and every later setup cost is strictly positive. Under those conditions, the manuscript proves a cost-preserving bijection between optimal physical setup patterns and optimal graph paths.
 
-The package studies `WW-Prefix-Radius-infinity`: how far a current demand forecast must move, in a weighted infinity norm and subject to demand floors, before an optimal lot-sizing path may leave a protected prefix of replenishment cycles.
+This distinction repairs the leading-zero-demand counterexample: with `K=(100,1)`, `q=(1,0)` and `d=(0,1)`, the forced-source graph costs 101 while the ordinary physical model can wait until period 2 and costs 1. The instance remains valid in graph mode and is rejected in classical mode.
 
-For nominal demand `d_hat`, coordinate weights `w > 0`, floors `ell`, and the first `k` arcs of a selected nominal optimum, the strong radius is the distance to the nearest admissible demand vector at which some optimal path lies outside that prefix class. The implementation returns a **certified decision record**, with every certified value computed or a posteriori verified in exact rational arithmetic:
+Demand floors are declared inputs, not quantities estimated by the software.
+Their provenance must say whether they encode empirical or physical support, a
+contractual/planning minimum, or a conservative truncation. These meanings are
+mathematically compatible with the same lower-bound constraint but are not
+operationally interchangeable.
 
-- an exact frozen-comparator lower certificate (breakpoint binary search plus
-  finitely terminating parametric shortest paths; no LP, no tolerances);
-- an exactly verified upper witness when one exists (floating-point LPs propose,
-  the exact layer verifies);
-- exact closure when the witnesses or bounds coincide as rationals;
-- proven infinity statuses (structural or saturation, with a certified residual gap);
-- otherwise an explicit unresolved state and certified exact escalation.
+## Principal contributions
 
-The certificate protects **setup epochs and cycle boundaries**, not literal order quantities. It assumes uncapacitated quantity recourse within each retained cycle.
+The manuscript proves, within the declared semantic domain:
 
-## Strongest supported contribution
+1. reduced affine arc costs `K_i + q_i(D_j-D_i)` under ordered reduced slopes;
+2. an exact, floor-aware distance to a tie with any fixed path;
+3. a prefix-deviation directed acyclic graph representing exactly the paths that leave a protected prefix;
+4. a polynomial exact-rational frozen-comparator lower certificate;
+5. a polynomial lower–upper bracket with exact closure conditions;
+6. a canonical common-optimal-prefix safeguard against arbitrary nominal tie-breaking;
+7. an exact prefix-to-arc decomposition: a `k`-arc strong radius is the minimum of at most `k` one-protected-arc suffix radii;
+8. a **single-detour optimal-face theorem**: every finite nearest loss of compulsory prefix optimality admits adjacent co-optimal inside/outside paths differing on one divergence–remergence interval;
+9. exact finite-disjunction and fixed-radius formulations, plus a polynomial-size production-balance mixed-integer formulation;
+10. one-step marginal conformal calibration under exchangeability; and
+11. a deterministic rolling structural-loss bound under uncapacitated quantity recourse.
 
-Within the stated Wagner-Whitin model, the release provides:
+The exact complexity of the demand-induced one-protected-arc problem remains open. The released enumerator is provably exponential, but that fact does not classify the decision problem.
 
-1. reduced affine arc costs `K_i + q_i (D_j - D_i)` with ordered slopes;
-2. an exact floor-aware distance to a fixed path tie;
-3. a formally specified prefix-deviation directed acyclic graph;
-4. a polynomial frozen-comparator certificate, including zero/repeated breakpoints, zero denominators, infinite radii and witness recovery;
-5. a polynomial lower-upper bracket and exact closure conditions;
-6. exact fixed-competitor inverse linear programmes, a finite disjunction, and a fixed-radius mixed-integer model;
-7. a floor-aware one-step marginal conformal rule and a prespecified finite-family Bonferroni extension;
-8. a deterministic rolling structural-loss bound with a certified dead zone.
+## What changed in 3.0.0
 
-The exact complexity classification of the demand-induced restriction remains open (generic partial inverse analogues are NP-hard). A full-text theorem-level comparison with Richter and Vörös (1989) also remains unresolved: the bounded search documented for this release located no lawful digital full text (the journal's 1987–94 run is not known to have been digitised and the quoted ACM identifier is a DOI test-prefix stub); triangulated review evidence indicates a fixed-solution stability-region antecedent, and a print-acquisition dossier ships in `docs/literature_audit.md`. These limits are part of the contribution boundary, not hidden caveats.
+- Added the classical active-horizon semantic bridge and explicit graph-only mode.
+- Added edge-case regressions for leading-zero demand, interior zero demand, zero setup cost and empty setup nodes.
+- Corrected the invalid test that demanded monotonicity of independently found unresolved upper witnesses. True-radius monotonicity is now tested only when adjacent radii are exactly certified; unresolved intervals are checked for lower ≤ upper consistency.
+- Replaced ambiguous `complete` statuses with `exact_certified`, `enumeration_completed_with_certified_interval`, refusal and solver-level states.
+- Added the single-detour optimal-face theorem, implementation and exact finite audit.
+- Added an independent physical-enumeration audit of the semantic bridge.
+- Stratified the 627-row compact-model corpus into exact, floating-search, reference-unresolved and pair-unresolved classes rather than calling all rows exact validations.
+- Reconciled the Richter–Vörös (1989) record through a hash-bound, page-specific inspection receipt. The result is a source-specific negative reading, not an exhaustive priority claim.
+- Added the closest omitted algorithmic and inverse-lot-sizing comparators: Zhang (2011), Li–Romero Morales (2013, 2017) and Egri et al. (2014), with explicit quantifier and objective differences.
+- Rebuilt the package as one version-matched source, wheel, manuscript, claims ledger, provenance record, verification receipt and SHA-256 manifest.
 
 ## Quick start
 
-Requirements: Python 3.11 or later and a LaTeX installation with `latexmk` for rebuilding the paper.
+Requirements: Python 3.11 or later. Rebuilding the manuscript also requires a LaTeX installation with `latexmk` and `biber`.
 
 ```bash
 python -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements-lock.txt
-python -m pip install -e . --no-build-isolation
+python -m pip install . --no-build-isolation
 
 wwprefix certify examples/strict_gap_instance.json --k 1 --exact \
   --output examples/sample_decision.json
 ```
 
-The expected strict-gap result is:
+The strict-gap example is in `classical_active_horizon` mode. It returns:
 
-- certified frozen lower radius: exactly `3/2`;
-- certified exact strong radius (escalation): exactly `2/1`;
-- public paths use one-based nodes, so `[1, 2, 4]` denotes the internal path `(0, 1, 3)`.
+- frozen lower certificate: exactly `3/2`;
+- exact strong radius: exactly `2/1`;
+- one-based public nominal path `[1, 2, 4]`.
 
-Certified values appear as `{"float": ..., "exact": "p/q"}` pairs. Floating-point
-diagnostics appear only under `float_search` and never influence a certified
-classification. Radius options are parsed exactly: `--proposed-radius "1.1"` means
-the decimal 11/10, not its binary approximation. Instance arrays may contain numeric
-strings for exact decimal semantics.
+Certified quantities appear as `{"float": ..., "exact": "p/q"}`. The rational string is authoritative. Floating-point values appear only under `float_search` and never decide a certified classification.
 
-Fixed-radius decision:
+### Input semantics
 
-```bash
-wwprefix decide examples/strict_gap_instance.json --k 1 --radius 1.75
-wwprefix decide examples/strict_gap_instance.json --k 1 --radius 2.00
+A minimal instance contains `K`, `q`, `demand`, `floor`, `weights` and `semantic_mode`:
+
+```json
+{
+  "semantic_mode": "classical_active_horizon",
+  "K": ["0", "3", "2"],
+  "q": ["2", "1", "0"],
+  "demand": ["1", "5", "1"],
+  "floor": ["0.5", "0.5", "0.5"],
+  "weights": ["1", "1", "1"]
+}
 ```
 
-The certified bracket decides whenever it can; the MILP runs only for unresolved
-radii and its results are labelled `solver_level_only_not_exactly_certified`
-(affirmative witnesses are re-verified exactly and upgraded when they check out).
-The interface never recodes an unresolved result as safe.
+Use numeric strings where decimal-exact semantics matter. Plain JSON numbers are converted from their exact binary values. See `docs/input_schema.md`.
 
-Verify any decision record independently of the package:
+## Output states
 
-```bash
-python scripts/check_certificate.py examples/sample_decision.json examples/strict_gap_instance.json
-```
+The interface does not collapse unresolved evidence into a binary answer.
 
-## One-command verification
+| Status | Warranted interpretation |
+|---|---|
+| `exact_certified` | The exact strong radius is closed to one rational value. |
+| `certified_interval` | Exact lower and feasible upper witnesses are valid; the nearest value is not closed. |
+| `enumeration_completed_with_certified_interval` | Candidate processing completed, but one or more disjuncts remain unresolved. |
+| `refused_by_candidate_guard` | The closed-form candidate count exceeded the predeclared cap; no safety conclusion follows. |
+| `solver_level_only` | A mixed-integer result lacks the exact witness or closing bound required for certification. |
+| proven infinity | No outside path exists, or a certified positive residual gap survives full admissible saturation. |
+
+A certified lower radius protects **setup epochs and replenishment-cycle boundaries**, not fixed order quantities. The model assumes quantities can adjust within retained cycles.
+
+## Verification
+
+Quick deterministic replay:
 
 ```bash
 bash run_all.sh --quick
 ```
 
-(The executable bit is set in the release, so `./run_all.sh --quick` also works;
-the `bash` form is robust to archive tools that drop permissions.)
-
-This compiles the Python sources, runs the test suite, regenerates the example decision and figures, rebuilds the manuscript, and checks the frozen artefacts. The complete computational replay is:
+Full computational replay:
 
 ```bash
-./run_all.sh --full
+bash run_all.sh --full
 ```
 
-`--full` reruns all synthetic audits, exact benchmarks, calibration simulations, rolling tests and the illustrative UCI case before performing the quick verification. Runtime is machine-dependent; exact candidate generation grows rapidly.
-
-After downloading a packaged release, verify every frozen file against the signed-off manifest:
+Release checks:
 
 ```bash
+python scripts/fresh_extract_replay.py --python /path/to/python3.12
 python scripts/verify_hashes.py release/SHA256SUMS
 PYTHONPATH=src python scripts/verify_release.py --run-tests
+python scripts/source_snapshot.py --check-provenance
+python scripts/seal_release.py --output /path/to/certified_commitment_horizons_v3.0.0.zip
 ```
 
-The hash checker rejects missing, altered and duplicate manifest entries. The release verifier can use the archived final LaTeX build log, so it does not require auxiliary build files.
+The fresh-extraction replay builds an unrelated virtual environment, installs
+the locked dependencies and wheel, runs the quick replay in pre-seal mode, and
+then imports the wheel with isolated Python from outside the source tree. The
+final verifier accepts the resulting receipt; this two-stage protocol avoids a
+circular gate in which a receipt would have to claim the final verifier passed
+before the final verifier could run.
+The sealing command regenerates the complete manifest, writes a deterministic
+ZIP outside the release tree, extracts it again, verifies manifest coverage and
+runs the final release verifier on the extracted archive.
 
-## Input schema
+Independent record check:
 
-See [`docs/input_schema.md`](docs/input_schema.md). A minimal input has arrays `K`, `q`, `demand`, `floor` and `weights`, all of equal length. `q` must be non-increasing, demand must lie above the floor, and weights must be strictly positive. A supplied nominal path must be nominally optimal.
+```bash
+python scripts/check_certificate.py \
+  examples/sample_decision.json \
+  examples/strict_gap_instance.json
+```
 
-## Evidence and audit boundary
+The independent checker does not import `wwprefix`. For horizons above 12 it checks achievability, consistency and infinity evidence but does not independently rederive global frozen-minimality.
 
-The release contains raw rows rather than success-only summaries:
+## Evidence ledger
 
-- 512 frozen-certificate comparisons from 258 generated instances;
-- 62 exhaustive graph-bijection checks;
-- 96 compact-versus-explicit fixed-competitor linear-programme checks;
-- 512 exact small-horizon bracket-containment checks;
-- 30 exact-disjunction benchmark instances;
-- 24 fixed-radius mixed-integer probes, including two unresolved time-limit cases;
-- 85,000 calibration trial rows across five scenarios;
-- 462 rolling-bound cases;
-- 31 reconstructed forecast-vintage windows from a 60-observation public demand dataset.
+| Evidence gate | Denominator | Result |
+|---|---:|---|
+| Semantic bridge | 320 exact active-horizon instances, `T=1..10` | 320 optimal-cost and optimal-setup-set matches; no empty later optimal setup; negative control 101 versus 1 |
+| Optimal-face edge witness | 315 prefix cases from 84 exact instances | 254/254 finite boundaries exposed a single-detour adjacent crossing pair; 61 were proven infinite |
+| Frozen certificate | 512 comparisons from 258 instances | maximum discrepancy from exhaustive frozen enumeration 0 |
+| Polynomial bracket | 512 cases | 411 exact closures; 101 certified intervals |
+| Exact certification | 330 brute-force comparisons | 330/330 frozen matches; 305 exact strong radii; 25 certified intervals |
+| Compact equivalence | 627 rows | 305 exact matches; 247 exact decomposition equalities; 55 platform-sensitive search rows (27 floating-search matches with exact witness checks and 28 reference-unresolved in the frozen macOS replay); 20 unresolved pairs; zero warranted disagreements |
+| Exact enumeration benchmark | 30 instances | 28 optimal; 2 `T=18` atomic candidate-generation timeouts before any disjunct; 0 solver failures |
+| Fixed-radius mixed integer | 24 probes | 22 resolved/correct; 2 time-limit unresolved |
+| Rolling bound | 462 cases | no theorem violation; all 254 dead-zone cases had zero residual |
+| Test suite | 94 deterministic tests | pass |
 
-These are **producer-side checks** created in the same workflow as the code. They establish internal consistency and boundary behaviour, not independent replication or industrial effectiveness. The UCI case uses real observed demand but reconstructed forecasts and stylised costs; it is not field validation.
+These are producer-side finite audits. They test implementation identities and can refute defects; they do not machine-prove universal theorems.
 
-## Repository map
+## Literature boundary
 
-- `paper/` — LaTeX source, bibliography, final PDF and publication figures.
-- `src/wwprefix/` — model, graph, certificate, bracket, exact, calibration, rolling and CLI code.
-- `tests/` — deterministic unit and integration tests.
-- `scripts/` — frozen audit, benchmark, figure and verification scripts.
-- `results/raw/` — row-level computational outputs, including failures and unresolved statuses.
-- `results/processed/` — summaries used in the paper.
-- `data/external/` — frozen illustrative demand data.
-- `docs/` — literature boundary, response to review, provenance, schemas and limitations.
-- `release/` — claim ledger, provenance record, verification receipt and hashes.
-- `archive/v1.0.0/` — pre-revision manuscript snapshot.
+The supplied seven-page Richter–Vörös (1989) scan was read page by page and bound to SHA-256 `bd5ee5a82e399e11572b44d2bf334672be6bc6b47499271e636cf3a8f04aa255`. It studies one- and two-scalar stability regions for one fixed Wagner–Whitin regeneration-point solution. No protected-prefix class, moving inside continuation, simultaneous weighted demand ball, coordinate floors or complexity classification was found in that source.
 
-## Assurance status
+The rebuilt boundary also includes the closest robust-complexity comparator: Zhang (2011) and Li–Romero Morales (2013) solve interval-demand minimax-regret lot sizing in polynomial time, with an $O(T^5)$ demand-only algorithm. Their model chooses one setup vector before uncertainty and minimises worst-case regret; this release searches for the nearest scenario where two adaptive prefix-restricted value envelopes cross. Egri et al. (2014) provide a direct inverse lot-sizing precedent by inferring cost ratios from observed demand–optimal-plan pairs, but do not perturb demand or protect a prefix.
 
-The mathematical claims were revised after internal and cross-model adversarial review and checked by producer-side tests, exact small-instance oracles and replayable scripts. Every value labelled certified is computed or re-verified in exact rational arithmetic with zero tolerances. A separately implemented producer-side checker re-verifies decision records without importing the package; for horizons above 12 it still relies on the package's internally cross-checked parametric result for frozen-minimality. The release has **not** received journal peer review, independent clean-room reproduction, proof-assistant verification, or field validation.
+See `docs/literature_audit.md`, `release/prior_art_corpus.json`, `docs/richter_voros_inspection_receipt.md` and `release/literature_inspection_receipt.json`. The Richter–Vörös scan itself is not redistributed. The search remains targeted rather than systematic; exhaustive priority and independent bibliographic attestation remain open.
 
-## Citation
+## Claim ceiling
 
-Use `CITATION.cff`. The GitHub release and archived DOI identify the public candidate package; the exact release ZIP is bound by `release/SHA256SUMS` and its published checksum.
+This release supports a theoretical and computational contribution in single-item uncapacitated lot sizing. It does **not** establish:
+
+- capacity-, service- or multi-item guarantees;
+- fixed-order-quantity robustness;
+- polynomial-time exact solution of the partial-prefix problem;
+- adaptive, conditional or time-uniform conformal coverage;
+- industrial cost savings;
+- independent clean-room reproduction;
+- proof-assistant verification; or
+- exhaustive novelty.
+
+The UCI exercise uses observed demand but reconstructed forecast vintages and stylised costs. It demonstrates the interface and conservative behaviour; it is not field validation.
+
+## Rights and scholarly identity
+
+The scholarly creator of this candidate is **Anonymous**. Original manuscript text, figures, documentation, release metadata, claim records and original result tables are dedicated under CC0 1.0. Original source code is licensed under MIT. The included UCI data retain CC BY 4.0. Literature PDFs used during review are not redistributed; citations, source URLs and hashes identify the inspected materials. See `LICENSES.md`, `PUBLIC_DOMAIN.md` and `THIRD_PARTY_NOTICES.md`.

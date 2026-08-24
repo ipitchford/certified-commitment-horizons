@@ -1,5 +1,7 @@
 # Response to reviewers — version 2.1.0 (5 August 2026)
 
+> **Historical record.** This document describes the state at its own review round and is not updated. The Richter–Vörös (1989) full text was subsequently obtained and audited on 17–18 August 2026 with no theorem-level collision found; see `docs/literature_audit.md` and manuscript v2.2.0.
+
 **Manuscript:** *Certified Commitment Horizons in Dynamic Lot Sizing*
 **Previous version reviewed:** 2.0.0 (4 August 2026); review dated 5 August 2026, recommendation **major revisions**, confidence 0.92.
 **This document:** point-by-point response. Section numbers refer to the review; line references to version 2.1.0.

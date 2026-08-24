@@ -161,6 +161,30 @@ def _float_search_public(instance, nominal, k) -> dict:
     }
 
 
+
+
+def _semantics_public(exact: ExactInstance) -> dict:
+    classical = exact.semantic_mode == "classical_active_horizon"
+    return {
+        "mode": exact.semantic_mode,
+        "classical_lot_sizing_bridge_active": classical,
+        "interpretation": (
+            "canonical productive setup schedules in the classical active-horizon "
+            "Wagner-Whitin model"
+            if classical
+            else "forced-source path graph; period-1 setup is mandatory and empty "
+            "zero-cost setup nodes remain distinct graph decisions"
+        ),
+        "bridge_conditions": (
+            {
+                "first_period_floor_strictly_positive": True,
+                "later_setup_costs_strictly_positive": True,
+            }
+            if classical
+            else None
+        ),
+    }
+
 def _nominal_public(exact: ExactInstance, optimum, nominal, k) -> dict:
     common = exact_common_optimal_prefix(exact)
     prefix_common = k <= len(common) - 1 and nominal[: k + 1] == common[: k + 1]
@@ -215,7 +239,8 @@ def certify(
     bracket = exact_polynomial_bracket(exact_inst, nominal, k)
     payload: dict = {
         "command": "certify",
-        "schema_version": "2.1",
+        "schema_version": "3.0",
+        "model_semantics": _semantics_public(exact_inst),
         "nominal": _nominal_public(exact_inst, optimum, nominal, k),
         "protected_arcs": k,
         "certified_bracket": _certified_bracket_public(bracket),
@@ -271,7 +296,8 @@ def decide(
     triage = exact_triage(bracket, radius_exact)
     payload: dict = {
         "command": "decide",
-        "schema_version": "2.1",
+        "schema_version": "3.0",
+        "model_semantics": _semantics_public(exact_inst),
         "nominal": _nominal_public(exact_inst, optimum, nominal, k),
         "protected_arcs": k,
         "certified_bracket": _certified_bracket_public(bracket),

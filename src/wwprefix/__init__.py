@@ -1,4 +1,6 @@
 """Certified commitment horizons for Wagner--Whitin lot sizing."""
+
+__version__ = "3.0.0"
 from .bracket import PolynomialBracketResult, polynomial_radius_bracket
 from .calibration import (
     ConformalResult,
@@ -8,6 +10,19 @@ from .calibration import (
     weighted_revision_score,
 )
 from .certificate import FrozenCertificateResult, frozen_certificate_exhaustive, frozen_certificate_lp
+from .compactmilp import (
+    CompactMILPResult,
+    compact_arc_radius_milp,
+    compact_fixed_radius_milp,
+    compact_radius_milp,
+)
+from .decomposition import (
+    DecomposedRadiusResult,
+    decomposed_certified_radius,
+    exact_local_tie_holds,
+    local_tie_gaps,
+    np_verifier,
+)
 from .exact import (
     ExactRadiusResult,
     FixedCompetitorResult,
@@ -24,6 +39,8 @@ from .graph import (
     outside_shortest_path,
 )
 from .model import (
+    CLASSICAL_ACTIVE_HORIZON,
+    FORCED_SOURCE_GRAPH,
     WWInstance,
     common_optimal_prefix,
     constrained_inside_path,
@@ -66,6 +83,21 @@ from .rolling import (
     revision_norm,
 )
 
+from .optimal_face import (
+    OptimalFaceEdgeWitness,
+    exact_optimal_paths_at,
+    find_optimal_face_edge_witness,
+    single_detour,
+)
+
+from .bridge import (
+    empty_setup_nodes,
+    exact_graph_optimal_paths,
+    exact_physical_setup_cost,
+    exact_physical_setup_optima,
+    setup_pattern_to_path,
+)
+
 __all__ = [
     "CertificationError",
     "CertifiedEnumerationResult",
@@ -87,7 +119,18 @@ __all__ = [
     "exact_shortest_path",
     "exact_triage",
     "exact_verify_nominal_optimal",
+    "CLASSICAL_ACTIVE_HORIZON",
+    "FORCED_SOURCE_GRAPH",
     "WWInstance",
+    "empty_setup_nodes",
+    "exact_graph_optimal_paths",
+    "exact_physical_setup_cost",
+    "exact_physical_setup_optima",
+    "setup_pattern_to_path",
+    "OptimalFaceEdgeWitness",
+    "exact_optimal_paths_at",
+    "find_optimal_face_edge_witness",
+    "single_detour",
     "shortest_path",
     "path_cost",
     "path_coefficients",

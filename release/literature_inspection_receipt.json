@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "work_id": "cch-wwprefix",
+  "release_version": "3.0.0",
+  "inspection_date": "2026-08-18",
+  "inspection_type": "direct_page_by_page_producer_side_reading",
+  "independent_attestation": false,
+  "source": {
+    "citation": "Richter, K., & Vörös, J. (1989). A Parametric Analysis of the Dynamic Lot-Sizing Problem. Journal of Information Processing and Cybernetics: EIK, 25(3), 67–73.",
+    "supplied_filename": "A_Parametric_Analysis_of_The_Dynamic_Lot_Sizing_Problem_Voros_Knut_Jozsef(1).pages",
+    "sha256": "bd5ee5a82e399e11572b44d2bf334672be6bc6b47499271e636cf3a8f04aa255",
+    "printed_pages_inspected": "67-73",
+    "redistributed": false,
+    "chain_of_custody_authenticated": false
+  },
+  "page_findings": [
+    {"pages": "67", "object": "three scalar-parametric cases for stability of one Wagner-Whitin solution"},
+    {"pages": "68-69", "object": "one-dimensional setup/holding-cost direction and interval inequalities"},
+    {"pages": "69-70", "object": "one-dimensional demand direction and interval inequalities"},
+    {"pages": "70-71", "object": "joint two-parameter cost-demand stability region"},
+    {"pages": "71-72", "object": "T=3 example, plotted region and IBM-XT timings through T=15"},
+    {"pages": "73", "object": "references, summaries and author details"}
+  ],
+  "bounded_conclusion": "No theorem-level collision was found in this source with compulsory protected-prefix optimality, a moving inside continuation, a simultaneous weighted floor-truncated T-dimensional demand ball, exact strong-radius certificates, the single-detour optimal-face theorem, or the demand-induced complexity question.",
+  "claim_ceiling": "source_specific_negative_reading_not_exhaustive_priority",
+  "remaining_risks": [
+    "The scan's pre-project chain of custody was not independently authenticated.",
+    "Adjacent same-programme papers are not all inspected in full text.",
+    "The literature search is targeted rather than systematic.",
+    "No second human or institutional attestation is included."
+  ],
+  "human_readable_receipt": "docs/richter_voros_inspection_receipt.md"
+}

@@ -11,11 +11,7 @@ The analysed file has 60 rows, 13 columns and zero missing cells. The source sch
 
 ## Chain-of-custody limit
 
-Version 2.1.2 re-fetched the official UCI archive on 8 August 2026 from:
-
-`https://archive.ics.uci.edu/static/public/409/daily+demand+forecasting+orders.zip`
-
-The archive contained one file, `Daily_Demand_Forecasting_Orders.csv` (5,138 bytes). Its SHA-256 was exactly `adf8dda021beae76b13b1cbb5b3c075d064f03b3353a711c1ddc357c6f89e924`, byte-identical to the analysed file. The record reports a CC BY 4.0 licence. This closes the original download-hop gap while preserving the earlier limitation transparently in the review history.
+The exact public-mirror URL used to obtain the local bytes was not preserved. Before analysis, the file's dimensions, column names, missingness and target range were checked against the UCI schema, and the bytes were frozen under the hash above. This supports reproducibility from the included bytes but leaves the original download hop unresolved. A future release should fetch directly from the DOI-backed repository and record the response headers and hash.
 
 ## Observed versus reconstructed fields
 

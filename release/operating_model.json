@@ -1,0 +1,249 @@
+{
+  "schema_version": "2.0",
+  "work_id": "cch-wwprefix",
+  "attempt_id": "cch-wwprefix-v3.0.0-20260818",
+  "release_version": "3.0.0",
+  "artifact_role": "unrefereed_theoretical_computational_candidate",
+  "bounded_decision_object": {
+    "question": "Within radius R, can some admissible demand make an optimal path leave the protected prefix?",
+    "yes_semantics": "A witness demand and outside path are exactly checkable.",
+    "no_semantics": "A no answer is certified only by a closing exact lower bound or a proved infinity condition; solver time limits and finite caps remain unresolved.",
+    "output_states": [
+      "exact_certified",
+      "certified_interval",
+      "enumeration_completed_with_certified_interval",
+      "refused_by_candidate_guard",
+      "solver_level_only",
+      "proven_infinite"
+    ]
+  },
+  "semantic_bridge": {
+    "state": "proved_sufficient_conditions_finitely_audited_not_independently_reviewed",
+    "source_model": "forced-source affine path model",
+    "target_interpretation": "ordinary uncapacitated Wagner–Whitin setup schedules on an active horizon",
+    "conditions": [
+      "demand floor in period 1 is strictly positive",
+      "setup costs in periods 2..T are strictly positive",
+      "ordered reduced slopes",
+      "zero initial inventory",
+      "no backlogging"
+    ],
+    "negative_control": {
+      "K": [
+        100,
+        1
+      ],
+      "q": [
+        1,
+        0
+      ],
+      "demand": [
+        0,
+        1
+      ],
+      "graph_optimum": 101,
+      "ordinary_physical_optimum": 1,
+      "classical_mode": "rejected"
+    },
+    "finite_audit": {
+      "instances": 320,
+      "exact_matches": 320,
+      "empty_later_optimal_setups": 0
+    },
+    "remaining_human_gate": "Independent operations-research specialist review of the source-to-encoding theorem and operational decision semantics."
+  },
+  "assurance_dimensions": [
+    {
+      "dimension": "structural_integrity",
+      "state": "producer_replay_passed",
+      "actor": "release workflow",
+      "evidence": [
+        "SHA-256 manifest",
+        "version-matched wheel/source comparison",
+        "fresh-extraction replay",
+        "PDF preflight"
+      ],
+      "authority_limit": "Establishes object identity and replayability, not theorem truth."
+    },
+    {
+      "dimension": "mathematical_argument",
+      "state": "manual_proof_with_adversarial_regressions",
+      "actor": "agentic research workflow",
+      "evidence": [
+        "manuscript proofs",
+        "negative controls",
+        "exact finite audits"
+      ],
+      "authority_limit": "Not proof-assistant verified or independently refereed."
+    },
+    {
+      "dimension": "implementation",
+      "state": "producer_tested_exact_certificate_layer",
+      "actor": "release workflow",
+      "evidence": [
+        "94 tests",
+        "independent record checker",
+        "exact-rational audits"
+      ],
+      "authority_limit": "No independently authored implementation."
+    },
+    {
+      "dimension": "semantic_validity",
+      "state": "bounded_bridge_proved_and_audited",
+      "actor": "release workflow",
+      "evidence": [
+        "Theorem 2.2",
+        "320 exact bridge cases",
+        "leading-zero negative control"
+      ],
+      "authority_limit": "Independent domain-specialist judgement remains required."
+    },
+    {
+      "dimension": "novelty_positioning",
+      "state": "targeted_corpus_with_source_specific_negative_reading_and_direct_algorithmic_comparators",
+      "actor": "producer-side literature audit",
+      "evidence": [
+        "Richter–Vörös pages 67–73 receipt",
+        "full-text fixed-solution sensitivity comparators",
+        "Li–Romero Morales minimax-regret full preprint",
+        "Egri et al. inverse lot-sizing full repository manuscript",
+        "frozen search and missingness record",
+        "release/prior_art_corpus.json"
+      ],
+      "authority_limit": "No exhaustive priority, no second bibliographic attestation and several adjacent full texts remain uninspected."
+    },
+    {
+      "dimension": "statistical_assurance",
+      "state": "one_step_theorem_with_negative_controls",
+      "actor": "release workflow",
+      "evidence": [
+        "finite-sample rank proof",
+        "85,000 simulated trials"
+      ],
+      "authority_limit": "Exchangeability and operational calibration are not established."
+    },
+    {
+      "dimension": "external_validity",
+      "state": "not_established",
+      "actor": "none",
+      "evidence": [
+        "illustrative UCI interface only"
+      ],
+      "authority_limit": "No field effect or industrial benefit claim."
+    },
+    {
+      "dimension": "independent_replication",
+      "state": "not_assessed",
+      "actor": "none",
+      "evidence": [],
+      "authority_limit": "Producer replay cannot be promoted to replication."
+    },
+    {
+      "dimension": "formal_verification",
+      "state": "not_assessed",
+      "actor": "none",
+      "evidence": [],
+      "authority_limit": "No theorem or implementation has proof-assistant verification."
+    }
+  ],
+  "human_judgement_gates": [
+    {
+      "gate": "operations-research semantic review",
+      "status": "open",
+      "decision_required": "Confirm that active-horizon assumptions and protected setup/cycle semantics match the intended classical lot-sizing interpretation."
+    },
+    {
+      "gate": "mathematical specialist review",
+      "status": "open",
+      "decision_required": "Audit the certificate, local decomposition, NP-membership and optimal-face edge proofs."
+    },
+    {
+      "gate": "independent bibliographic attestation",
+      "status": "open",
+      "decision_required": "Re-read Richter–Vörös and adjacent programme papers against the claim table."
+    },
+    {
+      "gate": "independent clean-room replay",
+      "status": "open",
+      "decision_required": "Reimplement at least the fixed-path radius, semantic bridge and edge-witness audit from the specification."
+    },
+    {
+      "gate": "operational validation",
+      "status": "open",
+      "decision_required": "Run a predeclared prospective study with genuine vintages, actual costs, constraints and outcomes before any benefit claim."
+    },
+    {
+      "gate": "archival publication",
+      "status": "open",
+      "decision_required": "Assign immutable archive identifier/DOI and verify byte identity before public promotion beyond candidate status."
+    }
+  ],
+  "remaining_risks": [
+    {
+      "risk": "Exact complexity of the demand-induced one-protected-arc core is open.",
+      "severity": "material_theoretical_frontier",
+      "containment": "No polynomial-time or hardness claim; candidate guard and explicit unresolved states."
+    },
+    {
+      "risk": "Semantic bridge conditions may be conservative.",
+      "severity": "scope_limitation",
+      "containment": "Conditions are labelled sufficient, and graph mode remains explicit."
+    },
+    {
+      "risk": "Single-workflow dependence across proofs, code and audits.",
+      "severity": "assurance_dependence",
+      "containment": "Independent checker, raw rows, hashes and open human gates; no independence claim."
+    },
+    {
+      "risk": "Targeted literature search may miss related work.",
+      "severity": "novelty_uncertainty",
+      "containment": "Source-specific language, direct minimax-regret and inverse-lot-sizing comparators, visible missingness and no priority claim."
+    },
+    {
+      "risk": "Illustrative application may be mistaken for impact evidence.",
+      "severity": "interpretation_risk",
+      "containment": "No-evidence impact record and repeated field-validation disclaimer."
+    }
+  ],
+  "next_assurance_targets": [
+    {
+      "priority": 1,
+      "target": "Independent specialist source-to-claim review",
+      "minimum_evidence": "Signed theorem/semantic review with issue ledger and exact locators."
+    },
+    {
+      "priority": 2,
+      "target": "Clean-room reimplementation",
+      "minimum_evidence": "Separately authored code and independently generated test corpus reproducing central certificates."
+    },
+    {
+      "priority": 3,
+      "target": "Complexity classification",
+      "minimum_evidence": "Polynomial algorithm or reduction for the demand-induced one-protected-arc core, with machine-checkable instances where relevant."
+    },
+    {
+      "priority": 4,
+      "target": "Formal verification",
+      "minimum_evidence": "Proof-assistant formalisation of the graph reduction, semantic bridge and frozen certificate theorem."
+    },
+    {
+      "priority": 5,
+      "target": "Prospective operational evaluation",
+      "minimum_evidence": "Preregistered genuine-vintage study with actual setup/inventory/service data and explicit decision comparator."
+    }
+  ],
+  "impact_evidence": {
+    "state": "none",
+    "record": "No field-validated cost, service, productivity or adoption effect is claimed. The UCI exercise is an illustrative interface demonstration only."
+  },
+  "publication_decision": {
+    "state": "candidate_release_eligible_after_internal_replay",
+    "not_equivalent_to": [
+      "peer reviewed",
+      "independently replicated",
+      "formally verified",
+      "field validated",
+      "REF 4-star adjudicated"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "seed": 2026081801,
+  "horizons": [
+    1,
+    10
+  ],
+  "classical_active_horizon_instances": 320,
+  "exact_cost_and_optimal_setup_set_matches": 320,
+  "optimal_paths_with_empty_later_setup": 0,
+  "failures": 0,
+  "negative_control": {
+    "instance": "K=(100,1), q=(1,0), d=(0,1), floor=(0,0)",
+    "forced_source_graph_optimum": "101",
+    "ordinary_physical_optimum": "1",
+    "classical_mode_admissible": false
+  },
+  "scope": "Finite exact-rational enumeration of small instances; supports the implementation and source-to-encoding bridge but does not replace its proof."
+}
